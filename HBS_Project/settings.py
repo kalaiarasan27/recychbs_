@@ -245,6 +245,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://hsb-ui.onrender.com',
     'https://hbs-admin-afcea2f2324b.herokuapp.com',
     'https://new-hbs-admin-82beda5bc10a.herokuapp.com',
+    'https://django-djreact-app-d5af3d4e3559.herokuapp.com',
     'chrome-extension://eejfoncpjfgmeleakejdcanedmefagga',
 
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
@@ -263,6 +264,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://hsb-ui.onrender.com',
     'https://hbs-admin-afcea2f2324b.herokuapp.com',
     'https://new-hbs-admin-82beda5bc10a.herokuapp.com',
+    'https://django-djreact-app-d5af3d4e3559.herokuapp.com',
 
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
