@@ -239,14 +239,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # React app's URL
     'http://localhost:5174',
-    'https://django-djreact-app-d5af3d4e3559.herokuapp.com',  # React app's URL
+    'https://recychbs-app-c05d5f684be1.herokuapp.com',  # React app's URL
     'https://adminapp-46edb27550db.herokuapp.com',  # React app's URL
     'https://hsb-admin-ui.onrender.com',
     'https://hsb-ui.onrender.com',
     'https://hbs-admin-afcea2f2324b.herokuapp.com',
     'https://new-hbs-admin-82beda5bc10a.herokuapp.com',
     'chrome-extension://eejfoncpjfgmeleakejdcanedmefagga',
-    'https://recychbs-app-c05d5f684be1.herokuapp.com',
 
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
@@ -258,13 +257,12 @@ CORS_ALLOW_CREDENTIALS = True  # Allow credentials like cookies to be included
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173',  # React app's URL
     'http://localhost:5174',
-    'https://django-djreact-app-d5af3d4e3559.herokuapp.com',  # React app's URL
+    'https://recychbs-app-c05d5f684be1.herokuapp.com',  # React app's URL
     'https://adminapp-46edb27550db.herokuapp.com',  # React app's URL
     'https://hsb-admin-ui.onrender.com',
     'https://hsb-ui.onrender.com',
     'https://hbs-admin-afcea2f2324b.herokuapp.com',
     'https://new-hbs-admin-82beda5bc10a.herokuapp.com',
-    'https://recychbs-app-c05d5f684be1.herokuapp.com'
 
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
@@ -353,4 +351,4 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1  # Password reset token will be valid for 1 day
 
 
 # settings.py (Django)
-FRONTEND_URL = "https://django-djreact-app-d5af3d4e3559.herokuapp.com"  # Set this to your actual frontend URL
+FRONTEND_URL = "https://recychbs-app-c05d5f684be1.herokuapp.com"  # Set this to your actual frontend URL

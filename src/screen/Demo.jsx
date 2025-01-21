@@ -287,7 +287,7 @@ export default Demo;
 //   loginType: activeLogin // Add secondVariable as a new field
 // };
  
-//     fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/login-form/', {
+//     fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/login-form/', {
 //       // fetch('http://127.0.0.1:8000/login-form/ ', {
  
 //         method: 'POST',

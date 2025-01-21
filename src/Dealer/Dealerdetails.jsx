@@ -410,7 +410,7 @@ const handleFileChange = (fileType) => (e) => {
     try {
       // Send the form data to the server
       const response = await fetch(
-        // "https://django-djreact-app-d5af3d4e3559.herokuapp.com/dealer_details/",
+        // "https://recychbs-app-c05d5f684be1.herokuapp.com/dealer_details/",
         "http://127.0.0.1:8000/dealer_details/",
         {
           method: "POST",

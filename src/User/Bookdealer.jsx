@@ -73,7 +73,7 @@ const Bookdealer = () => {
             const { latitude, longitude } = position.coords;
             
             // Combine answer with location data in the request body
-            // fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/bookdealer/', {
+            // fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/bookdealer/', {
             fetch('http://127.0.0.1:8000/bookdealer/', {
               credentials: 'include',
               method: 'POST',
