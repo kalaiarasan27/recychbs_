@@ -254,8 +254,6 @@ const RegisterUser = () => {
       localStorage.removeItem("formData");
   
       console.log(formData);
-      console.log("button has");
-      
       const csrfToken = getCookie("csrftoken");
  
       function getCookie(name) {
