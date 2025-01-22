@@ -670,7 +670,6 @@ def resend_otp_view(request):
 #     return JsonResponse({'error': 'Invalid method'}, status=405)
 @csrf_exempt# OTP Block
 def register_view(request):
-
     try:
         if request.method =='POST':
             data = json.loads(request.body)
@@ -818,7 +817,7 @@ def register_view(request):
         print("Exeption is ",e)
     connection.close()
 
-    return JsonResponse({'error': 'Invalid method in backend'}, status=500)
+    return JsonResponse({'error': 'Invalid method'}, status=405)
     
 msg91_auth_key = "435249AIlQ8Mzcd67908a7bP1"  
 sender_id = "HUDSME"  
