@@ -271,7 +271,7 @@ const RegisterUser = () => {
         return cookieValue;
       }
    
-      fetch("/register-form/", {
+      fetch("http://127.0.0.1:8000/register-form/", {
      
         credentials: 'include', 
         method: "POST",
@@ -282,13 +282,12 @@ const RegisterUser = () => {
         body: JSON.stringify(formData),
       })
       .then(response => {
-        console.log(response);
+        // console.log(response);
         if (response.ok) {
           return response.json().then(data => {
             setMessage(data.message);
            
           console.log("the fetch data-",data);
-          
           navig("/OtpVerification");         
          });
         } else {

@@ -448,7 +448,7 @@ def otp_send(request):
                         Dealer_Name = username,
                         Phone_Number = Phone_Number,
                         Email = email,
-                        Natioanality = Natioanality,
+                        Natioanlity = Natioanality,
                         Address = address
                     )
                     if dealer:
@@ -670,6 +670,7 @@ def resend_otp_view(request):
 #     return JsonResponse({'error': 'Invalid method'}, status=405)
 @csrf_exempt# OTP Block
 def register_view(request):
+    print("its inside function")
     try:
         if request.method =='POST':
             data = json.loads(request.body)
@@ -882,6 +883,7 @@ def login_view(request):
                     email = dealer_data.get('email', '')
                     password = dealer_data.get('password', '')
                     user = authenticate(request, email=email, password=password)
+                    print("this is user",user)
                     if user is not None:
                         if User.objects.filter(email=email, role=User.DEALER).exists():
                             django_login(request, user)

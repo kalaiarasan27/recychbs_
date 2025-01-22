@@ -151,7 +151,7 @@ const handleBlur = (e) => {
     };
     setLoading(true);
     console.log(dataToSend);
-    fetch('login-form/', {
+    fetch('http://127.0.0.1:8000/login-form/', {
       method: 'POST',
       credentials: 'include',
       headers: {
