@@ -271,7 +271,7 @@ const RegisterUser = () => {
         return cookieValue;
       }
    
-      fetch("http://127.0.0.1:8000/register-form/", {
+      fetch("register-form/", {
      
         credentials: 'include', 
         method: "POST",
