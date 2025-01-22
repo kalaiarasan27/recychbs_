@@ -151,7 +151,7 @@ const handleBlur = (e) => {
     };
     setLoading(true);
     console.log(dataToSend);
-    fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/login-form/', {
+    fetch('login-form/', {
       method: 'POST',
       credentials: 'include',
       headers: {
