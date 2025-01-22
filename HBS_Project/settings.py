@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-f247#btkri*v8$@^pbnr7mf@&#llh59-*$x7b5p^-$d4&gwsjp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['http://localhost:5174',    'http://localhost:5173',
+ALLOWED_HOSTS = ['http://localhost:5174',    'http://localhost:5173','app.recychbs.in', 'localhost'
 ]
 
 
