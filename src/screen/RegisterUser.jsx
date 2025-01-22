@@ -271,7 +271,7 @@ const RegisterUser = () => {
         return cookieValue;
       }
    
-      fetch("register-form/", {
+      fetch("/register-form/", {
      
         credentials: 'include', 
         method: "POST",
