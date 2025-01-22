@@ -282,6 +282,7 @@ const RegisterUser = () => {
         body: JSON.stringify(formData),
       })
       .then(response => {
+        console.log(response);
         if (response.ok) {
           return response.json().then(data => {
             setMessage(data.message);
