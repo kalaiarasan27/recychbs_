@@ -817,7 +817,7 @@ def register_view(request):
         print("Exeption is ",e)
     connection.close()
 
-    return JsonResponse({'error': 'Invalid method'}, status=405)
+    return JsonResponse({'error': 'Invalid method is backend'}, status=500)
     
 msg91_auth_key = "435249AIlQ8Mzcd67908a7bP1"  
 sender_id = "HUDSME"  
