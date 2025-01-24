@@ -58,6 +58,8 @@ class DealerProfile(models.Model):
     Nationality = models.CharField(max_length=50,null=True)
     Phone_Number=models.CharField(max_length=120,null=True)
     Total_Scrap_Collected=models.IntegerField(null=True)
+    account=models.BooleanField(default=True)
+
 
 # Admin profile
 class AdminProfile(models.Model):
