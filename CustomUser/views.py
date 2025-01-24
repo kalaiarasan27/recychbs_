@@ -3114,3 +3114,16 @@ from django.http import HttpResponse
 def clear_session(request):
     request.session.flush()  # Removes all session data
     return HttpResponse("Session cleared!")
+
+
+
+
+
+
+def testingforDatabas(req):
+    try:
+        data = User.objects.get()
+        print(data)
+    except Exception as e:
+        print(e)
+    return JsonResponse(data)
