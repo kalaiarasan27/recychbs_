@@ -800,7 +800,7 @@ def register_view(request):
 msg91_auth_key = "435249AIlQ8Mzcd67908a7bP1"  
 sender_id = "HUDSME"  
 template_id = "67777a39d6fc05127c1f9b72"  
-sms_url = "https://api.msg91.com/api/v5/flow/"  
+sms_url = "https://api.msg91.com/api/v5/flow/"   
   
 
 def send_sms(phone_number, otp_variable):
