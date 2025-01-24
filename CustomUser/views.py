@@ -792,6 +792,7 @@ def register_view(request):
         
     except Exception as e:
         print("Exeption is ",e)
+        
     connection.close()
 
     return JsonResponse({'error': 'Invalid method is backend'}, status=500)
