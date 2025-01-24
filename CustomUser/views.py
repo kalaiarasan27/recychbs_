@@ -832,7 +832,6 @@ def send_sms(phone_number, otp_variable):
         return None
 
 
-@csrf_exempt
 def login_view(request):
     try:
         # if request.method == 'POST':
@@ -845,67 +844,93 @@ def login_view(request):
                 user_data = data.get('user', {})
                 dealer_data = data.get('dealer', {})
                 loginType = data.get('loginType', '')
-
-
+ 
+ 
                 print("login type is-",loginType)
-
+ 
+ 
+ 
                 print("Request POST is-",request.POST)
                 print("Request POST is-",request.body)
                 print("Request is-",request)
-
-
+ 
+ 
+ 
                 # print("user is -",user)
+                # if loginType == User.DEALER:
+                #     email = dealer_data.get('email', '')
+                #     password = dealer_data.get('password', '')
+                #     user = authenticate(request, email=email, password=password)
+                #     if user is not None:
+                #         if User.objects.filter(email=email, role=User.DEALER).exists():
+                #             django_login(request, user)
+                #             user = request.user.id  # Assuming the user is logged in
+                #             dealer = DealerProfile.objects.get(user_id=user)
+                #             dealer_id = dealer.Dealer_ID
+                #             data_exists = Dealer_Details.objects.filter(Dealer_ID=dealer_id).first()
+                           
+                #             if data_exists:
+                #                 details_sent = "True"
+                #                 print("form already sent")
+                #                 application_status = data_exists.application_status
+                #             else:
+                #                 details_sent = "False"
+                #                 print("form doesn't  sent yet")
+                #             return JsonResponse({'message': 'Login successfull',"form_submitted":details_sent,"application_status":application_status}, status=200)
+                #         else:
+                #             return JsonResponse({'error': 'Incorrect Username Or Password'}, status=401)
                 if loginType == User.DEALER:
                     email = dealer_data.get('email', '')
                     password = dealer_data.get('password', '')
-                    user = authenticate(request, email=email, password=password)
-                    print("this is user",user)
-                    if user is not None:
-                        if User.objects.filter(email=email, role=User.DEALER).exists():
-                            django_login(request, user)
-                            user = request.user.id  # Assuming the user is logged in
-                            dealer = DealerProfile.objects.get(user_id=user)
-                            dealer_id = dealer.Dealer_ID
-                            data_exists = Dealer_Details.objects.filter(Dealer_ID=dealer_id).first()
-                           
-                            if data_exists:
-                                details_sent = "True"
-                                print("form already sent")
-                                # application_status = data_exists.application_status
-                            else:
-                                details_sent = "False"
-                                print("form doesn't  sent yet")
-                            return JsonResponse({'message': 'Login successfull',"form_submitted":details_sent}, status=200)
-                        else:
-                            return JsonResponse({'error': 'Incorrect Username Or Password'}, status=401)
-                elif loginType == User.USER:
-                    email = user_data.get('email', '')
-                    password = user_data.get('password', '')
-                    data=UserProfile.objects.get(Email=email)   
-                    active=data.active
-                    print(active)
-                    if active == 1:
+                    dealer_data = DealerProfile.objects.get(Email=email)
+                    if dealer_data.account is True:
                         user = authenticate(request, email=email, password=password)
                         if user is not None:
-                            if User.objects.filter(email=email, role=User.USER).exists():
+                            if User.objects.filter(email=email, role=User.DEALER).exists():
                                 django_login(request, user)
-                                return JsonResponse({'message': 'Login successfull'}, status=200)
-
+                                user = request.user.id  # Assuming the user is logged in
+                                dealer = DealerProfile.objects.get(user_id=user)
+                                dealer_id = dealer.Dealer_ID
+                                if Dealer_Details.objects.filter(Dealer_ID=dealer_id).exists():
+                                    details_sent = "True"
+                                    print("form already sent")
+                                else:
+                                    details_sent = "False"
+                                    print("form doesn't  sent yet")
+                                return JsonResponse({'message': 'Login successfull',"form_submitted":details_sent}, status=200)
                             else:
                                 return JsonResponse({'error': 'Incorrect Username Or Password'}, status=401)
                     else:
-                            return JsonResponse({'error': 'Your Account has been blocked by admin'}, status=401)
-
+                        return JsonResponse({'error': 'Your Account has been blocked by Admin'}, status=403)
+                         
+                elif loginType == User.USER:
+                    email = user_data.get('email', '')
+                    password = user_data.get('password', '')
+                    data=UserProfile.objects.get(Email=email)  
+                    active=data.active
+                    if active is True:
+                        user = authenticate(request, email=email, password=password)
+                        if user is not None:
+ 
+                            if User.objects.filter(email=email, role=User.USER).exists():
+                                django_login(request, user)
+                                return JsonResponse({'message': 'Login successfull'}, status=200)
+ 
+                            else:
+                                return JsonResponse({'error': 'Incorrect Username Or Password'}, status=401)
+                    else:
+                        return JsonResponse({'error': 'Your Account has been blocked by Admin'}, status=403)
+                         
+ 
                 else:
                     return JsonResponse({'error': 'Incorrect  UserName Or Password'}, status=401)
     except Exception as e:
         print(e)
-
+ 
     connection.close()
-
+ 
     # return JsonResponse({'error': 'Invalid method'}, status=405)
     return JsonResponse({'error': 'Incorrect  UserName Or Password'},status=401)
-
 # Forget Password
 
 
