@@ -143,29 +143,30 @@ WSGI_APPLICATION = 'HBS_Project.wsgi.application'
 
 #     }
 # }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hudsmer',
-        'HOST':'82.112.238.156',
-        'USER':'hudsmer_user',
-        'PASSWORD':'Hudsmer@123',
-        'PORT':'3306',
-       
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'revenge',
-#         'HOST':'localhost',
-#         'USER':'root',
-#         'PASSWORD':'Santhosh112',
+#         'NAME': 'hudsmer',
+#         'HOST':'82.112.238.156',
+#         'USER':'hudsmer_user',
+#         'PASSWORD':'Hudsmer@123',
 #         'PORT':'3306',
        
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'revenge',
+        'HOST':'localhost',
+        'USER':'root',
+        'PASSWORD':'Santhosh112',
+        'PORT':'3306',
+       
+    }
+}
 
 AUTH_USER_MODEL = 'CustomUser.User'
 
@@ -353,6 +354,5 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1  # Password reset token will be valid for 1 day
 #     'chrome-extension://eejfoncpjfgmeleakejdcanedmefagga',
 # ]
 
-
 # settings.py (Django)
-# FRONTEND_URL = "https://recychbs-app-c05d5f684be1.herokuapp.com"  # Set this to your actual frontend URL
+FRONTEND_URL = "https://recychbs-app-c05d5f684be1.herokuapp.com"  # Set this to your actual frontend URL

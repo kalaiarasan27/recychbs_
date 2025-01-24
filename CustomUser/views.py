@@ -382,11 +382,11 @@ def otp_send(request):
                             Email = email,
                             Address = address,
                             Phone_Number = Phone_Number,
-                            Nationality = Natioanality
-
+                            Nationality = Natioanality,
+                            account=1
                         )
-                    if user_creation:
 
+                    if user_creation:
                                     # Load the HTML template and render it with context
                         html_content = render_to_string('email_templates/user_RegisterEmail.html', {'user_name': username})
                         # Create a plain-text version by stripping HTML tags
@@ -416,7 +416,6 @@ def otp_send(request):
                     print("Incorrect OTP. Please try again.")
                     return JsonResponse({"otp_error":"Incorrect OTP. Please try again."},status=400)
                    
-
             elif role == User.DEALER:
                 address = register_data.get('address')
                 city = register_data.get('city')
@@ -426,7 +425,7 @@ def otp_send(request):
 
                 address = f"{address},{city},{state},{pincode}"
                
-                    # Compare the entered OTP with the generated OTP
+                # Compare the entered OTP with the generated OTP
                 data = json.loads(request.body)
                 entered_otp = data.get('enteredOtp')
 
@@ -449,7 +448,8 @@ def otp_send(request):
                         Phone_Number = Phone_Number,
                         Email = email,
                         Natioanlity = Natioanality,
-                        Address = address
+                        Address = address,
+                        account=1
                     )
                     if dealer:
 
@@ -476,8 +476,9 @@ def otp_send(request):
                         #     [email],
                         #     fail_silently=False
                         # )
-                    return JsonResponse({'message': 'User registered successfully'}, status=201)
 
+                    return JsonResponse({'message': 'User registered successfully'}, status=201)
+                    
                 else:
                     print("Incorrect OTP. Please try again.")
                     return JsonResponse({"otp_error":"Incorrect OTP. Please try again."},status=400)
@@ -717,19 +718,7 @@ def register_view(request):
  
                     address = f"{address},{city},{state},{pincode}"
                     print(address)
-                    user = User(username=username, email=email, password=password,phone_number=Phone_Number, role=role)
-                    user.save()
-
-                    user_creation  =  UserProfile.objects.create(
-                        
-                            user=user,
-                            User_Name = username,
-                            Email = email,
-                            Address = address,
-                            Phone_Number = Phone_Number,
-                            Nationality = Natioanality
-
-                        )
+                                    
                     if UserProfile.objects.filter(Email=email).exists():
                         return JsonResponse({"error":"SomeOne Already Login with this Email"},status=400)
                     elif UserProfile.objects.filter(Phone_Number=Phone_Number).exists():
@@ -740,8 +729,10 @@ def register_view(request):
                         return JsonResponse({"error":"SomeOne Already Login with this Number"},status=400)
                     else:
                        request.session['validated'] = True
- 
+
+                     
                 elif role == "DEALER":
+                    print("inside dealer")
                     data = json.loads(request.body)
                     address = data.get('address')
                     city = data.get('city')
@@ -749,20 +740,11 @@ def register_view(request):
                     pincode = data.get('pincode')
                     Natioanality = data.get('country')
                     request.session['validated'] = False
+                    print("its before address",Natioanality)
  
                     address = f"{address},{city},{state},{pincode}"
-                    user = User(username=username, email=email, password=password,phone_number=Phone_Number,  role=role)
-                    user.save()
-
-                    dealer = DealerProfile.objects.create(
-                        user=user,
-                        Dealer_Name = username,
-                        Phone_Number = Phone_Number,
-                        Email = email,
-                        Natioanality = Natioanality,
-                        Address = address
-                    )
-
+                    print(address)
+                    
                     if DealerProfile.objects.filter(Email=email).exists():
                         return JsonResponse({"error":"SomeOne Already Login with this Email"},status=400)
                     elif DealerProfile.objects.filter(Phone_Number=Phone_Number).exists():
@@ -773,6 +755,8 @@ def register_view(request):
                         return JsonResponse({"error":"SomeOne Already Login with this Number"},status=400)
                     else:
                         request.session['validated'] = True
+
+                   
  
                 elif role == User.ADMIN:
                     AdminProfile.objects.create(
@@ -806,13 +790,6 @@ def register_view(request):
             print(message)
 
             return JsonResponse({'message': 'OTP sent successfully!'})
-
-            # return JsonResponse({'message': 'OTP sent successfully!'})
-            
-           
-            # request.session['otp_response'] = response
-
-            # return JsonResponse({'message': 'User registered successfully'}, status=201)
         
     except Exception as e:
         print("Exeption is ",e)
