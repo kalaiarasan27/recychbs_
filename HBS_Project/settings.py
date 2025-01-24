@@ -355,4 +355,4 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1  # Password reset token will be valid for 1 day
 
 
 # settings.py (Django)
-# FRONTEND_URL = "https://recychbs-app-c05d5f684be1.herokuapp.com"  # Set this to your actual frontend URL
+FRONTEND_URL = "https://recychbs-app-c05d5f684be1.herokuapp.com"  # Set this to your actual frontend URL
