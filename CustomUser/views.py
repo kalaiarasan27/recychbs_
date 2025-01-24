@@ -337,6 +337,7 @@ def otp_send(request):
                 print("Generated OTP -",otp)
                 print("Generated String  OTP -",str(otp))
                 print("Entered String  OTP -",entered_otp)
+
                 # if resend_otp:
                 #     if str(resend_otp) == entered_otp:
                 #         print("OTP verification successful!")
@@ -383,7 +384,7 @@ def otp_send(request):
                             Address = address,
                             Phone_Number = Phone_Number,
                             Nationality = Natioanality,
-                            account=1
+                            active=1
                         )
 
                     if user_creation:
@@ -411,7 +412,6 @@ def otp_send(request):
                         #     fail_silently=False
                         # )
                     return JsonResponse({'message': 'User registered successfully'}, status=201)
-
                 else:
                     print("Incorrect OTP. Please try again.")
                     return JsonResponse({"otp_error":"Incorrect OTP. Please try again."},status=400)
@@ -441,7 +441,6 @@ def otp_send(request):
                     # Create user
                     user = User(username=username, email=email, password=password,phone_number=Phone_Number,  role=role)
                     user.save()
-
                     dealer = DealerProfile.objects.create(
                         user=user,
                         Dealer_Name = username,
