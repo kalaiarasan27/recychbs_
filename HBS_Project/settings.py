@@ -319,17 +319,17 @@ from django.conf import settings
 #     'ServerSideEncryption': 'AES256',  # Optional: Use 'aws:kms' if you're using KMS encryption
 # }
 
-from decouple import config
+# from decouple import config
 
-AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')  # e.g. 'us-west-2'
+# AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+# AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')  # e.g. 'us-west-2'
 
-AWS_DEFAULT_ACL = None  # Or 'public-read' if needed
-AWS_S3_FILE_OVERWRITE = True
-AWS_S3_VERITY = True
+# AWS_DEFAULT_ACL = None  # Or 'public-read' if needed
+# AWS_S3_FILE_OVERWRITE = True
+# AWS_S3_VERITY = True
 
 
 
@@ -337,9 +337,9 @@ AWS_S3_VERITY = True
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
-# Media files
-DEFAULT_FILE_STORAGE = 'CustomUser.storages.MediaStorage'  # Replace with the path to your storages.py
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+# # Media files
+# DEFAULT_FILE_STORAGE = 'CustomUser.storages.MediaStorage'  # Replace with the path to your storages.py
+# MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 
 # SEND EMAIL
