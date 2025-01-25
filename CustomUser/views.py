@@ -804,13 +804,10 @@ from flask import Flask, render_template, request, session
 # app = Flask(__name__)
 msg91_auth_key = "435249AIlQ8Mzcd67908a7bP1"  
 sender_id = "HUDSME"  
-template_id = "67777a39d6fc05127c1f9b72"  
-<<<<<<< HEAD
+template_id = "67777a39d6fc05127c1f9b72" 
 sms_url = "https://api.msg91.com/api/v5/flow/"  
-=======
-sms_url = "https://api.msg91.com/api/v5/flow/"   
-  
->>>>>>> fc4fd79e2178aa1684566410705219c4b2588ff8
+
+
 
 def send_sms(phone_number, otp_variable):
     headers = {
