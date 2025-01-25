@@ -678,6 +678,7 @@ def register_view(request):
             data = json.loads(request.body)
             print("the data is",data)
             request.session['data'] = data
+            print('session data are ',request.session['data'])
             email = data.get('email')
             print(email)
             Phone_Number = data.get('contact')
