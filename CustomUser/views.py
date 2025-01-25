@@ -756,7 +756,6 @@ def register_view(request):
                         request.session['validated'] = True
 
                    
- 
                 elif role == User.ADMIN:
                     AdminProfile.objects.create(
                         user='user',
@@ -774,19 +773,19 @@ def register_view(request):
             otp = random.randint(100000, 999999)
             print(f"Generated OTP: {otp}")  # This is just for testing, remove it in production
             request.session['otp'] = otp
- 
+
             sms_response = send_sms(otp_phoneNumber, otp) 
             print("sms responce is here")
             print(sms_response) 
             if sms_response:
                 print("inside the if")
                 if sms_response.get('type') == "success":
+                    print("inside if")
                     return JsonResponse({"status": "success"})
                 else:
                     return JsonResponse({"message": msg}, status=500) # type: ignore
             else:
                 return JsonResponse({"message": "Failed to send OTP."}, status=500)
-            print(message)
 
             return JsonResponse({'message': 'OTP sent successfully!'})
         
@@ -796,11 +795,16 @@ def register_view(request):
 
     return JsonResponse({'error': 'Invalid method is backend'}, status=500)
     
+import random
+import json
+import requests
+from flask import Flask, render_template, request, session
+ 
+# app = Flask(__name__)
 msg91_auth_key = "435249AIlQ8Mzcd67908a7bP1"  
 sender_id = "HUDSME"  
 template_id = "67777a39d6fc05127c1f9b72"  
 sms_url = "https://api.msg91.com/api/v5/flow/"  
-  
 
 def send_sms(phone_number, otp_variable):
     headers = {
@@ -825,7 +829,7 @@ def send_sms(phone_number, otp_variable):
         response = requests.post(sms_url, json=payload, headers=headers)
         print("\n=== Msg91 Response ===")
         print(response.text)
-        # response.raise_for_status()  
+        response.raise_for_status()  
         return response.json()
     except requests.exceptions.RequestException as e:
         print(f"Error sending SMS: {e}")
@@ -2570,62 +2574,8 @@ def upload_filert(request):
         return JsonResponse({'url': file_url})
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-    import requests
-api_key = "435249A6OkxyFo3G1F675c1c00P1"
-sender_id = "HUDSHI"
-recipient_number = "8838983063"
-message= "Hello! This is a test message from MSG91."
 
-import requests
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
 
-@csrf_exempt
-def send_sms_via_msg91(request):
-    print("Inside function")
-    try:
-        api_key = "435249A6OkxyFo3G1F675c1c00P1"
-        sender_id = "HUDSHI"
-        recipient_number = "918838983063"
-        message= "Hello! This is a test message from MSG91."
-
-        url = "https://api.msg91.com/api/v5/send"
-        payload = {
-            "authkey": api_key,
-            "sender": sender_id,
-            "sms": [
-                {
-                    "message": message,
-                    "to": [recipient_number]
-                }
-            ],
-            "route": "1",  # Use "4" for Transactional or "1" for Promotional
-            "country": "91"  # Adjust country code
-        }
-
-        headers = {
-            "Content-Type": "application/json"
-        }
-
-        response = requests.post(url, json=payload, headers=headers)
-
-        if response.status_code == 200:
-            print("SMS sent successfully!")
-            return JsonResponse({"status": "success", "response": response.json()}, status=200)
-        else:
-            print("Status Code:", response.status_code)
-            print("Response:", response.text)
-            return JsonResponse({"status": "error"})
-
-    except Exception as e:
-        print("Error occurred:", str(e))
-        return JsonResponse({"status": "error", "message": str(e)}, status=500)
-
-# Replace these variables with your MSG91 credentials
-# API_KEY = "435249A6OkxyFo3G1F675c1c00P1"
-# SENDER_ID = "HUDSHI"
-# MESSAGE = "Hello! This is a test message from MSG91."
-# recipient_number = "8838983063"
 
 # send_sms_via_msg91(API_KEY, SENDER_ID, MESSAGE, RECIPIENT)
 import logging
@@ -2775,44 +2725,6 @@ def display_file_details(request):
 
 
 
-import random
-import json
-import requests
-from flask import Flask, render_template, request, session
- 
-app = Flask(__name__)
-app.secret_key = "your_secret_key"
-msg91_auth_key = "435249A6OkxyFo3G1F675c1c00P1"  
-sender_id = "HUDSHI"  
-template_id = "675fbfdbd6fc0506401ad2d3"  
-sms_url = "https://api.msg91.com/api/v5/flow/"  
-def send_sms(phone_number, otp_variable):
-    headers = {
-        "authkey": msg91_auth_key,
-        "Content-Type": "application/json",
-    }
-    payload = {
-        "flow_id": template_id,
-        "sender": sender_id,
-        "recipients": [
-            {
-                "mobiles": phone_number,
-                "var": otp_variable
-            }
-        ]
-    }
- 
-    try:
-        print("\n=== Debugging Payload ===")
-        print(json.dumps(payload, indent=2))  
-        response = requests.post(sms_url, json=payload, headers=headers)
-        print("\n=== Msg91 Response ===")
-        print(response.text)
-        # response.raise_for_status()  
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Error sending SMS: {e}")
-        return None
  
 def generate_otp():
     otp = random.randint(100000, 999999)
