@@ -89,4 +89,7 @@ urlpatterns = [
     path('get_session/', get_session, name='get_session'),
     path('clear_session/',clear_session, name='clear_session'),
 
+        path('test/',testingforDatabas, name='test'),
+
+
 ]

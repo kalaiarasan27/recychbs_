@@ -791,6 +791,7 @@ def register_view(request):
         
     except Exception as e:
         print("Exeption is ",e)
+        
     connection.close()
 
     return JsonResponse({'error': 'Invalid method is backend'}, status=500)
@@ -804,7 +805,12 @@ from flask import Flask, render_template, request, session
 msg91_auth_key = "435249AIlQ8Mzcd67908a7bP1"  
 sender_id = "HUDSME"  
 template_id = "67777a39d6fc05127c1f9b72"  
+<<<<<<< HEAD
 sms_url = "https://api.msg91.com/api/v5/flow/"  
+=======
+sms_url = "https://api.msg91.com/api/v5/flow/"   
+  
+>>>>>>> fc4fd79e2178aa1684566410705219c4b2588ff8
 
 def send_sms(phone_number, otp_variable):
     headers = {
@@ -3001,3 +3007,16 @@ from django.http import HttpResponse
 def clear_session(request):
     request.session.flush()  # Removes all session data
     return HttpResponse("Session cleared!")
+
+
+
+
+
+
+def testingforDatabas(req):
+    try:
+        data = User.objects.get()
+        print(data)
+    except Exception as e:
+        print(e)
+    return JsonResponse(data)
