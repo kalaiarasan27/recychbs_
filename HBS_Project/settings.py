@@ -288,8 +288,6 @@ django_heroku.settings(locals())
 
 
 
-
-
 from django.conf import settings
 
 # AWS Credentials
