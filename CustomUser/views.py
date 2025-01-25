@@ -781,6 +781,7 @@ def register_view(request):
                 print("inside the if")
                 if sms_response.get('type') == "success":
                     print("inside if")
+                    print(otp)
                     return JsonResponse({"status": "success"})
                 else:
                     return JsonResponse({"message": msg}, status=500) # type: ignore
