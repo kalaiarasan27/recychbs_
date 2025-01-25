@@ -287,7 +287,9 @@ def otp_send(request):
     # try:
         if request.method == 'POST':
             # Prompt user to enter the OTP
-            register_data = request.session['data']
+            register_data = request.session.get('data')
+
+            print("This is From OTP block  -", register_data)
 
             username = register_data.get('name')
             email = register_data.get('email')
@@ -674,7 +676,7 @@ def register_view(request):
     try:
         if request.method =='POST':
             data = json.loads(request.body)
-            print(data)
+            print("the data is",data)
             request.session['data'] = data
             email = data.get('email')
             print(email)
