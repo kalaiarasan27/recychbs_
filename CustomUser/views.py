@@ -2254,4 +2254,8 @@ def handle_checkbox(request):
         # print(f"Checkbox value: {is_checked}")
         print(active)
         return JsonResponse({'status': 'success', 'isChecked': is_checked})
+<<<<<<< HEAD
     return JsonResponse({'status': 'failed'}, status=400)
+=======
+    return JsonResponse({'status': 'failed'}, status=400)
+>>>>>>> ee419891e22773d631ce8cf49d4005df66d95119
