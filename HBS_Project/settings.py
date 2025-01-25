@@ -277,7 +277,9 @@ CSRF_TRUSTED_ORIGINS = [
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default: use database for session storage
 
 CORS_ALLOW_CREDENTIALS = True# settings.py
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 # Set session to expire after a certain number of seconds
 SESSION_COOKIE_AGE = 1209600  # 2 weeks, default is 1209600 seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session active even after browser close
