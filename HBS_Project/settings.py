@@ -275,7 +275,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default: use database for session storage
-
+SESSION_COOKIE_SAMESITE = None  # Allow the session cookie to be shared across different origins
 CORS_ALLOW_CREDENTIALS = True# settings.py
   # Set to True in production with HTTPS
 SESSION_COOKIE_SECURE = True
