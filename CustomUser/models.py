@@ -165,22 +165,16 @@ class Dealer_Details(models.Model):
     Phone_Number = models.CharField(max_length=30,null=True)
     Aadhar_No = models.BigIntegerField()
     Aadhar_Front_Photo = models.FileField(upload_to='Dealer_Aadhar_Img')
-    Aadhar_Front_base64file_name = models.CharField(max_length=255,null=True)
-    Aadhar_Front_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
     Aadhar_Back_Photo = models.FileField(upload_to='Dealer_Aadhar_Img')  
-    Aadhar_Back_base64file_name = models.CharField(max_length=255,null=True)
-    Aadhar_Back_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
+    # Storing the base64-encoded file
     PAN_No = models.CharField(max_length=20)
     PAN_Photo = models.FileField(upload_to='Dealer_Pan_Img')
-    PAN_Photo_base64file_name = models.CharField(max_length=255,null=True)
-    PAN_Photo_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
+    # Storing the base64-encoded file
     LICENSE_No = models.CharField(max_length=20)
     LICENSE_Front_Photo = models.FileField(upload_to='Dealer_License_Img')
-    LICENSE_Front_base64file_name = models.CharField(max_length=255,null=True)
-    LICENSE_Front_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
+   # Storing the base64-encoded file
     LICENSE_Back_Photo = models.FileField(upload_to='Dealer_License_Img')
-    LICENSE_Back_base64file_name = models.CharField(max_length=255,null=True)
-    LICENSE_Back_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
+  # Storing the base64-encoded file
     Vehicle_No = models.CharField(max_length=25)
     RC_BOOK_Photo = models.FileField(upload_to='Dealer_RCBook_Img')
     RC_BOOK_base64file_name = models.CharField(max_length=255,null=True)
