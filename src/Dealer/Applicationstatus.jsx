@@ -85,7 +85,7 @@ const Applicationstatus = () => {
           // Fetch status from Django when the component loads
           const fetchStatus = async () => {
             try {
-              const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/FetchStatusActive/',{
+              const response = await fetch('FetchStatusActive/',{
             // const response = await fetch('http://127.0.0.1:8000/FetchStatusActive/ ', {
               credentials: 'include', // Ensures cookies are sent
               'X-CSRFToken':csrfToken
