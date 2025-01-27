@@ -1290,18 +1290,18 @@ def Get_DealerDetails(request):
 
     clears = [var for var in file_paths if var]
     # Extract only the file name without query parameters
-    filenames = [os.path.basename(urlparse(file_path).path) for file_path in clears]
+    # filenames = [os.path.basename(urlparse(file_path).path) for file_path in clears]
 
-    print("this is file files")
+    # print("this is file files")
 
-    print(filenames)
+    # print(filenames)
 
     # print(image_names)
     # filenames = [var2, var1, var3]
 
     images = []
 
-    for filename in filenames:
+    for filename in clears:
     
         try:
             response = s3_client.get_object(Bucket='mybucket', Key=filename)
