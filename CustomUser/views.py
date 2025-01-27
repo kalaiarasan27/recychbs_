@@ -942,9 +942,9 @@ def dealer_details(request):
     # Text Fields
     try:
         user = request.user.id
-        # id = DealerProfile.objects.get(user_id=user)
-        # dealer_id = id.Dealer_ID
-        dealer_id = user
+        id = DealerProfile.objects.get(user_id=user)
+        dealer_id = id.Dealer_ID
+        # dealer_id = 1
         name = request.POST.get('name')
         phone_number = request.POST.get('phoneNumber')
         mail_id = request.POST.get('mailId')
@@ -969,134 +969,45 @@ def dealer_details(request):
         pan_card = request.FILES.get('panCard')
         license_file_front = request.FILES.get('licensefront')
         license_file_back = request.FILES.get('licenseback')
+        print("license_file_back",license_file_back)
         RC_Book_file = request.FILES.get('vehicle')
         bank_statement = request.FILES.get('statement')
         bank_passBook = request.FILES.get('passbook')
+        print("bank_passBook",bank_passBook)
 
+        s3_client = boto3.client(
+            's3',
+            endpoint_url='http://82.112.238.156:9000',  
+            aws_access_key_id='minioadmin',          
+            aws_secret_access_key='minioadmin',      
+            region_name='us-east-1'                  
+        )
+ 
+        BUCKET_NAME = 'mybucket'
+        files = [aadhar_front,aadhar_back,pan_card,license_file_front,license_file_back,RC_Book_file,bank_statement,bank_passBook]  # Get all files from 'photos' field
 
+        # uploaded_files = []
+        failed_files = []
+        unique_names = []
 
-        # Retrieve file1 base64 data and file name
-        aadhar_front_base64 = request.POST.get('aadharfront_base64')
-        aadhar_front_file_name = request.POST.get('adharfront_fileName')
-        print(aadhar_front_base64)
-        print(aadhar_front_file_name)
-        # Retrieve file2 base64 data and file name (if multiple files)
-        aadhar_back_base64 = request.POST.get('aadharback_base64')
-        aadhar_back_file_name = request.POST.get('aadharback_fileName')
-        print(aadhar_back_base64)
-        print(aadhar_back_file_name)
+        for file in files:
+            try:
+                # Extract the file name
+                file_name = os.path.basename(file.name)
+                logging.debug(f"Uploading file: {file_name}")
+                unique_name = f"{uuid.uuid4()}_{file_name}"
 
-        print(user)
-    
-        # print(f"aadhar- {aadhar_front.name}")
-        # print(f"PanCard- {aadhar_back.name}")
-        # print(f"Aadhar size from request: {aadhar_front.size} bytes")
-        # print(f"PanCard size from request: {aadhar_back.size} bytes")
-        # # Print the first few bytes for debugging (e.g., first 100 bytes)
-        # # print(f"Aadhar file content (first 100 bytes): {aadhar_content[:100]}")
-        # # print(f"PanCard file content (first 100 bytes): {pan_card_content[:100]}")
-        # print("Bucket-",settings.AWS_STORAGE_BUCKET_NAME)
-        # if aadhar_front.size == 0 or aadhar_back.size == 0:
-        #     return HttpResponseBadRequest("Uploaded files are empty.")
+                # Upload the file to the VPS bucket
+                s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
 
-        # print(DUMMY_ID)
-
-        # dealer = Dealer_Details(
-        # Dealer_ID = dealer_id, 
-        # Dealer_Name = name,
-        # mail_id = mail_id,
-        # DOB = DOB,
-        # Phone_Number = phone_number,
-        # Address = address,
-        # Aadhar_No = aadharNumber,
-        # Aadhar_Front_Photo = aadhar_front,
-        # Aadhar_Back_Photo = aadhar_back,
-        # PAN_No = panCardNumber,
-        # PAN_Photo = pan_card,
-        # LICENSE_No = licenseNumber,
-        # LICENSE_Front_Photo = license_file_front,
-        # LICENSE_Back_Photo = license_file_back,
-        # Vehicle_No = vehicleNumber,
-        # RC_BOOK_Photo = RC_Book_file,
-        # City = city,
-        # State = state,
-        # Post_Code = postcode,
-        # Country = country,
-        # Nationality = Nationality,
-        # Bank_AccountName = bankAccountName,
-        # Bank_Acc = bankAccountNumber,
-        # IFSC_CODE = ifscCode,
-        # Bank_Statement_Photo = bank_statement,
-        # PassBook_Photo = bank_passBook,
-        # Vehicle_Type = VehicleType
-        # )
-        # dealer.save()
-
-
-        # # if Dealer_Details.objects.filter(Dealer_ID=dealer_id).exists():
-        # #     return JsonResponse({"error":"Dealer Details Already Sent"},status=400)
-        # try:
-        #     # Validate that files were uploaded
-        #     if not aadhar_front or not aadhar_back:
-        #         raise ValueError("Aadhar or Pan Card not uploaded correctly.")
-
-        #     # Create a session with S3
-        #     s3 = boto3.client('s3')
-
-        #     # Reset the file pointers by seeking to the beginning for future operations
-        #     aadhar_front.seek(0)
-        #     aadhar_back.seek(0)
-
-        #     # Read images into memory (BytesIO) once
-        #     aadhar_front_content = aadhar_front.read()  # Store content as bytes
-        #     aadhar_back_content = aadhar_back.read()
-        #     # Print the first few bytes for debugging (e.g., first 100 bytes)
-        #     print(f"Aadhar file content (first 100 bytes): {aadhar_front_content[:100]}")
-        #     print(f"PanCard file content (first 100 bytes): {aadhar_back_content[:100]}")
-        #     # DEBUG: Check the size of the bytes
-        #     print(f"Aadhar size after read: {len(aadhar_front_content)} bytes")
-        #     print(f"Pan card size after read: {len(aadhar_back_content)} bytes")
-
-        #     # Reset the file pointers by seeking to the beginning for future operations
-        #     aadhar_front.seek(0)
-        #     aadhar_back.seek(0)
-
-        #     # Upload images to S3 using the in-memory content
-        #     image1_key = f'uploads/{aadhar_front.name}'
-        #     image2_key = f'uploads/{aadhar_back.name}'
-
-        #     # Upload to S3 (need BytesIO to upload)
-        #     s3.upload_fileobj(BytesIO(aadhar_front_content), settings.AWS_STORAGE_BUCKET_NAME, image1_key)
-        #     s3.upload_fileobj(BytesIO(aadhar_back_content), settings.AWS_STORAGE_BUCKET_NAME, image2_key)
-
-        #     byteAadhar = BytesIO(aadhar_front_content)
-        #     bytePan = BytesIO(aadhar_back_content)
-        #     print("BYTE IO-",byteAadhar)
-        #     print("BYTE IO-",bytePan)
-
-        #     # Create PDF from in-memory images
-        #     pdf_buffer = images_to_pdf([BytesIO(aadhar_front_content), BytesIO(aadhar_back_content)])
-
-        #     if pdf_buffer is None:
-        #         raise Exception("Failed to create PDF due to invalid image data")
-
-        #     # Save PDF to S3
-        #     pdf_key = f'uploads/aadhar_{uuid.uuid4()}.pdf'
-        #     s3.upload_fileobj(pdf_buffer, settings.AWS_STORAGE_BUCKET_NAME, pdf_key)
-
-        #     # Save the PDF model instance with the S3 URL
-        #     pdf_instance = Dealer_Details()
-        #     pdf_instance.aadharPDF = f'https://{settings.AWS_S3_CUSTOM_DOMAIN}/{pdf_key}'
-        #     pdf_instance.save()
-
-        # except Exception as e:
-        #     print(f"Error in handle_upload: {e}")
-        #     return HttpResponseServerError(f"Internal server error: {e}")
-
-
-
-
-        # print("after")
+                unique_names.append(unique_name)
+                #
+            except NoCredentialsError:
+                logging.error("Credentials not available")
+                failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
+            except Exception as e:
+                logging.error(f"Error during file upload: {str(e)}")
+                failed_files.append({'file_name': file.name, 'error': str(e)})
 
 
         if Dealer_Details.objects.filter(Dealer_ID=dealer_id).exists():
@@ -1110,15 +1021,15 @@ def dealer_details(request):
         Phone_Number = phone_number,
         Address = address,
         Aadhar_No = aadharNumber,
-        Aadhar_Front_Photo = aadhar_front,
-        Aadhar_Back_Photo = aadhar_back,
+        Aadhar_Front_Photo = unique_names[0],
+        Aadhar_Back_Photo = unique_names[1],
         PAN_No = panCardNumber,
-        PAN_Photo = pan_card,
+        PAN_Photo = unique_names[2],
         LICENSE_No = licenseNumber,
-        LICENSE_Front_Photo = license_file_front,
-        LICENSE_Back_Photo = license_file_back,
+        LICENSE_Front_Photo = unique_names[3],
+        LICENSE_Back_Photo = unique_names[4],
         Vehicle_No = vehicleNumber,
-        RC_BOOK_Photo = RC_Book_file,
+        RC_BOOK_Photo = unique_names[5],
         City = city,
         State = state,
         Post_Code = postcode,
@@ -1127,12 +1038,12 @@ def dealer_details(request):
         Bank_AccountName = bankAccountName,
         Bank_Acc = bankAccountNumber,
         IFSC_CODE = ifscCode,
-        Bank_Statement_Photo = bank_statement,
-        PassBook_Photo = bank_passBook,
+        Bank_Statement_Photo = unique_names[6],
+        PassBook_Photo = unique_names[7],
         Vehicle_Type = VehicleType
         )
         dealer.save()
-
+        print("dealer",dealer)
         print("Dealer Deatails Sent")
         connection.close()
 
@@ -1336,21 +1247,16 @@ def Get_DealerDetails(request):
 
         # Filter DealerProfile based on the current dealer's Dealer_ID
         profiles = list(DealerProfile.objects.filter(Dealer_ID=dealer_id).values())
-        
+       
         # Append the profiles to dealer_profiles
         dealer_profiles.extend(profiles)
 
+    # print(dealer['Aadhar_Front_Photo'])
 
-    print(dealer_profiles)
-    
-    data = {
-        'dealer_details': dealer_data,
-        'dealer_profiles': dealer_profiles
-    }
     # Loop through each dealer and add the URL for each image field
     for dealer in dealer_data:
         dealer_details = Dealer_Details.objects.get(Dealer_ID=dealer['Dealer_ID'])
-        
+
         # Add the full URLs for the image fields
         dealer['Aadhar_Front_Photo'] = dealer_details.Aadhar_Front_Photo.url if dealer_details.Aadhar_Front_Photo else None
         dealer['Aadhar_Back_Photo'] = dealer_details.Aadhar_Back_Photo.url if dealer_details.Aadhar_Back_Photo else None
@@ -1364,9 +1270,62 @@ def Get_DealerDetails(request):
         dealer['extradata_field2'] = dealer_details.extradata_field2.url if dealer_details.extradata_field2 else None
         dealer['extradata_field3'] = dealer_details.extradata_field3.url if dealer_details.extradata_field3 else None
         dealer['extradata_field4'] = dealer_details.extradata_field4.url if dealer_details.extradata_field4 else None
+
     connection.close()
-    # Return the data as JSON
+
+    file_paths = [
+    dealer['Aadhar_Front_Photo'],
+    dealer['Aadhar_Back_Photo'],
+    dealer['PAN_Photo'],
+    dealer['LICENSE_Front_Photo'],
+    dealer['LICENSE_Back_Photo'],
+    dealer['RC_BOOK_Photo'],
+    dealer['Bank_Statement_Photo'],
+    dealer['PassBook_Photo'],
+    dealer['extradata_field1'],
+    dealer['extradata_field2'],
+    dealer['extradata_field3'],
+    dealer['extradata_field4']
+]
+
+    clears = [var for var in file_paths if var]
+    # Extract only the file name without query parameters
+    filenames = [os.path.basename(urlparse(file_path).path) for file_path in clears]
+
+    print("this is file files")
+
+    print(filenames)
+
+    # print(image_names)
+    # filenames = [var2, var1, var3]
+
+    images = []
+
+    for filename in filenames:
+    
+        try:
+            response = s3_client.get_object(Bucket='mybucket', Key=filename)
+            file_content = response['Body'].read()
+            encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
+            images.append({"filename": filename, "content": encoded_image})
+        except s3_client.exceptions.NoSuchKey:
+            print(f"File not found: {filename}")
+            images.append({"filename": filename, "content": None})
+        except Exception as e:
+            print(f"An error occurred for {filename}: {e}")
+            images.append({"filename": filename, "content": None})
+  # Or handle as needed
+
+        # return JsonResponse({"images": images}, safe=False)
+
+    data = {
+        'dealer_details': dealer_data,
+        'dealer_profiles': dealer_profiles,
+        "images": images
+    }
+
     return JsonResponse(data, safe=False, status=200)
+
 
 
 @csrf_exempt
