@@ -185,7 +185,7 @@ def send_extraData(request):
     for file in clears:
             try:
                 # Extract the file name
-                file_name = os.path.basename(file)
+                file_name = os.path.basename(file.name)
                 logging.debug(f"Uploading file: {file_name}")
                 unique_name = f"{uuid.uuid4()}_{file_name}"
  
@@ -194,12 +194,14 @@ def send_extraData(request):
  
                 extrafiles.append(unique_name)
                 #
-            except Exception as e:
+            except NoCredentialsError:
                 logging.error("Credentials not available")
-                failed_files.append({'file_name': file, 'error': 'Credentials not available'})
+                failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
             except Exception as e:
                 logging.error(f"Error during file upload: {str(e)}")
-                failed_files.append({'file_name': file, 'error': str(e)})
+                failed_files.append({'file_name': file.name, 'error': str(e)})
+
+                
     # Dynamically assign files or set None if list is empty
     table.extradata_field1 = extrafiles[0] if file1 else None
     table.extradata_field2 = extrafiles[1] if file2 else None
