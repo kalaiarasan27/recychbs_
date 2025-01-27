@@ -193,7 +193,7 @@ def send_extraData(request):
  
                 extrafiles.append(unique_name)
                 #
-            except NoCredentialsError:
+            except Exception as e:
                 logging.error("Credentials not available")
                 failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
             except Exception as e:
