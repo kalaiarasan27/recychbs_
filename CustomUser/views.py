@@ -166,13 +166,44 @@ def send_extraData(request):
     print('This is Backend file3 - ',file3)
     print('This is Backend file4 - ',file4)
 
+    files=[file1,file2,file3,file4]
+
     table = Dealer_Details.objects.get(Dealer_ID=dealer_id)
     table.dealer_message = message
+    s3_client = boto3.client(
+            's3',
+            endpoint_url='http://82.112.238.156:9000',  
+            aws_access_key_id='minioadmin',          
+            aws_secret_access_key='minioadmin',      
+            region_name='us-east-1'                  
+        )
+ 
+    BUCKET_NAME = 'mybucket'
+    clears = [var for var in files if var]
+    extrafiles=[]
+    for file in clears:
+            try:
+                # Extract the file name
+                file_name = os.path.basename(file.name)
+                logging.debug(f"Uploading file: {file_name}")
+                unique_name = f"{uuid.uuid4()}_{file_name}"
+ 
+                # Upload the file to the VPS bucket
+                s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
+ 
+                extrafiles.append(unique_name)
+                #
+            except NoCredentialsError:
+                logging.error("Credentials not available")
+                failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
+            except Exception as e:
+                logging.error(f"Error during file upload: {str(e)}")
+                failed_files.append({'file_name': file.name, 'error': str(e)})
     # Dynamically assign files or set None if list is empty
-    table.extradata_field1 = file1[0] if file1 else None
-    table.extradata_field2 = file2[0] if file2 else None
-    table.extradata_field3 = file3[0] if file3 else None
-    table.extradata_field4 = file4[0] if file4 else None
+    table.extradata_field1 = extrafiles[0] if file1 else None
+    table.extradata_field2 = extrafiles[1] if file2 else None
+    table.extradata_field3 = extrafiles[2] if file3 else None
+    table.extradata_field4 = extrafiles[3] if file4 else None
 
     table.save()
 
