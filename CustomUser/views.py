@@ -1232,6 +1232,7 @@ s3_client = boto3.client(
             aws_secret_access_key='minioadmin',      
             region_name='us-east-1'                  
         )
+import base64
 
 @csrf_exempt
 def Get_DealerDetails(request):
@@ -1308,13 +1309,13 @@ def Get_DealerDetails(request):
         # filenames = [var2, var1, var3]
 
         images = []
-        print("this is clears:",clears)
+        # print("this is clears:",clears)
 
         for filename in clears:
         
             try:
                 response = s3_client.get_object(Bucket='mybucket', Key=filename)
-                # print(response)
+                print("this is responce",response)
                 file_content = response['Body'].read()
                 encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
                 images.append({"filename": filename, "content": encoded_image})
