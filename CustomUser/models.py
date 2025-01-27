@@ -177,14 +177,10 @@ class Dealer_Details(models.Model):
   # Storing the base64-encoded file
     Vehicle_No = models.CharField(max_length=25)
     RC_BOOK_Photo = models.FileField(upload_to='Dealer_RCBook_Img')
-    RC_BOOK_base64file_name = models.CharField(max_length=255,null=True)
-    RC_BOOK_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
     Bank_Acc = models.BigIntegerField(null=True)
     IFSC_CODE = models.CharField(max_length=40,null=True)
     Bank_AccountName = models.CharField(max_length=40,null=True)
     Bank_Statement_Photo = models.FileField(upload_to='Bank_Statement')
-    Bank_Statement_base64file_name = models.CharField(max_length=255,null=True)
-    Bank_Statement_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
     PassBook_Photo = models.FileField(upload_to='PassBook_Photo')
     Vehicle_Type = models.CharField(max_length=30,null = True)
     Fees_Paid = models.CharField(max_length=30,choices=[('notPaid','NotPaid'),('paid','Paid')],default='notpaid')
@@ -194,14 +190,6 @@ class Dealer_Details(models.Model):
     extradata_field2 = models.FileField(upload_to='Extra_Images',null=True,blank=True)
     extradata_field3 = models.FileField(upload_to='Extra_Images',null=True,blank=True)
     extradata_field4 = models.FileField(upload_to='Extra_Images',null=True,blank=True)
-    extradata_field1_base64file_name = models.CharField(max_length=255,null=True)
-    extradata_field1_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
-    extradata_field2_base64file_name = models.CharField(max_length=255,null=True)
-    extradata_field2_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
-    extradata_field3_base64file_name = models.CharField(max_length=255,null=True)
-    extradata_field3_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
-    extradata_field4_base64file_name = models.CharField(max_length=255,null=True)
-    extradata_field4_base64file_data = models.TextField(null=True)  # Storing the base64-encoded file
     dealer_message = models.TextField(null=True,blank=True)
     aadhar_PDF = models.FileField(upload_to='AadharPDF',null=True,blank=True)
 
