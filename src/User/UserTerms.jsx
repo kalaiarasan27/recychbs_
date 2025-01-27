@@ -1,18 +1,10 @@
+import Header from "../component/Header";
+
 function UserTerms() {
     return (
         <>
-            <div
-                className="container-fluid m-0"
-                style={{
-                    backgroundColor: "#000",
-                    color: "#fff",
-                    paddingTop: "20px",
-                    fontSize: "17px",
-                    fontWeight: "200",
-                    paddingLeft: "30px",
-                    paddingRight: "30px"
-                }}
-            >
+             <Header />
+             <div className="container-fluid topbottom-user">
                 <div
                     style={{
                         display: "flex",

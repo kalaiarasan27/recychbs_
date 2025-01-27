@@ -1,4 +1,6 @@
 import './App.css';
+import '../src/style/Footer.css';
+import '../src/style/OngoingOrder.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Register1 from './screen/Register1';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -33,8 +35,6 @@ import Career from './User/FooterScreen/Career';
 import Fulfillment from './User/FooterScreen/Fullfillment';
 import Sellon from './User/FooterScreen/sellon';
 import Useraccount from './User/Drawer/Useraccount';
-import FileUploads from './User/Drawer/test';
-import FileDisplaybucket from './User/Drawer/displayfile';
 import Usercustomer from './User/Drawer/Usercustomer';
 import Userfaq from './User/Drawer/Userfaq';
 import Userhelp from './User/Drawer/Userhelp';
@@ -63,12 +63,16 @@ import CompletedOrder from './User/CompletedOrder';
 import OngoingOrder from './User/OngoingOrder';
 import Logout from './screen/Logout';
 import { AuthProvider } from './screen/AuthContext';
-import ProtectedRoute from './screen/ProtectedRoute'; // Adjust the path accordingly
-import FileUpload from './screen/FileUpload';
-import DisplayUploadedFile from './screen/DisplayUploadedFile';
-import Scrapotpdetail from './Dealer/Otps'
-import LocationFinder from './Dealer/location'
-
+import ProtectedRoute from './screen/ProtectedRoute';
+import UploadBankDetails from './User/Drawer/UploadBankDetails';
+import Base64Testing from './Dealer/Base64Testing';
+import Base64Testing2 from './Dealer/Base64Testing2';
+import LocationTesting from './Dealer/locationTesting';
+import NearbyUsers from './Dealer/nearbyUsers';
+import UserPage from './User/webSocketUser';
+import DealerPage from './User/WebSocketTesting';
+import Testing2 from './User/testing2';
+import Testing3 from './User/testing3';
 
 function App() {
 
@@ -81,8 +85,6 @@ function App() {
           <Route path='/Login' element={<Login />} />
           <Route path='/Register1' element={<Register1 />} />
           <Route path='/RegisterUser' element={<RegisterUser />} />
-          <Route path='/FileUpload' element={<FileUpload />} />
-          <Route path='/DisplayUploadedFile' element={<DisplayUploadedFile />} />
           <Route path='/Success' element={<Success />} />
           <Route path='/OtpVerification' element={<OtpVerification />} />
           <Route path='/password-reset' element={<Forgotpassword />} />
@@ -91,17 +93,12 @@ function App() {
           <Route path='/Notification' element={<Notification />} />
           <Route path='/Datadel' element={<Datadel />} />
           <Route path='/Applicationstatus' element={<Applicationstatus />} />
-          <Route path='/FileUploads' element={<FileUploads />} />
-          <Route path='/FileDisplaybucket' element={<FileDisplaybucket />} />
-          <Route path='/Scrapotpdetail' element={<Scrapotpdetail />} />
-          <Route path='/LocationFinder' element={<LocationFinder />} />
-
 
           {/* ----------------------///DEALER////---------------------------- */}
           <Route path='/Homedealer' element={
-            <ProtectedRoute requiredRole="DEALER">
+            // <ProtectedRoute requiredRole="DEALER">
               <Homedealer />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           } />
           <Route path='/Todayscrap' element={
             <ProtectedRoute requiredRole="DEALER">
@@ -230,13 +227,22 @@ function App() {
               <Logout />
             </ProtectedRoute>
           } />
-
+           <Route path='/UploadBankDetails' element={<UploadBankDetails />} />
+           <Route path='/Base64Testing' element={<Base64Testing />} />
+           <Route path='/Base64Testing2' element={<Base64Testing2 />} />
+           <Route path='/locationTesting' element={<LocationTesting />} />
+           <Route path='/nearbyUsers' element={<NearbyUsers />} />
+           <Route path="/wsUser" element={<UserPage />} />
+           <Route path="/wsDealer" element={<DealerPage />} />
+           <Route path="/wsDealer1" element={<Testing2 />} />
+           <Route path="/wsDealer2" element={<Testing3 />} />
           {/* ----------------------///USER////---------------------------- */}
-          <Route path='/Homeuser' element={
+          {/* <Route path='/Homeuser' element={
             <ProtectedRoute requiredRole="USER">
               <Homeuser />
             </ProtectedRoute>
-          } />
+          } /> */}
+              <Route path='/Homeuser' element={<Homeuser />} />
           <Route path='/Scrapselect' element={
             <ProtectedRoute requiredRole="USER">
               <Scrapselect />
@@ -277,11 +283,12 @@ function App() {
               <Userqns />
             </ProtectedRoute>
           } />
-          <Route path='/UserTerms' element={
+          {/* <Route path='/UserTerms' element={
             <ProtectedRoute requiredRole="USER">
               <UserTerms />
             </ProtectedRoute>
-          } />
+          } /> */}
+          <Route path='/UserTerms' element={<UserTerms />} />
           <Route path='/CompletedOrder' element={
             <ProtectedRoute requiredRole="USER">
               <CompletedOrder />
@@ -303,29 +310,29 @@ function App() {
 
           {/* ----------drawer user------ */}
           <Route path='/Useraccount' element={
-            <ProtectedRoute requiredRole="USER">
+            // <ProtectedRoute requiredRole="USER">
               <Useraccount />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           } />
           <Route path='/Usercustomer' element={
-            <ProtectedRoute requiredRole="USER">
+            // <ProtectedRoute requiredRole="USER">
               <Usercustomer />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           } />
           <Route path='/Userfaq' element={
-            <ProtectedRoute requiredRole="USER">
+            // <ProtectedRoute requiredRole="USER">
               <Userfaq />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           } />
           <Route path='/Userhelp' element={
-            <ProtectedRoute requiredRole="USER">
+            // <ProtectedRoute requiredRole="USER">
               <Userhelp />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           } />
           <Route path='/Yourbooking' element={
-            <ProtectedRoute requiredRole="USER">
+            // <ProtectedRoute requiredRole="USER">
               <Yourbooking />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           } />
         </Routes>
       </BrowserRouter>

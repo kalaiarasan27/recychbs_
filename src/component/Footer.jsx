@@ -120,10 +120,10 @@ const Footer = () => {
             <Link to="/BookingProtection" className="footer-subtext-link">
               <span className="footer-subtext">100% Booking Protection</span>
            </Link>
-            <Link to="https://www.recychbs.in/" target="_blank" rel="noopener noreferrer" className="footer-subtext-link">
+            <Link to="/" className="footer-subtext-link">
               <span className="footer-subtext">RECYCHBS App Download</span>
            </Link>
-            <Link to="/Successful" className="footer-subtext-link">
+            <Link to="/Userhelp" className="footer-subtext-link">
               <span className="footer-subtext">Help</span>
            </Link>
           </div>

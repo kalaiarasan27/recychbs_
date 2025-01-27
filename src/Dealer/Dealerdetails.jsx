@@ -51,7 +51,6 @@ const Dealerdetails = () => {
     ifscCode: "",
     bankAccountName: "",
   });
-
   const [errors, setErrors] = useState({});
   const [fileNames, setFileNames] = useState({
     aadharfront: "",
@@ -77,6 +76,13 @@ const Dealerdetails = () => {
     passbook: useRef(null)
   };
 
+  // const [base_fileNames, base_setFileNames] = useState([]);  // To store selected file names
+  // const [base_files, base_setFiles] = useState([]);  // To store base64 strings of files
+
+
+  const [filesData, setFilesData] = useState({});  // To store base64 data for each file
+
+console.log(filesData);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [generalError, setGeneralError] = useState("");
@@ -270,6 +276,20 @@ const handleFileChange = (fileType) => (e) => {
       [fileType]: "No file selected.",
     }));
   }
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+      setFilesData(prevData => ({
+        ...prevData,
+        [fileType]: { base64: base64String, file_name: file.name }  // Update the base64 and name for this field
+      }));
+    };
+
+    reader.readAsDataURL(file);  // Convert file to base64
+  }
 };
 
 
@@ -388,6 +408,14 @@ const handleFileChange = (fileType) => (e) => {
     }
 
     uploadFile.append("vehicleType", selectedOption);
+    // Append filesData (base64-encoded file data)
+for (const [key, fileData] of Object.entries(filesData)) {
+  if (fileData) {
+    uploadFile.append(`${key}_base64`, fileData.base64);  // Add base64 string
+    uploadFile.append(`${key}_fileName`, fileData.file_name);  // Add file name for each file
+  }
+}
+
 
     const csrfToken = getCookie("csrftoken");
     displayAlert('loading', 'Uploading, please wait...');
@@ -410,8 +438,8 @@ const handleFileChange = (fileType) => (e) => {
     try {
       // Send the form data to the server
       const response = await fetch(
-        // "https://recychbs-app-c05d5f684be1.herokuapp.com/dealer_details/",
-        "dealer_details/",
+        "https://django-djreact-app-d5af3d4e3559.herokuapp.com/dealer_details/",
+        // "http://127.0.0.1:8000/dealer_details/",
         {
           method: "POST",
           body: uploadFile,

@@ -72,7 +72,7 @@ function Homeuser() {
   return (
     <>
       <Header />
-      <div className="container-fluid topbottom-user ps-0 pe-0">
+      <div className="container-fluid topbottom-user">
       <div className="slideshow-container" style={{ position: "relative", overflow: "hidden" }}>
           {slides.map((src, index) => (
             <div
@@ -111,20 +111,20 @@ function Homeuser() {
                 UPDATED SCRAP PRICES
             </span>
           </div>
-          <div className="search-header-container" style={{ display: 'flex', justifyContent: 'center', padding: '10px',alignItems:"center" }}>
+          <div className="search-header-container" style={{ display: 'flex', justifyContent: 'center', padding: '10px 0',alignItems:"center" }}>
           <div style={{ position: "relative", display:"flex", marginRight: '10px',width:"100%",boxShadow:"0px 4px 10px rgba(88, 76, 76, 0.5)",borderRadius:"50px",height:"35px",margin:"0 10px" }}>
             <CiSearch className="search-headerIcon" />
             <input
               className="search-header"
               type="search"
-              placeholder="Search by title or cost..."
+              placeholder="Search"
               onChange={(e) => setSearchQuery(e.target.value)}
               value={searchQuery} 
             />
           </div>
         </div>
           {filteredItems.map((item, index) => (
-            <div key={index} className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <div key={index} className="col-xl-3 col-lg-4 col-md-6 col-sm-12 p-2">
             <div className="homecard">
                 <div>
                   <img

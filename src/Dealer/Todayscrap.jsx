@@ -24,7 +24,7 @@ function Todayscrap() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/fetch/')
+    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/fetch/')
       .then(response => response.json())
       .then(data =>{ 
         setData(data);

@@ -210,7 +210,7 @@ const RegisterUser = () => {
     setErrors(newErrors);
   };
   
-  
+ 
   const validateForm = () => {
     const newErrors = {};
  
@@ -271,7 +271,7 @@ const RegisterUser = () => {
         return cookieValue;
       }
    
-      fetch("register-form/", {
+      fetch("https://django-djreact-app-d5af3d4e3559.herokuapp.com/register-form/", {
      
         credentials: 'include', 
         method: "POST",
@@ -282,12 +282,12 @@ const RegisterUser = () => {
         body: JSON.stringify(formData),
       })
       .then(response => {
-        // console.log(response);
         if (response.ok) {
           return response.json().then(data => {
             setMessage(data.message);
            
           console.log("the fetch data-",data);
+          
           navig("/OtpVerification");         
          });
         } else {
@@ -392,6 +392,7 @@ const RegisterUser = () => {
 />
 {touched.email && <p className="error-warning">{errors.email}</p>}
 
+{emailError && <p style={{ color: "red" }}>{emailError}</p>}
  
               <div className="input-box">
                 <div className="input-wrapper">

@@ -150,8 +150,7 @@ const handleBlur = (e) => {
       loginType: activeLogin
     };
     setLoading(true);
-    console.log(dataToSend);
-    fetch('http://127.0.0.1:8000/login-form/', {
+    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/login-form/', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -161,52 +160,105 @@ const handleBlur = (e) => {
       body: JSON.stringify(dataToSend),
     })
     .then(response => {
+      // if (response.ok) {
+      //   return response.json().then(data => {
+      //     setMessage(data.message);
+      //     setStatus(data.form_submitted);
+    
+      //     // Store login details in session storage
+      //     // sessionStorage.setItem('isLoggedIn', 'true');
+      //     // sessionStorage.setItem('userRole', activeLogin);
+      //     sessionStorage.setItem('formSubmitted', JSON.stringify(data.form_submitted));
+      //     sessionStorage.setItem('applicationStatus', JSON.stringify(data.application_status));
+      //     logIn(activeLogin);
+
+    
+      //     // Navigate based on login type
+      //     displayAlert('success', 'Logged In successfully');
+    
+      //     setTimeout(() => {
+      //       if (activeLogin === "USER") {
+      //         navigate("/Homeuser");
+      //       } else if (activeLogin === "DEALER") {
+      //         if (data.application_status === "approved") {
+      //           navigate("/Homedealer");
+      //         } else if (data.form_submitted === 'True') {
+      //           navigate("/Applicationstatus");
+      //         } else {
+      //           navigate("/Dealerdetails");
+      //         }
+      //       }
+      //     }, 2000);
+      //   });
+      // } 
       if (response.ok) {
         return response.json().then(data => {
           setMessage(data.message);
           setStatus(data.form_submitted);
-    
-          // Store login details in session storage
+          console.log(data.form_submitted);
+               //     // Store login details in session storage
           // sessionStorage.setItem('isLoggedIn', 'true');
           // sessionStorage.setItem('userRole', activeLogin);
           sessionStorage.setItem('formSubmitted', JSON.stringify(data.form_submitted));
-          sessionStorage.setItem('applicationStatus', JSON.stringify(data.application_status));
+          // sessionStorage.setItem('applicationStatus', JSON.stringify(data.application_status));
           logIn(activeLogin);
 
     
           // Navigate based on login type
           displayAlert('success', 'Logged In successfully');
-    
-          setTimeout(() => {
-            if (activeLogin === "USER") {
-              navigate("/Homeuser");
-            } else if (activeLogin === "DEALER") {
-              if (data.application_status === "approved") {
-                navigate("/Homedealer");
-              } else if (data.form_submitted === 'True') {
-                navigate("/Applicationstatus");
-              } else {
-                navigate("/Dealerdetails");
-              }
+           // Navigate based on login type
+          if (activeLogin === "USER") {
+            navigate('/Homeuser');
+          } else if (activeLogin === "DEALER") {
+            if (data.form_submitted === 'True'){
+              navigate('/Applicationstatus');
+            }else{
+              navigate('/Dealerdetails');
             }
-          }, 2000);
-        });
-      } else {
-        return response.json().then(data => {
-          setError(data.error);
-          displayAlert('error', 'Log In Failed');
-          setTimeout(() => {
-            navigate("/");
-          }, 2000);
+          }
         });
       }
-    })
-    .catch(error => {
-      console.log("Error:", error);
-    })
-    .finally(() => {
+    
+    
+      
+    //   else {
+    //     return response.json().then(data => {
+    //       setError(data.error);
+    //       displayAlert('error', 'Log In Failed');
+    //       setTimeout(() => {
+    //         navigate("/");
+    //       }, 2000);
+    //     });
+    //   }
+    // })
+    // .catch(error => {
+    //   console.log("Error:", error);
+    // })
+    else {
+      return response.json().then(data => {
+        setError(data.error);
+        displayAlert('error', 'Log In Failed');
+
+              if (activeLogin === "USER") {
+                setTimeout(() => {
+                    navigate("/");
+                  }, 2000);
+              } else if (activeLogin === "DEALER") {
+
+                setTimeout(() => {
+                    navigate("/");
+                  }, 2000);              
+                }
+
+      });
+    }
+  })
+  .catch(error => {
+    console.log("Error:", error);
+  });
+    // .finally(() => {
       setLoading(false); // Set loading to false when API call is complete
-    });
+    // });
   
     // Perform validation and error handling as needed
     const role = activeLogin.toLowerCase();

@@ -306,7 +306,7 @@ const Register1 = () => {
         return cookieValue;
       }
    
-      fetch("http://127.0.0.1:8000/register-form/", {
+      fetch("https://django-djreact-app-d5af3d4e3559.herokuapp.com/register-form/", {
      
         credentials: 'include', 
         method: "POST",

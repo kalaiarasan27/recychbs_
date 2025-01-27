@@ -47,8 +47,6 @@ const Userqns = () => {
   <>
   <Header/>
     <div className='container-fluid topbottom-user'>
-      
-     
       <div style={{ marginBottom: '20px' }}>
         <h2>Post a Question</h2>
         <form onSubmit={handleQuestionSubmit}>

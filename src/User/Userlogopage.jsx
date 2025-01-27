@@ -6,8 +6,8 @@ function Userlogopage() {
   const navigate = useNavigate();
   return (
     <>
-      <Header />
-      <div className="container-fluid topbottom-user">
+       <Header />
+       <div className="container-fluid topbottom-user">
         <div className="row">
           <div className="col-12 col-md-6 col-lg-4">
             <div

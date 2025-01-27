@@ -1,484 +1,310 @@
-// import Header from "../component/Header";
-// import { useRef, useState, useEffect } from "react";
-// import { FiUploadCloud, FiCheckCircle } from "react-icons/fi"; // Import the check icon
-// import { useNavigate } from "react-router-dom";
-
-// const Scrapselect = () => {
-//   const [data, setData] = useState([]);
-//   const [showInput, setShowInput] = useState(false);
-//   const [selectedItems, setSelectedItems] = useState([]);
-//   const [uploadedFile, setUploadedFile] = useState(null);
-//   const [uploadedFileDetails, setUploadedFileDetails] = useState({ name: '', size: 0 });
-//   const [errorMessage, setErrorMessage] = useState("");
-
-//   const fileInputRef = useRef(null);
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/SelectScrap/')
-//       .then(response => response.json())
-//       .then(data => setData(data))
-//       .catch(error => console.error('Error fetching data:', error));
-//   }, []);
-
-//   const handleToggleInput = () => {
-//     setShowInput(prev => !prev);
-//   };
-
-//   const handleCheckboxChange = (event) => {
-//     const { value, checked } = event.target;
-//     if (checked) {
-//       setSelectedItems(prev => [...prev, value]);
-//     } else {
-//       setSelectedItems(prev => prev.filter(item => item !== value));
-//     }
-//   };
-
-//   const handleFileChange = (event) => {
-//     const file = event.target.files[0];
-//     if (file) {
-//       setUploadedFile(file);
-//       setUploadedFileDetails({ name: file.name, size: file.size });
-//       setErrorMessage("");
-//     }
-//   };
-
-//   const handleConfirm = async (event) => {
-//     event.preventDefault();
-
-//     if (selectedItems.length === 0 && !uploadedFile) {
-//       setErrorMessage("Please select at least one scrap item or upload an image before confirming.");
-//       return;
-//     }
-
-//     const formData = new FormData();
-//     formData.append('selectedItems', JSON.stringify(selectedItems));
-//     if (uploadedFile) {
-//       formData.append('selectedFile', uploadedFile);
-//     }
-
-//     const csrfToken = getCookie('csrftoken');
-
-//     try {
-//       const response = await fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/ScrapSelection/', {
-//         method: "POST",
-//         body: formData,
-//         credentials: "include",
-//         headers: {
-//           "X-CSRFToken": csrfToken,
-//         },
-//       });
-
-//       if (response.ok) {
-//         const data = await response.json();
-//         console.log('Response:', data);
-//         navigate("/Bookdealer");
-//       } else {
-//         console.error('Error:', response.statusText);
-//       }
-//     } catch (error) {
-//       console.error('Error:', error);
-//     }
-//   };
-
-//   function getCookie(name) {
-//     let cookieValue = null;
-//     if (document.cookie && document.cookie !== '') {
-//       const cookies = document.cookie.split(';');
-//       for (let i = 0; i < cookies.length; i++) {
-//         const cookie = cookies[i].trim();
-//         if (cookie.startsWith(`${name}=`)) {
-//           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-//           break;
-//         }
-//       }
-//     }
-//     return cookieValue;
-//   }
-
-//   return (
-//     <>
-//       <Header />
-//       <div className="container-fluid topbottom-user">
-//         <div style={{ display: "flex", padding: "20px", justifyContent: "center", alignItems: "center" }}>
-//           <span style={{ fontSize: "30px", fontWeight: "800", color: "#000" }}>Select the Scraps</span>
-//         </div>
-//         <div className="row">
-//           {data.map((item, index) => (
-//             <div key={index} className="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
-//               <div className="pricecard">
-//                 <div className="col-6">
-//                   <img src={item.Scrap_Image} className="scrapimg-select" alt={item.Scrap_Name} />
-//                 </div>
-//                 <div className="col-3 d-flex">
-//                   <div className="flex-column d-flex">
-//                     <span>{item.Scrap_Name}</span>
-//                     <span>{item.Current_Price_Per_KG}</span>
-//                   </div>
-//                 </div>
-//                 <div className="col-4 d-flex align-items-center justify-content-center">
-//                   <input
-//                     type="checkbox"
-//                     value={item.Scrap_Name}
-//                     onChange={handleCheckboxChange}
-//                     style={{ height: "20px", width: "20px", cursor: "pointer" }}
-//                   />
-//                 </div>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//         <div>
-//           <div className="otherscrap" onClick={handleToggleInput}>Other Scraps</div>
-//           {showInput && (
-//             <div className="otherscrap-upload">
-//               <input type="file" style={{ display: "none" }} ref={fileInputRef} onChange={handleFileChange} />
-//               <div
-//                 style={{ cursor: "pointer", fontSize: "24px", flexDirection: "column", display: "flex", justifyContent: "center", alignItems: "center" }}
-//                 onClick={() => fileInputRef.current.click()}
-//               >
-//                 {uploadedFile ? (
-//                   <FiCheckCircle className="uploadicon" style={{ color: "green", fontSize: "48px" }} />
-//                 ) : (
-//                   <FiUploadCloud className="uploadicon" />
-//                 )}
-//                 <span style={{ fontSize: "12px" }}>
-//                   {uploadedFile ? "File Uploaded!" : "Upload scrap image"}
-//                 </span>
-//               </div>
-//             </div>
-//           )}
-//           {uploadedFile && (
-//             <div style={{ marginTop: "10px", textAlign: "center" }}>
-//               <span>Uploaded File: {uploadedFileDetails.name}</span><br />
-//               <span>Size: {(uploadedFileDetails.size / 1024).toFixed(2)} KB</span>
-//             </div>
-//           )}
-//         </div>
-//         {errorMessage && (
-//           <div style={{ color: "red", textAlign: "center", margin: "10px 0" }}>
-//             {errorMessage}
-//           </div>
-//         )}
-//         <div className="submit-button" onClick={handleConfirm}>Confirm</div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Scrapselect;
-
-import Header from "../component/Header";
-import bottle from "../assets/image/bottle.jpeg";
-import card from "../assets/image/card.jpeg";
-import cocount from "../assets/image/cocount.jpeg";
-import drum from "../assets/image/drum.jpeg";
-import glass from "../assets/image/glass.jpeg";
-import iron2 from "../assets/image/iron2.jpeg";
-import mbl from "../assets/image/mbl.jpeg";
-import paper from "../assets/image/paper.jpeg";
-import scrap from "../assets/image/scrap.jpeg";
-import scrap1 from "../assets/image/scrap1.jpeg";
-import scrap2 from "../assets/image/scrap2.jpeg";
-import scrap3 from "../assets/image/scrap3.jpeg";
-import scrap4 from "../assets/image/scrap4.jpeg";
-import tyre from "../assets/image/tyre.jpeg";
-import wire from "../assets/image/wire.jpeg";
-import { useRef, useState,useEffect } from "react";
-import { FiUploadCloud } from "react-icons/fi";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Headerdealer from "../component/Headerdealer";
+import { FaTrash } from 'react-icons/fa';
+import { GoogleMap, LoadScript } from "@react-google-maps/api";
 
-const Scrapselect = () => {
-  
-  const [data, setData] = useState([]);
-
-
-
-const [scrapDetail, setscrapDetails] = useState([]);
-
-console.log(scrapDetail);
-
-// Loop based on the response data length
-for (let i = 0; i < data.length; i++) {
-  scrapDetail.push({
-    title: data[i].Scrap_Name,
-    cost: data[i].Current_Price_Per_KG,
-    scrapimg: data[i].Scrap_Image
-  });
-}
-
-console.log(scrapDetail);
-
-  // const scrapDetail = [
-  //   { title: "PLASTIC", cost: 500, scrapimg: bottle },
-  //   { title: "CARBOARD", cost: 556, scrapimg: card },
-  //   { title: "COCONUT SHELL", cost: 500, scrapimg: cocount },
-  //   { title: "SYNTEX TANKS", cost: 500, scrapimg: drum },
-  //   { title: "GLASSES", cost: 570, scrapimg: glass },
-  //   { title: "IRON", cost: 556, scrapimg: iron2 },
-  //   { title: "E-WASTE", cost: 556, scrapimg: mbl },
-  //   { title: "NOTE & BOOKS", cost: 556, scrapimg: paper },
-  //   { title: "PVC PIPES", cost: 556, scrapimg: scrap },
-  //   { title: "BRONZE", cost: 556, scrapimg: scrap1 },
-  //   { title: "ALUMINIUM", cost: 556, scrapimg: scrap2 },
-  //   { title: "COPPER", cost: 556, scrapimg: scrap3 },
-  //   { title: "BATTERIES", cost: 556, scrapimg: scrap4 },
-  //   { title: "TYRES", cost: 556, scrapimg: tyre },
-  //   { title: "ELECTRICAL WIRES", cost: 556, scrapimg: wire },
-  // ];
-
-  const [showInput, setShowInput] = useState(false);
-  const [selectedScraps, setSelectedScraps] = useState(Array(scrapDetail.length).fill(false));
-  const [errorMessage, setErrorMessage] = useState("");
-  const [uploadedFile, setUploadedFile] = useState(null); 
-  const [uploadedFileDetails, setUploadedFileDetails] = useState({ name: '', size: 0 });
-
-  const handleToggleInput = () => {
-    setShowInput((prevState) => !prevState);
-  };
-
-
-  const [selectedItems, setSelectedItems] = useState([]);
-
-  console.log(selectedItems);
-  
-
-  // Handle checkbox change
-  const handleCheckboxChange = (event) => {
-    const { value, checked } = event.target;
-    if (checked) {
-      // Add the value if the checkbox is checked
-      setSelectedItems([...selectedItems, value]);
-    } else {
-      // Remove the value if the checkbox is unchecked
-      setSelectedItems(selectedItems.filter((item) => item !== value));
-    }
-  };
-  
-  const [selectedFiles, setSelectedFiles] = useState(null);
-
-   // Handling file input change
-   const handleFileChange = (event) => {
-    setSelectedFiles(event.target.files[0]);
-  };
-    // Handle form submission
-  // const handleSubmit = async (event) => {
-
-  // };
-
-
-  const fileInputRef = useRef(null);
-  const handleClick = () => {
-    fileInputRef.current.click();
-  };
-
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     console.log('Selected file:', file);
-  //     setUploadedFile(file); 
-  //     setUploadedFileDetails({ name: file.name, size: file.size });
-  //     setErrorMessage(""); 
-  //   }
-  // };
-
-  // const handleCheckboxChange = (index) => {
-  //   const newSelectedScraps = [...selectedScraps];
-  //   newSelectedScraps[index] = !newSelectedScraps[index];
-  //   setSelectedScraps(newSelectedScraps);
-  //   setErrorMessage(""); 
-  // };
-
+function Scrapdetail() {
+  const [scrapType, setScrapType] = useState("");
+  const [OtherScrapType, setOtherScrapType] = useState("");
+  const [scrapQuality, setScrapQuality] = useState("");
+  const [weight, setWeight] = useState("");
+  const [amount, setAmount] = useState("");
+  const [error, setError] = useState("");
+  const [adminPhone] = useState([
+    { username: "username", address: "123 Main St", phoneno: "7878787878" },
+  ]);
+  const [scrapEntries, setScrapEntries] = useState([]);
+  const [numScrapEntries, setNumScrapEntries] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const navigate = useNavigate();
+  const orderId = `Order-${Date.now()}`;
 
-  const handleConfirm = async (event) => {  
-    event.preventDefault();
-
-
-    // const uploadFile = new FormData();
-    // // Append file data
-    // for (const [key, file] of Object.entries(fileNames)) {
-    //   if (file) {
-    //     uploadFile.append(key, file); // Append the actual File object, not just its name
-    //   }
-    // }
-    // console.log(uploadFile[fileNames]);
-
-
-
-        // Create a FormData object
-        const formData = new FormData();
-        formData.append('selectedItems', JSON.stringify(selectedItems)); // Sending selected checkboxes as JSON
-        formData.append('selectedFile', selectedFiles); // Sending the file
-
-        console.log(formData);
-        formData.forEach((value, key) => {
-          console.log(`${key}:`, value);
-        });
-    
-        const csrfToken = getCookie('csrftoken'); // Function to get the CSRF token
- 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === `${name}=`) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-    // Send the selectedItems to the Django backend using fetch https://recychbs-app-c05d5f684be1.herokuapp.com
-    try {
-      // Send the form data to the server
-      const response = await fetch(
-        'http://localhost:8000/ScrapSelection/',
-        // 'https://recychbs-app-c05d5f684be1.herokuapp.com/ScrapSelection/',
-        {
-          method: "POST",
-          body: formData,
-          credentials: "include",
-          headers: {
-            "X-CSRFToken": csrfToken,
-          },
-        }
-      );
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Response:', data);
-      navigate("/Bookdealer");
-
-    } else {
-      console.error('Error:', response.statusText);
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-    const isAnySelected = selectedScraps.some(selected => selected);
-    if (!isAnySelected && !uploadedFile) {
-      setErrorMessage("Please select at least one scrap item or upload an image before confirming.");
-    } 
+  const scrapTypeMap = {
+    "type 1": "Plastic",
+    "type 2": "Copper",
+    "type 3": "Iron",
+    "others": OtherScrapType,
   };
+
+  const scrapQualityMap = {
+    "Quality 1": "Good",
+    "Quality 2": "Average",
+    "Quality 3": "Bad",
+  };
+
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/select-scrap/')
-      .then(response => response.json())
-      .then(data =>{ 
-        setData(data);
-        console.log(data);
-        
-    })
-      .catch(error => console.error('Error fetching data:', error));
+    localStorage.removeItem('orderData');
   }, []);
-  
-  
-  console.log(data);
-  
+
+  const handleOtpChange = (index, value) => {
+    const updatedOtp = [...otp];
+    updatedOtp[index] = value.slice(-1); 
+    setOtp(updatedOtp);
+
+    if (value && index < otp.length - 1) {
+      document.getElementById(`otp-input-${index + 1}`).focus();
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (scrapEntries.length === 0) {
+      setError("Please add at least one scrap entry.");
+      return;
+    }
+
+    setError("");
+
+    const orderData = {
+      orderId,
+      entries: scrapEntries.map(entry => ({
+        ...entry,
+        address: adminPhone[0]?.address || "",
+        phoneno: adminPhone[0]?.phoneno || "",
+        username: adminPhone[0]?.username || "",
+      })),
+      totalAmount: subtotal,
+    };
+
+    localStorage.setItem('orderData', JSON.stringify(orderData));
+    navigate("/Completeorder", { state: { orderData } });
+  };
+
+  const handleAddScrap = () => {
+    if (!scrapType || !scrapQuality || !weight || !amount) {
+      setError("All fields are required to add a scrap entry.");
+      return;
+    }
+
+    const weightValue = parseInt(weight, 10);
+    const amountValue = parseInt(amount, 10);
+
+    if (isNaN(weightValue) || weightValue <= 0) {
+      setError("Weight must be a positive integer.");
+      return;
+    }
+
+    if (isNaN(amountValue) || amountValue <= 0) {
+      setError("Amount must be a positive integer.");
+      return;
+    }
+
+    const newEntry = {
+      scrapType: scrapType === "others" ? OtherScrapType : scrapType,
+      scrapQuality,
+      weight: weightValue,
+      amount: amountValue,
+    };
+
+    setScrapEntries([...scrapEntries, newEntry]);
+    setNumScrapEntries(prevCount => prevCount + 1);
+    setSubtotal(prevSubtotal => prevSubtotal + newEntry.amount);
+
+    setScrapType("");
+    setOtherScrapType("");
+    setScrapQuality("");
+    setWeight("");
+    setAmount("");
+    setError("");
+  };
+
+  const handleDeleteScrap = (index) => {
+    const updatedEntries = scrapEntries.filter((_, i) => i !== index);
+    const removedAmount = scrapEntries[index]?.amount || 0;
+
+    setScrapEntries(updatedEntries);
+    setNumScrapEntries(prevCount => prevCount - 1);
+    setSubtotal(prevSubtotal => prevSubtotal - removedAmount);
+  };
+
+  const handleScrapTypeChange = (e) => {
+    const value = e.target.value;
+    setScrapType(value);
+    if (value !== "others") {
+      setOtherScrapType("");
+    }
+    setError(""); 
+  };
+
+  const handleScrapQualityChange = (e) => {
+    setScrapQuality(e.target.value);
+    setError(""); 
+  };
+
+  const handleWeightChange = (e) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {
+      setWeight(value);
+    }
+    setError("");
+  };
+
+  const handleAmountChange = (e) => {
+    const value = e.target.value;
+    if (/^\d*$/.test(value)) {
+      setAmount(value);
+    }
+    setError(""); 
+  };
+
+  const handleOtherScrapTypeChange = (e) => {
+    const value = e.target.value;
+    if (/^[a-zA-Z\s]*$/.test(value)) {
+      setOtherScrapType(value);
+      setError("");
+    } else {
+      setError("Other Scrap Type can only contain letters.");
+    }
+  };
+
   return (
     <>
-      <Header />
-      <div className="container-fluid topbottom-user">
-        <div
-          style={{
-            display: "flex",
-            padding: "20px",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <span style={{ fontSize: "30px", fontWeight: "800", color: "#000" }}>
-            Select the Scraps
-          </span>
-        </div>
-        <div className="row">
-          {scrapDetail.map((item, index) => (
-            <div key={index} className="col-xl-4 col-lg-6 col-md-6 col-sm-12 col-12">
-              <div className="pricecard">
-                <div className="col-6">
-                  <img
-                    src={item.scrapimg}
-                    className="scrapimg-select"
-                    alt={item.title}
-                  />
-                </div>
-                <div className="col-3 d-flex">
-                  <div className="flex-column d-flex">
-                    <span>{item.title}</span>
-                    <span>{item.cost}</span>
-                  </div>
-                </div>
-                {/* <div className="col-3 d-flex align-items-center justify-content-center">
-                  <input
-                    type="checkbox"
-                    style={{ height: "20px", width: "20px", cursor: "pointer" }}
-                    value={item.title}
-                    checked={selectedScraps[index]}
-                    onChange={() => handleCheckboxChange(index)}
-                  />
-                </div> */}
-                <div className="col-4 d-flex align-items-center justify-content-center">
-                <input
-                  type="checkbox"
-                  value={JSON.stringify({ title: item.title, cost: item.cost, scrapimg: item.scrapimg })}
-                  onChange={handleCheckboxChange}
-                  style={{ height: "20px", width: "20px", cursor: "pointer" }}
-                />
-
-                </div>
-              </div>
+      <Headerdealer />
+      <div className="topbottom mt-5">
+      <div className="">
+      <h2>Ongoing Order Details</h2>
+      <div className="dealer-container row">
+            <div className="dealer-info col-12 col-lg-8 col-md-12 col-sm-12">
+            {adminPhone.map((item, index) => (
+            <div key={index}>
+               <h5>Dealer Information</h5>
+              <p><strong>Name:</strong>{item.username}</p>
+              <p><strong>Phone Number:</strong>{item.address}</p>
+              <p><strong>Location:</strong>{item.phoneno}</p>
             </div>
           ))}
-        </div>
-        <div>
-          <div className="otherscrap" onClick={handleToggleInput}>
-            Other Scraps
+            </div>
+            <div className="otp-display col-12 col-lg-4 col-md-12 col-sm-12">
+              <div className="otp-box">
+                <p>Your OTP is:</p>
+                {otp.map((digit, index) => (
+                  <input
+                    key={index}
+                    type="text"
+                    id={`otp-input-${index}`}
+                    value={digit}
+                    onChange={(e) => handleOtpChange(index, e.target.value)}
+                    maxLength="1"
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      textAlign: "center",
+                      margin: "0 5px",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
-          {showInput && (
-            <div className="otherscrap-upload">
+          <div className="dealer-container row">
+            <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
+            <GoogleMap
+              mapContainerStyle={{ height: '300px', width: '100%' }}
+              center={{ lat: 13.0827, lng: 80.2707 }}
+              zoom={10}
+              onLoad={(map) => console.log('Map Loaded')}
+              onUnmount={(map) => console.log('Map Unmounted')}
+            >
+            </GoogleMap>
+          </LoadScript>
+          </div>
+          <div className="dealer-container row">
+          <span className="scrapdetail-label">Scrap Type:</span>
+          <select
+            style={{ height: "40px" }}
+            value={scrapType}
+            onChange={handleScrapTypeChange}
+          >
+            <option value="">Select Scrap Type</option>
+            <option value="type 1">Plastic</option>
+            <option value="type 2">Copper</option>
+            <option value="type 3">Iron</option>
+            <option value="others">Others</option>
+          </select>
+
+          {scrapType === "others" && (
+            <>
+              <span className="scrapdetail-label">Other Scrap Type:</span>
               <input
-                type="file"
-                style={{ display: "none" }}
-                ref={fileInputRef}
-                onChange={handleFileChange}
+                style={{ height: "40px" }}
+                value={OtherScrapType}
+                onChange={handleOtherScrapTypeChange}
               />
-              <div
-                style={{
-                  cursor: "pointer",
-                  fontSize: "24px",
-                  flexDirection: "column",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onClick={handleClick}
-              >
-                <FiUploadCloud className="uploadicon" />
-                <span style={{ fontSize: "12px" }}>Upload scrap image</span>
+            </>
+          )}
+
+          <span className="scrapdetail-label">Scrap Quality:</span>
+          <select
+            style={{ height: "40px" }}
+            value={scrapQuality}
+            onChange={handleScrapQualityChange}
+          >
+            <option value="">Select Scrap Quality</option>
+            <option value="Quality 1">Good</option>
+            <option value="Quality 2">Average</option>
+            <option value="Quality 3">Bad</option>
+          </select>
+
+          <span className="scrapdetail-label">Weight:</span>
+          <input
+            style={{ height: "40px" }}
+            value={weight}
+            onChange={handleWeightChange}
+          />
+
+          <span className="scrapdetail-label">Amount:</span>
+          <input
+            style={{ height: "40px" }}
+            value={amount}
+            onChange={handleAmountChange}
+          />
+
+          {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
+
+          <button className="ongoing-addscrap-btn mt-4" onClick={handleAddScrap}>Add Scrap</button>
+          {scrapEntries.length > 0 && (
+            <div>
+              {scrapEntries.map((entry, index) => (
+                <div key={index} style={{ marginBottom: "10px", padding: "10px", border: "1px solid #ddd", position: "relative" }}>
+                   <p><strong>Scrap Type:</strong> {scrapTypeMap[entry.scrapType] || entry.scrapType}</p>
+                  <p><strong>Scrap Quality:</strong> {scrapQualityMap[entry.scrapQuality] || entry.scrapQuality}</p>
+                  <p><strong>Weight:</strong> {entry.weight}Kg</p>
+                  <p><strong>Amount:</strong> ₹{entry.amount}</p>
+                  <button
+                    onClick={() => handleDeleteScrap(index)}
+                    style={{
+                      position: "absolute",
+                      top: "10px",
+                      right: "10px",
+                      border: "none",
+                      background: "none",
+                      fontSize: "25px",
+                      cursor: "pointer",
+                      color: "black",
+                    }}
+                  >
+                    <FaTrash />
+                  </button>
+                </div>
+              ))}
+
+              <div style={{ marginTop: "20px" }}>
+                <p><strong>Total Scrap Entries:</strong> {numScrapEntries}</p>
+                <p><strong>Subtotal Amount:</strong> ₹{subtotal.toFixed(2)}</p>
               </div>
             </div>
           )}
-          {uploadedFile && (
-            <div style={{ marginTop: "10px", textAlign: "center" }}>
-              <span>Uploaded File: {uploadedFileDetails.name}</span><br />
-              <span>Size: {(uploadedFileDetails.size / 1024).toFixed(2)} KB</span>
-            </div>
-          )}
-        </div>
-        {errorMessage && (
-          <div style={{ color: "red", textAlign: "center", margin: "10px 0" }}>
-            {errorMessage}
+                <div className="fixed-footer">
+            <div className="ongoing-addscrap-btn" onClick={handleSubmit}>SUBMIT</div>
+            <div className="ongoing-modal-cls-btn" onClick={() => navigate("/Homedealer")}>CANCEL</div>
           </div>
-        )}
-        <div className="submit-button" onClick={handleConfirm}>
-          Confirm
-        </div>
+          </div>
+      </div>
       </div>
     </>
   );
-};
+}
 
-export default Scrapselect;
+export default Scrapdetail;

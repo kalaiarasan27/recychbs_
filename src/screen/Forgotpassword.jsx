@@ -30,7 +30,7 @@ const Forgotpassword = () => {
     }
     return cookieValue;
   }
-      const response = await fetch('password-reset/', {
+      const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/password-reset/', {
       // const response = await fetch('http://127.0.0.1:8000/password-reset/', {
         method: 'POST',
         credentials: 'include',

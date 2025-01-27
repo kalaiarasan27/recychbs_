@@ -1,24 +1,3 @@
-# # utils.py
-
-# import requests
-# from django.conf import settings
-
-# def verify_email_hunter(email):
-#     api_key = settings.HUNTER_API_KEY
-#     url = f'https://api.hunter.io/v2/email-verifier?email={email}&api_key={api_key}'
-    
-#     response = requests.get(url)
-#     data = response.json()
-
-#     if 'data' in data:
-#         status = data['data']['status']
-#         if status == 'valid':
-#             return True
-#         else:
-#             return False
-#     return False
-
-
 # utils.py
 import requests
 

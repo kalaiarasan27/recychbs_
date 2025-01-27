@@ -23,7 +23,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@popperjs/core": "^2.11.8",
-    "@react-google-maps/api": "^2.20.5",
+    "@react-google-maps/api": "^2.20.3",
     "axios": "^1.7.3",
     "bootstrap": "^5.3.3",
     "font-awesome": "^4.7.0",
@@ -46,6 +46,6 @@
     "eslint-plugin-react": "^7.34.3",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
-    "vite": "^5.4.14"
+    "vite": "^5.4.10"
   }
 }

@@ -15,7 +15,7 @@
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/SelectScrap/')
+//     fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/SelectScrap/')
 //       .then(response => response.json())
 //       .then(data => setData(data))
 //       .catch(error => console.error('Error fetching data:', error));
@@ -60,7 +60,7 @@
 //     const csrfToken = getCookie('csrftoken');
 
 //     try {
-//       const response = await fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/ScrapSelection/', {
+//       const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/ScrapSelection/', {
 //         method: "POST",
 //         body: formData,
 //         credentials: "include",
@@ -193,7 +193,7 @@ const Scrapselect = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/SelectScrap/')
+    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/SelectScrap/')
       .then(response => response.json())
       .then(data =>{ 
         setData(data);
@@ -339,12 +339,12 @@ console.log(scrapDetail);
             }
             return cookieValue;
         }
-    // Send the selectedItems to the Django backend using fetch https://recychbs-app-c05d5f684be1.herokuapp.com
+    // Send the selectedItems to the Django backend using fetch https://django-djreact-app-d5af3d4e3559.herokuapp.com
     try {
       // Send the form data to the server
       const response = await fetch(
-        // 'http://localhost:8000/ScrapSelection/',
-        'http://127.0.0.1:8000/ScrapSelection/',
+        'http://localhost:8000/ScrapSelection/',
+        // 'https://django-djreact-app-d5af3d4e3559.herokuapp.com/ScrapSelection/',
         {
           method: "POST",
           body: formData,
@@ -367,9 +367,9 @@ console.log(scrapDetail);
     console.error('Error:', error);
   }
     const isAnySelected = selectedScraps.some(selected => selected);
-    // if (!isAnySelected && !uploadedFile) {
-    //   setErrorMessage("Please select at least one scrap item or upload an image before confirming.");
-    // } 
+    if (!isAnySelected && !uploadedFile) {
+      setErrorMessage("Please select at least one scrap item or upload an image before confirming.");
+    } 
   };
 
   return (

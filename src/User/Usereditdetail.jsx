@@ -37,7 +37,6 @@ const Usereditdetail = () => {
       setEditingField(field);
     }
   };
-  console.log(editingField)
 
   const handleChange = (field, value) => {
     setDealerDetails((prev) => ({ ...prev, [field]: value }));
@@ -76,10 +75,6 @@ const Usereditdetail = () => {
     setTimeout(() => setButtonState(null), 300);
     setEditingField(null);
   };
-
-  console.log(originalDetails)
-  console.log(buttonState)
-
 
   const handleCancel = () => {
     setDealerDetails(originalDetails);
@@ -138,8 +133,8 @@ const Usereditdetail = () => {
 
   return (
     <>
-      <Header />
-      <div style={styles.container}>
+       <Header />
+       <div className="container-fluid topbottom-user">
         <h1 style={styles.header}>Edit Your Account Details</h1>
         <div style={styles.cardContainer}>
           <DetailCard title="Name" field="name" />
@@ -159,12 +154,12 @@ const Usereditdetail = () => {
 
 const styles = {
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '20px 20px 80px 20px',
-    maxWidth: '1400px',
-    margin: '90px auto 0',
-    overflow: 'hidden',
+    // display: 'flex',
+    // flexDirection: 'column',
+    // padding: '20px 20px 80px 20px',
+    // maxWidth: '1400px',
+    // margin: '90px auto 0',
+    // overflow: 'hidden',
   },
   header: {
     textAlign: 'center',

@@ -136,7 +136,7 @@ const Login = () => {
       loginType: activeLogin
     };
     setLoading(true);
-    fetch('https://recychbs-app-c05d5f684be1.herokuapp.com/login-form/', {
+    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/login-form/', {
       method: 'POST',
       credentials: 'include',
       headers: {

@@ -10,12 +10,13 @@ const Usernotification = () => {
   //   { head: "dealer 3", title: "comment", message: "your order" },
   // ];
 
-  const [userDetails, setUserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
   // console.log(userDetails);
   
   useEffect(() => {
-    fetch(' http://127.0.0.1:8000/Get_UserNotification/')
+    // fetch('http://127.0.0.1:8000/Get_UserNotification/')
+    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/Get_UserNotification/')
       .then(response => response.json())
       .then(data => {
         console.log(data);

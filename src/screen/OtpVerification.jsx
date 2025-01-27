@@ -118,7 +118,7 @@ const OtpVerification = () => {
     e.preventDefault();
     setTimer(30);
     setIsTimerActive(true);
-    fetch("resend-otp/", {
+    fetch("https://django-djreact-app-d5af3d4e3559.herokuapp.com/resend-otp/", {
       credentials: "include",
       method: "POST",
       headers: {
@@ -147,7 +147,7 @@ const OtpVerification = () => {
     const enteredOtp = otp.join("");
     console.log("Otp Button Clicked");
     setLoading(true);
-    fetch("otp/", {
+    fetch("https://django-djreact-app-d5af3d4e3559.herokuapp.com/otp/", {
       method: "POST",
       credentials: "include",
       headers: {

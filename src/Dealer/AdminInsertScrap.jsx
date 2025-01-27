@@ -164,7 +164,7 @@ const handleSubmit = async (e) => {
     }
 
   try {
-    const response = await fetch(' http://127.0.0.1:8000/InsertScrap/', {
+    const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/InsertScrap/', {
       method: 'POST',
       credentials: 'include', // Ensures cookies are sent
       body: uploadFile,
@@ -172,6 +172,7 @@ const handleSubmit = async (e) => {
         'X-CSRFToken': csrfToken,
       },
     });
+
     if (response.ok) {
       const data = await response.json();
       setMessage(data.message); // Set success message
