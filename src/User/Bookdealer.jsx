@@ -74,7 +74,7 @@ const Bookdealer = () => {
             
             // Combine answer with location data in the request body
             // fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/bookdealer/', {
-            fetch('http://127.0.0.1:8000/bookdealer/', {
+            fetch('bookdealer/', {
               credentials: 'include',
               method: 'POST',
               body: JSON.stringify({ latitude, longitude, answer }), // Include latitude, longitude, and answer

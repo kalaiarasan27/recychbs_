@@ -21,7 +21,7 @@ function OngoingOrder() {
   console.log("Otp is",otp);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/ongoing_order/')
+    fetch('ongoing_order/')
     // fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/ongoing_order/')
        .then(response => {
         if (!response.ok) {

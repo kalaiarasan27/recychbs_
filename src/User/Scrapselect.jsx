@@ -193,7 +193,7 @@ const Scrapselect = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/SelectScrap/')
+    fetch('SelectScrap/')
       .then(response => response.json())
       .then(data =>{ 
         setData(data);
@@ -343,7 +343,7 @@ console.log(scrapDetail);
     try {
       // Send the form data to the server
       const response = await fetch(
-        'http://localhost:8000/ScrapSelection/',
+        'ScrapSelection/',
         // 'https://django-djreact-app-d5af3d4e3559.herokuapp.com/ScrapSelection/',
         {
           method: "POST",
