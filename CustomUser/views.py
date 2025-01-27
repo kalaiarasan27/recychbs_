@@ -1225,7 +1225,13 @@ def GetScrap(request):
 
 
 # Admin Site--------
-
+s3_client = boto3.client(
+            's3',
+            endpoint_url='http://82.112.238.156:9000',  
+            aws_access_key_id='minioadmin',          
+            aws_secret_access_key='minioadmin',      
+            region_name='us-east-1'                  
+        )
 
 @csrf_exempt
 def Get_DealerDetails(request):
