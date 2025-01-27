@@ -136,7 +136,7 @@ const handleSubmit = async () => {
   uploadFile.append('message', message);
 
   try {
-    const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/send_extraData/', {
+    const response = await fetch('send_extraData/', {
       method: 'POST',
       body: uploadFile,
       credentials: 'include',

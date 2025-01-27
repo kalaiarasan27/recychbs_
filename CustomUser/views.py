@@ -1308,11 +1308,13 @@ def Get_DealerDetails(request):
         # filenames = [var2, var1, var3]
 
         images = []
+        print(clears)
 
         for filename in clears:
         
             try:
                 response = s3_client.get_object(Bucket='mybucket', Key=filename)
+                print(response)
                 file_content = response['Body'].read()
                 encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
                 images.append({"filename": filename, "content": encoded_image})

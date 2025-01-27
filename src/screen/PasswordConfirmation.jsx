@@ -34,7 +34,7 @@ const PasswordResetConfirm = () => {
     }
 
     try {
-      const response = await fetch(`https://django-djreact-app-d5af3d4e3559.herokuapp.com/reset/${uid}/${token}/`, {
+      const response = await fetch(`reset/${uid}/${token}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

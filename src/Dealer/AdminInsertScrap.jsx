@@ -164,7 +164,7 @@ const handleSubmit = async (e) => {
     }
 
   try {
-    const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/InsertScrap/', {
+    const response = await fetch('InsertScrap/', {
       method: 'POST',
       credentials: 'include', // Ensures cookies are sent
       body: uploadFile,
