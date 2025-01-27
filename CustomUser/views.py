@@ -359,7 +359,7 @@ def register_confirmation(request):
                         Dealer_Name = username,
                         Phone_Number = Phone_Number,
                         Email = email,
-                        Natioanality = Natioanality,
+                        Nationality = Natioanality,
                         Address = address
                     )
                     if dealer:

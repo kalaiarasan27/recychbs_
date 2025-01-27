@@ -61,7 +61,7 @@ class DealerProfile(models.Model):
     Dealer_Name = models.CharField(max_length=255)   
     Email = models.EmailField(unique=True,null=True)
     Address=models.CharField(max_length=120,null=True)
-    Natioanality = models.CharField(max_length=50,null=True)
+    Nationality = models.CharField(max_length=50,null=True)
     Phone_Number=models.CharField(max_length=120,null=True)
     Total_Scrap_Collected=models.IntegerField(null=True)
     account=models.BooleanField(default=True)
