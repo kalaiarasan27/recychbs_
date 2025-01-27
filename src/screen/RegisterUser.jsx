@@ -271,7 +271,7 @@ const RegisterUser = () => {
         return cookieValue;
       }
    
-      fetch("https://django-djreact-app-d5af3d4e3559.herokuapp.com/register-form/", {
+      fetch("register-form/", {
      
         credentials: 'include', 
         method: "POST",

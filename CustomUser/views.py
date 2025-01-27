@@ -1229,102 +1229,107 @@ def GetScrap(request):
 
 @csrf_exempt
 def Get_DealerDetails(request):
+
+    try:
     # Fetch the data from the Dealer_Details model
 
-    dealer_data = list(Dealer_Details.objects.values())
-    # dealer_id  = Dealer_Details.objects.all()
-    # dealer_profiles = list(DealerProfile.objects.filter(Dealer_ID = dealer_id).values())
+        dealer_data = list(Dealer_Details.objects.values())
+        # dealer_id  = Dealer_Details.objects.all()
+        # dealer_profiles = list(DealerProfile.objects.filter(Dealer_ID = dealer_id).values())
 
-    # Fetch all dealer details
-    # dealer_data = list(Dealer_Details.objects.values())
+        # Fetch all dealer details
+        # dealer_data = list(Dealer_Details.objects.values())
 
-    # Initialize a list to store dealer profiles
-    dealer_profiles = []
+        # Initialize a list to store dealer profiles
+        dealer_profiles = []
 
-    # Loop through each dealer in dealer_data
-    for dealer in dealer_data:
-        dealer_id = dealer['Dealer_ID']  # Access Dealer_ID from the current dealer
+        # Loop through each dealer in dealer_data
+        for dealer in dealer_data:
+            dealer_id = dealer['Dealer_ID']  # Access Dealer_ID from the current dealer
 
-        # Filter DealerProfile based on the current dealer's Dealer_ID
-        profiles = list(DealerProfile.objects.filter(Dealer_ID=dealer_id).values())
-       
-        # Append the profiles to dealer_profiles
-        dealer_profiles.extend(profiles)
+            # Filter DealerProfile based on the current dealer's Dealer_ID
+            profiles = list(DealerProfile.objects.filter(Dealer_ID=dealer_id).values())
+        
+            # Append the profiles to dealer_profiles
+            dealer_profiles.extend(profiles)
 
-    # print(dealer['Aadhar_Front_Photo'])
+        # print(dealer['Aadhar_Front_Photo'])
 
-    # Loop through each dealer and add the URL for each image field
-    for dealer in dealer_data:
-        dealer_details = Dealer_Details.objects.get(Dealer_ID=dealer['Dealer_ID'])
+        # Loop through each dealer and add the URL for each image field
+        for dealer in dealer_data:
+            dealer_details = Dealer_Details.objects.get(Dealer_ID=dealer['Dealer_ID'])
 
-        # Add the full URLs for the image fields
-        dealer['Aadhar_Front_Photo'] = dealer_details.Aadhar_Front_Photo.url if dealer_details.Aadhar_Front_Photo else None
-        dealer['Aadhar_Back_Photo'] = dealer_details.Aadhar_Back_Photo.url if dealer_details.Aadhar_Back_Photo else None
-        dealer['PAN_Photo'] = dealer_details.PAN_Photo.url if dealer_details.PAN_Photo else None
-        dealer['LICENSE_Front_Photo'] = dealer_details.LICENSE_Front_Photo.url if dealer_details.LICENSE_Front_Photo else None
-        dealer['LICENSE_Back_Photo'] = dealer_details.LICENSE_Back_Photo.url if dealer_details.LICENSE_Back_Photo else None
-        dealer['RC_BOOK_Photo'] = dealer_details.RC_BOOK_Photo.url if dealer_details.RC_BOOK_Photo else None
-        dealer['Bank_Statement_Photo'] = dealer_details.Bank_Statement_Photo.url if dealer_details.Bank_Statement_Photo else None
-        dealer['PassBook_Photo'] = dealer_details.PassBook_Photo.url if dealer_details.PassBook_Photo else None
-        dealer['extradata_field1'] = dealer_details.extradata_field1.url if dealer_details.extradata_field1 else None
-        dealer['extradata_field2'] = dealer_details.extradata_field2.url if dealer_details.extradata_field2 else None
-        dealer['extradata_field3'] = dealer_details.extradata_field3.url if dealer_details.extradata_field3 else None
-        dealer['extradata_field4'] = dealer_details.extradata_field4.url if dealer_details.extradata_field4 else None
+            # Add the full URLs for the image fields
+            dealer['Aadhar_Front_Photo'] = dealer_details.Aadhar_Front_Photo.url if dealer_details.Aadhar_Front_Photo else None
+            dealer['Aadhar_Back_Photo'] = dealer_details.Aadhar_Back_Photo.url if dealer_details.Aadhar_Back_Photo else None
+            dealer['PAN_Photo'] = dealer_details.PAN_Photo.url if dealer_details.PAN_Photo else None
+            dealer['LICENSE_Front_Photo'] = dealer_details.LICENSE_Front_Photo.url if dealer_details.LICENSE_Front_Photo else None
+            dealer['LICENSE_Back_Photo'] = dealer_details.LICENSE_Back_Photo.url if dealer_details.LICENSE_Back_Photo else None
+            dealer['RC_BOOK_Photo'] = dealer_details.RC_BOOK_Photo.url if dealer_details.RC_BOOK_Photo else None
+            dealer['Bank_Statement_Photo'] = dealer_details.Bank_Statement_Photo.url if dealer_details.Bank_Statement_Photo else None
+            dealer['PassBook_Photo'] = dealer_details.PassBook_Photo.url if dealer_details.PassBook_Photo else None
+            dealer['extradata_field1'] = dealer_details.extradata_field1.url if dealer_details.extradata_field1 else None
+            dealer['extradata_field2'] = dealer_details.extradata_field2.url if dealer_details.extradata_field2 else None
+            dealer['extradata_field3'] = dealer_details.extradata_field3.url if dealer_details.extradata_field3 else None
+            dealer['extradata_field4'] = dealer_details.extradata_field4.url if dealer_details.extradata_field4 else None
 
-    connection.close()
+        connection.close()
 
-    file_paths = [
-    dealer['Aadhar_Front_Photo'],
-    dealer['Aadhar_Back_Photo'],
-    dealer['PAN_Photo'],
-    dealer['LICENSE_Front_Photo'],
-    dealer['LICENSE_Back_Photo'],
-    dealer['RC_BOOK_Photo'],
-    dealer['Bank_Statement_Photo'],
-    dealer['PassBook_Photo'],
-    dealer['extradata_field1'],
-    dealer['extradata_field2'],
-    dealer['extradata_field3'],
-    dealer['extradata_field4']
-]
+        file_paths = [
+        dealer['Aadhar_Front_Photo'],
+        dealer['Aadhar_Back_Photo'],
+        dealer['PAN_Photo'],
+        dealer['LICENSE_Front_Photo'],
+        dealer['LICENSE_Back_Photo'],
+        dealer['RC_BOOK_Photo'],
+        dealer['Bank_Statement_Photo'],
+        dealer['PassBook_Photo'],
+        dealer['extradata_field1'],
+        dealer['extradata_field2'],
+        dealer['extradata_field3'],
+        dealer['extradata_field4']
+    ]
 
-    clears = [var for var in file_paths if var]
-    # Extract only the file name without query parameters
-    # filenames = [os.path.basename(urlparse(file_path).path) for file_path in clears]
+        clears = [var for var in file_paths if var]
+        # Extract only the file name without query parameters
+        # filenames = [os.path.basename(urlparse(file_path).path) for file_path in clears]
 
-    # print("this is file files")
+        # print("this is file files")
 
-    # print(filenames)
+        # print(filenames)
 
-    # print(image_names)
-    # filenames = [var2, var1, var3]
+        # print(image_names)
+        # filenames = [var2, var1, var3]
 
-    images = []
+        images = []
 
-    for filename in clears:
-    
-        try:
-            response = s3_client.get_object(Bucket='mybucket', Key=filename)
-            file_content = response['Body'].read()
-            encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
-            images.append({"filename": filename, "content": encoded_image})
-        except s3_client.exceptions.NoSuchKey:
-            print(f"File not found: {filename}")
-            images.append({"filename": filename, "content": None})
-        except Exception as e:
-            print(f"An error occurred for {filename}: {e}")
-            images.append({"filename": filename, "content": None})
-  # Or handle as needed
+        for filename in clears:
+        
+            try:
+                response = s3_client.get_object(Bucket='mybucket', Key=filename)
+                file_content = response['Body'].read()
+                encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
+                images.append({"filename": filename, "content": encoded_image})
+            except s3_client.exceptions.NoSuchKey:
+                print(f"File not found: {filename}")
+                images.append({"filename": filename, "content": None})
+            except Exception as e:
+                print(f"An error occurred for {filename}: {e}")
+                images.append({"filename": filename, "content": None})
+    # Or handle as needed
 
-        # return JsonResponse({"images": images}, safe=False)
+            # return JsonResponse({"images": images}, safe=False)
 
-    data = {
-        'dealer_details': dealer_data,
-        'dealer_profiles': dealer_profiles,
-        "images": images
-    }
+        data = {
+            'dealer_details': dealer_data,
+            'dealer_profiles': dealer_profiles,
+            "images": images
+        }
 
-    return JsonResponse(data, safe=False, status=200)
+        return JsonResponse(data, safe=False, status=200)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error":"Internel Error"},status=500)
 
 
 
