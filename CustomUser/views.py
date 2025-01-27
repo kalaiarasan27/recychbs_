@@ -196,10 +196,10 @@ def send_extraData(request):
                 #
             except Exception as e:
                 logging.error("Credentials not available")
-                failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
+                failed_files.append({'file_name': file, 'error': 'Credentials not available'})
             except Exception as e:
                 logging.error(f"Error during file upload: {str(e)}")
-                failed_files.append({'file_name': file.name, 'error': str(e)})
+                failed_files.append({'file_name': file, 'error': str(e)})
     # Dynamically assign files or set None if list is empty
     table.extradata_field1 = extrafiles[0] if file1 else None
     table.extradata_field2 = extrafiles[1] if file2 else None
