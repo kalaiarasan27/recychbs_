@@ -2,5 +2,5 @@
 
 
 release:python manage.py migrate && python manage.py collectstatic --noinput
-# web: gunicorn HBS_Project.wsgi --log-file -
-web: daphne -p $PORT HBS_Project.asgi:application
+web: gunicorn HBS_Project.wsgi --log-file -
+# web: daphne -p $PORT HBS_Project.asgi:application
