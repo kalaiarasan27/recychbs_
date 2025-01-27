@@ -181,6 +181,7 @@ def send_extraData(request):
     BUCKET_NAME = 'mybucket'
     clears = [var for var in files if var]
     extrafiles=[]
+    failed_files=[]
     for file in clears:
             try:
                 # Extract the file name
