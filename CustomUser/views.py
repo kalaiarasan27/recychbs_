@@ -184,7 +184,7 @@ def send_extraData(request):
     for file in clears:
             try:
                 # Extract the file name
-                file_name = os.path.basename(file.name)
+                file_name = os.path.basename(file)
                 logging.debug(f"Uploading file: {file_name}")
                 unique_name = f"{uuid.uuid4()}_{file_name}"
  
