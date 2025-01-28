@@ -186,7 +186,8 @@ def send_extraData(request):
 
         for file in files:
             try:
-                # Extract the file name
+                # Extract the file 
+                print("inside try block")
                 file_name = os.path.basename(file.name)
                 logging.debug(f"Uploading file: {file_name}")
                 unique_name = f"{uuid.uuid4()}_{file_name}"
@@ -200,6 +201,7 @@ def send_extraData(request):
             #     logging.error("Credentials not available")
             #     failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
             except Exception as e:
+                print("inside f expect")
                 logging.error(f"Error during file upload: {str(e)}")
                 # failed_files.append({'file_name': file.name, 'error': str(e)})
                 return JsonResponse({'message':'except block '},status=500)
