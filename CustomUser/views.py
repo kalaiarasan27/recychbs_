@@ -210,6 +210,7 @@ def send_extraData(request):
         data.extradata_field2 = extra[1] if len(extra) > 1 and extra[1] else None
         data.extradata_field3 = extra[2] if len(extra) > 2 and extra[2] else None
         data.extradata_field4 = extra[3] if len(extra) > 3 and extra[3] else None
+        data.dealer_message=message if message else None
         data.save()
 
         print("after if")
