@@ -195,10 +195,10 @@ def send_extraData(request):
                 s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
 
                 unique_names.append(unique_name)
-                #
-            except NoCredentialsError:
-                logging.error("Credentials not available")
-                failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
+            #     #
+            # except NoCredentialsError:
+            #     logging.error("Credentials not available")
+            #     failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
             except Exception as e:
                 logging.error(f"Error during file upload: {str(e)}")
                 failed_files.append({'file_name': file.name, 'error': str(e)})
