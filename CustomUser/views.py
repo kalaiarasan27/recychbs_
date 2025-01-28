@@ -911,7 +911,9 @@ class PasswordResetConfirmView(APIView):
     renderer_classes = [JSONRenderer]
     @csrf_exempt
     def post(self, request, uidb64, token):
+        print("inside function")
         new_password = request.data.get('password')
+        print("this is password:",new_password)
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
