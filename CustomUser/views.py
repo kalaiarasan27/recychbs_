@@ -197,6 +197,7 @@ def send_extraData(request):
                 failed_files.append({'file_name': file.name, 'error': str(e)})
 
         # Return a response based on the result
+        print("before if")
         if failed_files:
             return JsonResponse({
                 'message': 'Some files failed to upload',
