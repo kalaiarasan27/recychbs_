@@ -170,57 +170,38 @@ def send_extraData(request):
         files=[file1,file2,file3,file4]
 
     
-        s3_client = boto3.client(
-                's3',
-                endpoint_url='http://82.112.238.156:9000',  
-                aws_access_key_id='minioadmin',          
-                aws_secret_access_key='minioadmin',      
-                region_name='us-east-1'                  
-            )
-    
+         s3_client = boto3.client(
+            's3',
+            endpoint_url='http://82.112.238.156:9000',  
+            aws_access_key_id='minioadmin',          
+            aws_secret_access_key='minioadmin',      
+            region_name='us-east-1'                  
+        )
+ 
         BUCKET_NAME = 'mybucket'
-        clears = [var for var in files if var]
-        extrafiles=[]
-        failed_files=[]
-        for file in clears:
-                try:
-                    # Extract the file name
-                    file_name = os.path.basename(file.name)
-                    logging.debug(f"Uploading file: {file_name}")
-                    unique_name = f"{uuid.uuid4()}_{file_name}"
-    
-                    # Upload the file to the VPS bucket
-                    s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
-    
-                    extrafiles.append(unique_name)
-                    #
-                except NoCredentialsError:
-                    logging.error("Credentials not available")
-                    failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
-                except Exception as e:
-                    logging.error(f"Error during file upload: {str(e)}")
-                    failed_files.append({'file_name': file.name, 'error': str(e)})
+        files=[file1,file2,file3,file4]
+        # uploaded_files = []
+        failed_files = []
+        unique_names = []
 
-                    
-        table = Dealer_Details.objects.get(Dealer_ID=dealer_id)
-        table.dealer_message = message
-                    
-        # Dynamically assign files or set None if list is empty
-        table.extradata_field1 = extrafiles[0] if file1 else None
-        table.extradata_field2 = extrafiles[1] if file2 else None
-        table.extradata_field3 = extrafiles[2] if file3 else None
-        table.extradata_field4 = extrafiles[3] if file4 else None
+        for file in files:
+            try:
+                # Extract the file name
+                file_name = os.path.basename(file.name)
+                logging.debug(f"Uploading file: {file_name}")
+                unique_name = f"{uuid.uuid4()}_{file_name}"
 
-        table.save()
+                # Upload the file to the VPS bucket
+                s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
 
-        print('This is Backend  file1 in DB- ',file1)
-        print('This is Backend file2 in DB- ',file2)
-        print('This is Backend file3 in DB- ',file3)
-        print('This is Backend file4 in DB- ',file4)
-        connection.close()
-        
-
-        return JsonResponse({'message':'Upload successfuly'},status=200)
+                unique_names.append(unique_name)
+                #
+            except NoCredentialsError:
+                logging.error("Credentials not available")
+                failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
+            except Exception as e:
+                logging.error(f"Error during file upload: {str(e)}")
+                failed_files.append({'file_name': file.name, 'error': str(e)})
     
     except Exception as e:
         print(e)
