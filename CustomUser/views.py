@@ -149,77 +149,85 @@ def fetch_approve_dealer(request):
     return JsonResponse(data,safe=False,status = 200)
 
 def send_extraData(request):
-    user = request.user.id
-    dealer_data = DealerProfile.objects.get(user_id=user)
-    dealer_id = dealer_data.Dealer_ID
-        # Access the file(s) from request.FILES
-    file1 = request.FILES.getlist('file0')  # Adjust the index if you have multiple files
-    file2 = request.FILES.getlist('file1')  # Adjust the index if you have multiple files
-    file3 = request.FILES.getlist('file2')  # Adjust the index if you have multiple files
-    file4 = request.FILES.getlist('file3')  # Adjust the index if you have multiple files
+    try:
+        user = request.user.id
+        dealer_data = DealerProfile.objects.get(user_id=user)
+        dealer_id = dealer_data.Dealer_ID
+            # Access the file(s) from request.FILES
+        file1 = request.FILES.getlist('file0')  # Adjust the index if you have multiple files
+        file2 = request.FILES.getlist('file1')  # Adjust the index if you have multiple files
+        file3 = request.FILES.getlist('file2')  # Adjust the index if you have multiple files
+        file4 = request.FILES.getlist('file3')  # Adjust the index if you have multiple files
 
-        # Access the message or boolean from request.POST
-    message = request.POST.get('message')
-    print('This is Backend Value - ',message)
-    print('This is Backend  file1- ',file1)
-    print('This is Backend file2 - ',file2)
-    print('This is Backend file3 - ',file3)
-    print('This is Backend file4 - ',file4)
+            # Access the message or boolean from request.POST
+        message = request.POST.get('message')
+        print('This is Backend Value - ',message)
+        print('This is Backend  file1- ',file1)
+        print('This is Backend file2 - ',file2)
+        print('This is Backend file3 - ',file3)
+        print('This is Backend file4 - ',file4)
 
-    files=[file1,file2,file3,file4]
+        files=[file1,file2,file3,file4]
 
-   
-    s3_client = boto3.client(
-            's3',
-            endpoint_url='http://82.112.238.156:9000',  
-            aws_access_key_id='minioadmin',          
-            aws_secret_access_key='minioadmin',      
-            region_name='us-east-1'                  
-        )
- 
-    BUCKET_NAME = 'mybucket'
-    clears = [var for var in files if var]
-    extrafiles=[]
-    failed_files=[]
-    for file in clears:
-            try:
-                # Extract the file name
-                file_name = os.path.basename(file.name)
-                logging.debug(f"Uploading file: {file_name}")
-                unique_name = f"{uuid.uuid4()}_{file_name}"
- 
-                # Upload the file to the VPS bucket
-                s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
- 
-                extrafiles.append(unique_name)
-                #
-            except NoCredentialsError:
-                logging.error("Credentials not available")
-                failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
-            except Exception as e:
-                logging.error(f"Error during file upload: {str(e)}")
-                failed_files.append({'file_name': file.name, 'error': str(e)})
-
-                
-    table = Dealer_Details.objects.get(Dealer_ID=dealer_id)
-    table.dealer_message = message
-                
-    # Dynamically assign files or set None if list is empty
-    table.extradata_field1 = extrafiles[0] if file1 else None
-    table.extradata_field2 = extrafiles[1] if file2 else None
-    table.extradata_field3 = extrafiles[2] if file3 else None
-    table.extradata_field4 = extrafiles[3] if file4 else None
-
-    table.save()
-
-    print('This is Backend  file1 in DB- ',file1)
-    print('This is Backend file2 in DB- ',file2)
-    print('This is Backend file3 in DB- ',file3)
-    print('This is Backend file4 in DB- ',file4)
-    connection.close()
     
+        s3_client = boto3.client(
+                's3',
+                endpoint_url='http://82.112.238.156:9000',  
+                aws_access_key_id='minioadmin',          
+                aws_secret_access_key='minioadmin',      
+                region_name='us-east-1'                  
+            )
+    
+        BUCKET_NAME = 'mybucket'
+        clears = [var for var in files if var]
+        extrafiles=[]
+        failed_files=[]
+        for file in clears:
+                try:
+                    # Extract the file name
+                    file_name = os.path.basename(file.name)
+                    logging.debug(f"Uploading file: {file_name}")
+                    unique_name = f"{uuid.uuid4()}_{file_name}"
+    
+                    # Upload the file to the VPS bucket
+                    s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
+    
+                    extrafiles.append(unique_name)
+                    #
+                except NoCredentialsError:
+                    logging.error("Credentials not available")
+                    failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
+                except Exception as e:
+                    logging.error(f"Error during file upload: {str(e)}")
+                    failed_files.append({'file_name': file.name, 'error': str(e)})
 
-    return JsonResponse({'message':'Upload successfuly'},status=200)
+                    
+        table = Dealer_Details.objects.get(Dealer_ID=dealer_id)
+        table.dealer_message = message
+                    
+        # Dynamically assign files or set None if list is empty
+        table.extradata_field1 = extrafiles[0] if file1 else None
+        table.extradata_field2 = extrafiles[1] if file2 else None
+        table.extradata_field3 = extrafiles[2] if file3 else None
+        table.extradata_field4 = extrafiles[3] if file4 else None
+
+        table.save()
+
+        print('This is Backend  file1 in DB- ',file1)
+        print('This is Backend file2 in DB- ',file2)
+        print('This is Backend file3 in DB- ',file3)
+        print('This is Backend file4 in DB- ',file4)
+        connection.close()
+        
+
+        return JsonResponse({'message':'Upload successfuly'},status=200)
+    
+    except Exception as e:
+        print(e)
+        return JsonResponse({'message':'except block is priniting'},status=500)
+
+
+
 
 # Dealer Register Block
 # @csrf_exempt
