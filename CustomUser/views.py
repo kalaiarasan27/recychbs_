@@ -160,6 +160,7 @@ def send_extraData(request):
             request.FILES.getlist('file2'),
             request.FILES.getlist('file3'),
         ]
+
         
         # Extract the message or boolean from request.POST
         message = request.POST.get('message')
@@ -207,6 +208,15 @@ def send_extraData(request):
                 'message': 'All files uploaded successfully',
                 'uploaded_files': uploaded_files,
             }, status=200)
+
+        data = Dealer_Details.objects.get(Dealer_ID = dealer_id)
+
+        data.extradata_field1 = uploaded_files[0] if  uploaded_files[0] else none
+        data.extradata_field3 = uploaded_files[1] if  uploaded_files[1] else none
+        data.extradata_field3 = uploaded_files[2] if  uploaded_files[2] else none
+        data.extradata_field4 = uploaded_files[3] if  uploaded_files[3] else none
+
+        data.save()
 
     
     except Exception as e:
