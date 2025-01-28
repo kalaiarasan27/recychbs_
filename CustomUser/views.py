@@ -167,7 +167,6 @@ def send_extraData(request):
         print('This is Backend file3 - ',file3)
         print('This is Backend file4 - ',file4)
 
-        files=[file1,file2,file3,file4]
 
     
         s3_client = boto3.client(
@@ -180,11 +179,13 @@ def send_extraData(request):
  
         BUCKET_NAME = 'mybucket'
         files=[file1,file2,file3,file4]
+
+        clears = [var for var in files if var]
         # uploaded_files = []
         failed_files = []
         unique_names = []
 
-        for file in files:
+        for file in clears:
             try:
                 # Extract the file 
                 print("inside try block")
