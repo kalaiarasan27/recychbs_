@@ -198,26 +198,20 @@ def send_extraData(request):
 
         # Return a response based on the result
         print("before if")
-        if failed_files:
-            return JsonResponse({
-                'message': 'Some files failed to upload',
-                'uploaded_files': uploaded_files,
-                'failed_files': failed_files,
-            }, status=400)
-        else:
-            return JsonResponse({
+      
+        return JsonResponse({
                 'message': 'All files uploaded successfully',
                 'uploaded_files': uploaded_files,
             }, status=200)
-            print(" inside else")
-            data = Dealer_Details.objects.get(Dealer_ID = dealer_id)
-            print("this is dealer id  ",data)
-            print(uploaded_files)
-            data.extradata_field1 = uploaded_files[0] if  uploaded_files[0] else none
-            data.extradata_field3 = uploaded_files[1] if  uploaded_files[1] else none
-            data.extradata_field3 = uploaded_files[2] if  uploaded_files[2] else none
-            data.extradata_field4 = uploaded_files[3] if  uploaded_files[3] else none
-            data.save()
+        print(" inside else")
+        data = Dealer_Details.objects.get(Dealer_ID = dealer_id)
+        print("this is dealer id  ",data)
+        print(uploaded_files)
+        data.extradata_field1 = uploaded_files[0] if  uploaded_files[0] else none
+        data.extradata_field3 = uploaded_files[1] if  uploaded_files[1] else none
+        data.extradata_field3 = uploaded_files[2] if  uploaded_files[2] else none
+        data.extradata_field4 = uploaded_files[3] if  uploaded_files[3] else none
+        data.save()
         print("after if")
 
     
