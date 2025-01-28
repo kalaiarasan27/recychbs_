@@ -373,6 +373,6 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1  # Password reset token will be valid for 1 day
 
 
 # settings.py (Django)
-FRONTEND_URL = "https://django-djreact-app-d5af3d4e3559.herokuapp.com"  # Set this to your actual frontend URL
+FRONTEND_URL = "https://app.recychbs.in/"  # Set this to your actual frontend URL
 
 GDAL_LIBRARY_PATH = os.path.join('C:\\OSGeo4W\\bin\\adal.dll')  # Adjust 'gdal304.dll' as necessary
