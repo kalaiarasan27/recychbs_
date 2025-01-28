@@ -141,7 +141,7 @@ const handleSubmit = async () => {
   try {
     const response = await fetch('send_extraData/', {
       method: 'POST',
-      body: uploadFile,
+      body: files,
       credentials: 'include',
       headers: {
         'X-CSRFToken': csrfToken,
