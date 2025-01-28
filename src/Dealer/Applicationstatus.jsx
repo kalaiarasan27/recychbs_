@@ -135,8 +135,6 @@ const handleSubmit = async () => {
   });
   uploadFile.append('message', message);
   // console.log("Response is",uploadFile);
-  console.log(uploadFile);
-  
 
   try {
     const response = await fetch('send_extraData/', {
