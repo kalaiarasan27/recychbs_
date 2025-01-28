@@ -153,59 +153,60 @@ def send_extraData(request):
         user = request.user.id
         dealer_data = DealerProfile.objects.get(user_id=user)
         dealer_id = dealer_data.Dealer_ID
-            # Access the file(s) from request.FILES
-        file1 = request.FILES.getlist('file0')  # Adjust the index if you have multiple files
-        file2 = request.FILES.getlist('file1')  # Adjust the index if you have multiple files
-        file3 = request.FILES.getlist('file2')  # Adjust the index if you have multiple files
-        file4 = request.FILES.getlist('file3')  # Adjust the index if you have multiple files
-
-            # Access the message or boolean from request.POST
+         
+        files = [
+            request.FILES.getlist('file0'),
+            request.FILES.getlist('file1'),
+            request.FILES.getlist('file2'),
+            request.FILES.getlist('file3'),
+        ]
+        
+        # Extract the message or boolean from request.POST
         message = request.POST.get('message')
-        print('This is Backend Value - ',message)
-        print('This is Backend  file1- ',file1)
-        print('This is Backend file2 - ',file2)
-        print('This is Backend file3 - ',file3)
-        print('This is Backend file4 - ',file4)
+        print('This is Backend Value - ', message)
 
-    
+        # Flatten the list of files
+        clears = [file for file_group in files for file in file_group if file]
+        print('Files to upload:', clears)
+
+        # Configure S3 client
         s3_client = boto3.client(
             's3',
-            endpoint_url='http://82.112.238.156:9000',  
-            aws_access_key_id='minioadmin',          
-            aws_secret_access_key='minioadmin',      
-            region_name='us-east-1'                  
+            endpoint_url='http://82.112.238.156:9000',  # Replace with your endpoint
+            aws_access_key_id='minioadmin',
+            aws_secret_access_key='minioadmin',
+            region_name='us-east-1'
         )
- 
         BUCKET_NAME = 'mybucket'
-        files=[file1,file2,file3,file4]
 
-        clears = [var for var in files if var]
-        # uploaded_files = []
+        uploaded_files = []
         failed_files = []
-        unique_names = []
 
         for file in clears:
             try:
-                # Extract the file 
-                print(file)
-                print("inside try block")
-                file_name = file
-                logging.debug(f"Uploading file: {file_name}")
-                unique_name = f"{uuid.uuid4()}_{file_name}"
+                # Generate a unique name for the file
+                unique_name = f"{uuid.uuid4()}_{file.name}"
+                print(f"Uploading file: {unique_name}")
 
-                # Upload the file to the VPS bucket
+                # Upload the file to the bucket
                 s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
-
-                unique_names.append(unique_name)
-            #     #
-            # except NoCredentialsError:
-            #     logging.error("Credentials not available")
-            #     failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
+                uploaded_files.append(unique_name)
             except Exception as e:
-                print("inside f expect")
-                logging.error(f"Error during file upload: {str(e)}")
-                # failed_files.append({'file_name': file.name, 'error': str(e)})
-                return JsonResponse({'message':'except block '},status=500)
+                logging.error(f"Error during file upload for {file.name}: {str(e)}")
+                failed_files.append({'file_name': file.name, 'error': str(e)})
+
+        # Return a response based on the result
+        if failed_files:
+            return JsonResponse({
+                'message': 'Some files failed to upload',
+                'uploaded_files': uploaded_files,
+                'failed_files': failed_files,
+            }, status=400)
+        else:
+            return JsonResponse({
+                'message': 'All files uploaded successfully',
+                'uploaded_files': uploaded_files,
+            }, status=200)
 
     
     except Exception as e:
