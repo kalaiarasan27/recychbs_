@@ -453,7 +453,7 @@ for (const [key, fileData] of Object.entries(filesData)) {
       if (response.ok) {
         const data = await response.json();
         setMessage(data.message);
-        console.log("Submited");
+        console.log("Submited",uploadFile);
         // alert("Dealer Details submitted successfully");
         // onClose();
         displayAlert('success', 'Dealer Details submitted successfully');

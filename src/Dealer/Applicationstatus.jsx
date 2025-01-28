@@ -146,10 +146,10 @@ const handleSubmit = async () => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log("Response is OK");
+      console.log("Response is OK",uploadFile);
     } else {
       const data = await response.json();
-      console.log("Response is not OK");
+      console.log("Response is not OK",uploadFile);
       setError(data.error);
     }
   } catch (error) {
