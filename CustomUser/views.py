@@ -207,7 +207,7 @@ def send_extraData(request):
         print(" this is first",uploaded_files[0])
         extra = [var for var in uploaded_files if var]
         data.extradata_field1 = extra[0] if  extra[0] else none
-        data.extradata_field3 = extra[1] if  extra[1] else none
+        data.extradata_field2 = extra[1] if  extra[1] else none
         data.extradata_field3 = extra[2] if  extra[2] else none
         data.extradata_field4 = extra[3] if  extra[3] else none
         data.save()
