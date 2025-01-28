@@ -205,10 +205,11 @@ def send_extraData(request):
         print("this is dealer id  ",data)
         print(uploaded_files)
         print(" this is first",uploaded_files[0])
-        data.extradata_field1 = uploaded_files[0] if  uploaded_files[0] else none
-        data.extradata_field3 = uploaded_files[1] if  uploaded_files[1] else none
-        data.extradata_field3 = uploaded_files[2] if  uploaded_files[2] else none
-        data.extradata_field4 = uploaded_files[3] if  uploaded_files[3] else none
+        extra = [var for var in uploaded_files if var]
+        data.extradata_field1 = extra[0] if  extra[0] else none
+        data.extradata_field3 = extra[1] if  extra[1] else none
+        data.extradata_field3 = extra[2] if  extra[2] else none
+        data.extradata_field4 = extra[3] if  extra[3] else none
         data.save()
         print("after if")
         return JsonResponse({
