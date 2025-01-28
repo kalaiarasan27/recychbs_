@@ -201,7 +201,9 @@ def send_extraData(request):
             #     failed_files.append({'file_name': file.name, 'error': 'Credentials not available'})
             except Exception as e:
                 logging.error(f"Error during file upload: {str(e)}")
-                failed_files.append({'file_name': file.name, 'error': str(e)})
+                # failed_files.append({'file_name': file.name, 'error': str(e)})
+                return JsonResponse({'message':'except block '},status=500)
+
     
     except Exception as e:
         print(e)
