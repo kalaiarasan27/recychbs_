@@ -170,7 +170,7 @@ def send_extraData(request):
         files=[file1,file2,file3,file4]
 
     
-         s3_client = boto3.client(
+        s3_client = boto3.client(
             's3',
             endpoint_url='http://82.112.238.156:9000',  
             aws_access_key_id='minioadmin',          
