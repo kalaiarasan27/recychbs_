@@ -167,7 +167,6 @@ def send_extraData(request):
         print('This is Backend file3 - ',file3)
         print('This is Backend file4 - ',file4)
 
-
     
         s3_client = boto3.client(
             's3',
@@ -190,7 +189,7 @@ def send_extraData(request):
                 # Extract the file 
                 print(file)
                 print("inside try block")
-                file_name = os.path.basename(file.name)
+                file_name = os.path.basename(file)
                 logging.debug(f"Uploading file: {file_name}")
                 unique_name = f"{uuid.uuid4()}_{file_name}"
 
