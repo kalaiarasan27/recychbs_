@@ -168,8 +168,7 @@ def send_extraData(request):
 
     files=[file1,file2,file3,file4]
 
-    table = Dealer_Details.objects.get(Dealer_ID=dealer_id)
-    table.dealer_message = message
+   
     s3_client = boto3.client(
             's3',
             endpoint_url='http://82.112.238.156:9000',  
@@ -201,6 +200,9 @@ def send_extraData(request):
                 logging.error(f"Error during file upload: {str(e)}")
                 failed_files.append({'file_name': file.name, 'error': str(e)})
 
+                
+    table = Dealer_Details.objects.get(Dealer_ID=dealer_id)
+    table.dealer_message = message
                 
     # Dynamically assign files or set None if list is empty
     table.extradata_field1 = extrafiles[0] if file1 else None
@@ -1275,13 +1277,7 @@ def Get_DealerDetails(request):
     # Fetch the data from the Dealer_Details model
 
         dealer_data = list(Dealer_Details.objects.values())
-        # dealer_id  = Dealer_Details.objects.all()
-        # dealer_profiles = list(DealerProfile.objects.filter(Dealer_ID = dealer_id).values())
-
-        # Fetch all dealer details
-        # dealer_data = list(Dealer_Details.objects.values())
-
-        # Initialize a list to store dealer profiles
+        
         dealer_profiles = []
 
         # Loop through each dealer in dealer_data
@@ -1332,15 +1328,7 @@ def Get_DealerDetails(request):
     ]
 
         clears = [var for var in file_paths if var]
-        # Extract only the file name without query parameters
-        # filenames = [os.path.basename(urlparse(file_path).path) for file_path in clears]
-
-        # print("this is file files")
-
-        # print(filenames)
-
-        # print(image_names)
-        # filenames = [var2, var1, var3]
+      
 
         images = []
         # print("this is clears:",clears)
@@ -1349,7 +1337,7 @@ def Get_DealerDetails(request):
         
             try:
                 response = s3_client.get_object(Bucket='mybucket', Key=filename)
-                print("this is responce",response)
+                # print("this is responce",response)
                 file_content = response['Body'].read()
                 encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
                 images.append({"filename": filename, "content": encoded_image})
