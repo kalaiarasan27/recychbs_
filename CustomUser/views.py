@@ -206,11 +206,12 @@ def send_extraData(request):
         print(uploaded_files)
         print(" this is first",uploaded_files[0])
         extra = [var for var in uploaded_files if var]
-        data.extradata_field1 = extra[0] if  extra[0] else None
-        data.extradata_field2 = extra[1] if  extra[1] else None
-        data.extradata_field3 = extra[2] if  extra[2] else None
-        data.extradata_field4 = extra[3] if  extra[3] else None
+        data.extradata_field1 = extra[0] if len(extra) > 0 and extra[0] else None
+        data.extradata_field2 = extra[1] if len(extra) > 1 and extra[1] else None
+        data.extradata_field3 = extra[2] if len(extra) > 2 and extra[2] else None
+        data.extradata_field4 = extra[3] if len(extra) > 3 and extra[3] else None
         data.save()
+
         print("after if")
         return JsonResponse({
                 'message': 'All files uploaded successfully',
