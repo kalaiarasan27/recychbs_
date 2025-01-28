@@ -210,7 +210,8 @@ def send_extraData(request):
             }, status=200)
 
         data = Dealer_Details.objects.get(Dealer_ID = dealer_id)
-
+        print("this is dealer id  ",data)
+        print(uploaded_files)
         data.extradata_field1 = uploaded_files[0] if  uploaded_files[0] else none
         data.extradata_field3 = uploaded_files[1] if  uploaded_files[1] else none
         data.extradata_field3 = uploaded_files[2] if  uploaded_files[2] else none
