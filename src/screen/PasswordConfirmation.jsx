@@ -33,6 +33,9 @@ const PasswordResetConfirm = () => {
       return cookieValue;
     }
 
+    console.log(password);
+    
+
     try {
       const response = await fetch(`reset/${uid}/${token}/`, {
         method: 'POST',
