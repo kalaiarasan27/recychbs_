@@ -199,10 +199,7 @@ def send_extraData(request):
         # Return a response based on the result
         print("before if")
       
-        return JsonResponse({
-                'message': 'All files uploaded successfully',
-                'uploaded_files': uploaded_files,
-            }, status=200)
+       
         print(" inside else")
         data = Dealer_Details.objects.get(Dealer_ID = dealer_id)
         print("this is dealer id  ",data)
@@ -213,6 +210,10 @@ def send_extraData(request):
         data.extradata_field4 = uploaded_files[3] if  uploaded_files[3] else none
         data.save()
         print("after if")
+        return JsonResponse({
+                'message': 'All files uploaded successfully',
+                'uploaded_files': uploaded_files,
+            }, status=200)
 
     
     except Exception as e:
