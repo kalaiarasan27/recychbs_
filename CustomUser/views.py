@@ -218,6 +218,7 @@ def send_extraData(request):
             data.extradata_field3 = uploaded_files[2] if  uploaded_files[2] else none
             data.extradata_field4 = uploaded_files[3] if  uploaded_files[3] else none
             data.save()
+        print("after if")
 
     
     except Exception as e:
