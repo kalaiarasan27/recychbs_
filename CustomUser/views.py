@@ -188,6 +188,7 @@ def send_extraData(request):
         for file in clears:
             try:
                 # Extract the file 
+                print(file)
                 print("inside try block")
                 file_name = os.path.basename(file.name)
                 logging.debug(f"Uploading file: {file_name}")
