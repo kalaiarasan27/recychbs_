@@ -55,7 +55,7 @@ import uuid
 # for notification
 from plyer import notification
 # from win10toast import ToastNotifier
-
+from django.middleware.csrf import get_token
 # for geolocation
 from geopy.distance import great_circle
 # For Find Dealer
@@ -882,6 +882,8 @@ def login_view(request):
 # Send reset password email
 
 class PasswordResetRequestView(APIView):
+    csrf_token = get_token(request)  # Get CSRF token
+    print("CSRF Token:", csrf_token)
     @csrf_exempt
     def post(self, request):
         email = request.data.get('email')
@@ -920,6 +922,8 @@ class PasswordResetRequestView(APIView):
 class PasswordResetConfirmView(APIView):
     def post(self, request, uidb64, token):
         print("inside function")
+        csrf_token = get_token(request)  # Get CSRF token
+        print("CSRF Token:", csrf_token) 
         
         # Get and validate new password
         new_password = request.data.get('password')
@@ -930,7 +934,6 @@ class PasswordResetConfirmView(APIView):
             uid = force_str(urlsafe_base64_decode(uidb64))
         except (TypeError, ValueError, OverflowError):
             return Response({"message": "Invalid user identifier"}, status=400)
-
         try:
             user = User.objects.get(pk=uid)
             if default_token_generator.check_token(user, token):
