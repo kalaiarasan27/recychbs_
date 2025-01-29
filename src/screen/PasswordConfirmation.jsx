@@ -34,7 +34,7 @@ const PasswordResetConfirm = () => {
     }
 
     console.log(csrfToken);
-    console.log(document.cookie);
+    console.log(cookieValue);
 
 
     try {
