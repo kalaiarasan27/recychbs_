@@ -34,7 +34,6 @@ const PasswordResetConfirm = () => {
     }
 
     console.log(password);
-    
 
     try {
       const response = await fetch(`reset/${uid}/${token}/`, {
@@ -46,7 +45,7 @@ const PasswordResetConfirm = () => {
         },
         body: JSON.stringify({ password }),
       });
-
+      console.log(response);
       if (response.ok) {
         setMessage('Password reset successful.');
         navigate('/login');
