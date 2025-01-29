@@ -16,12 +16,12 @@ const PasswordResetConfirm = () => {
       return;
     }
 
-    const csrfToken = getCookie('csrftoken');
-  
+    const csrfToken = getCookie("csrftoken");
+
     function getCookie(name) {
       let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
+      if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
         for (let i = 0; i < cookies.length; i++) {
           const cookie = cookies[i].trim();
           if (cookie.substring(0, name.length + 1) === `${name}=`) {
@@ -34,7 +34,7 @@ const PasswordResetConfirm = () => {
     }
 
     console.log(csrfToken);
-    console.log(cookieValue);
+    
 
 
     try {
