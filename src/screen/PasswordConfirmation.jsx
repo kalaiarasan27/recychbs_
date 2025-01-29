@@ -1,138 +1,38 @@
-import React, { useState } from 'react';
-import logo from '../assets/image/logotrans.png'; 
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import Cookies from "js-cookie";
-
-
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const PasswordResetConfirm = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const { uid, token } = useParams();
+  const { uidb64, token } = useParams();
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password !== confirmPassword) {
-      setMessage('Passwords do not match.');
-      return;
-    }
-
-
-
-  //   const getCSRFToken = () => {
-  //     return Cookies.get("csrftoken"); // Extract CSRF token from cookies
-  // };
-  
-    // const csrfToken = getCookie("csrftoken");
-
-    // function getCookie(name) {
-    //   let cookieValue = null;
-    //   if (document.cookie && document.cookie !== "") {
-    //     const cookies = document.cookie.split(";");
-    //     for (let i = 0; i < cookies.length; i++) {
-    //       const cookie = cookies[i].trim();
-    //       if (cookie.substring(0, name.length + 1) === `${name}=`) {
-    //         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-    //         break;
-    //       }
-    //     }
-    //   }
-    //   return cookieValue;
-    // }
-
-
-    // const csrfToken = getCSRFToken();
-
-    // if (!csrfToken) {
-    //     console.error("CSRF token not found. Make sure the backend provides it.");
-    //     return;
-    // }
-    // console.log(csrfToken);
-    
-
-
     try {
-      console.log("inside try");
-      
-      const response = await fetch(`reset/${uid}/${token}/`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          // 'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({ password }),
-      });
-      console.log(response);
-      if (response.ok) {
-        setMessage('Password reset successful.');
-        navigate('/login');
-      } else {
-        setMessage('An error occurred. Please try again.');
-      }
+      const response = await axios.post(`reset/${uid}/${token}/`, { password });
+      setMessage(response.data.message);
+      setTimeout(() => navigate("/login"), 2000);
     } catch (error) {
-      setMessage('Failed to reset password.');
+      setMessage("Error resetting password");
     }
   };
 
   return (
-    <div className="container-fluid p-0 m-0" style={{ height: "100vh" }}>
-      <div className="login-container d-flex" style={{ height: "100%" }}>
-        <div className="col-lg-6 col-md-4 col-sm-12 d-flex align-items-center justify-content-center">
-          <div className="login-left text-center" style={{backgroundColor:"transparent"}}>
-            <img src={logo} className="logonew" alt="Logo" />
-            <span className="logonew-text">RECYCHBS</span>
-          </div>
-        </div>
-        <div className="col-lg-6 col-md-8 col-sm-12 d-flex align-items-center justify-content-center">
-          <form onSubmit={handleSubmit} className="forgot-password-form p-4" style={{ width: "100%" }}>
-            <h2 style={{ fontWeight: "800" }}>Set New Password</h2>
-            {message && <p style={{ color: 'red' }}>{message}</p>}
-            <div className="form-group">
-              <label
-                htmlFor="password"
-                style={{ fontSize: "20px", fontWeight: "600", marginTop: "20px" }}
-              >
-                New Password:
-              </label>
-              <input
-                type="password"
-                id="password"
-                className="form-control mt-2"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="Enter your new password"
-              />
-            </div>
-            <div className="form-group">
-              <label
-                htmlFor="confirmPassword"
-                style={{ fontSize: "20px", fontWeight: "600", marginTop: "20px" }}
-              >
-                Confirm New Password:
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                className="form-control mt-2"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                placeholder="Confirm your new password"
-              />
-            </div>
-            <button type="submit" className="mt-4 py-1 px-2" style={{ backgroundColor: "lightblue", borderWidth: "0" }}>
-              Reset Password
-             
-            </button>
-            
-          </form>
-        </div>
-      </div>
+    <div>
+      <h2>Reset Password</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="password"
+          placeholder="Enter new password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Submit</button>
+      </form>
+      <p>{message}</p>
     </div>
   );
 };
