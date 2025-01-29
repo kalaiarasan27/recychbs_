@@ -264,8 +264,8 @@ CORS_ALLOWED_ORIGINS = [
     'https://app.recychbs.in',
     'https://recychbs-app-c05d5f684be1.herokuapp.com',  # React app's URL
     'https://recychbs-admin-app-527051e76757.herokuapp.com',
-    'https://recychbs.in',
-    'https://recychbsadmin.in',
+    'http://recychbs.in',
+    'http://recychbsadmin.in',
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
 ]
@@ -284,9 +284,9 @@ CSRF_TRUSTED_ORIGINS = [
     'https://new-hbs-admin-82beda5bc10a.herokuapp.com',
     'https://app.recychbs.in',
     'https://recychbs-app-c05d5f684be1.herokuapp.com', 
-    'https://recychbs.in',
+    'http://recychbs.in',
     'https://recychbs-admin-app-527051e76757.herokuapp.com',
-    'https://recychbsadmin.in',
+    'http://recychbsadmin.in',
 
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
