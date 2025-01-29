@@ -379,9 +379,9 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1  # Password reset token will be valid for 1 day
 #     'chrome-extension://eejfoncpjfgmeleakejdcanedmefagga',
 # ]
 
-CSRF_COOKIE_HTTPONLY = False  # ✅ Allows JavaScript to read the CSRF token
-CSRF_COOKIE_SECURE = True  # ✅ Ensure this is True for HTTPS
-CSRF_USE_SESSIONS = False  # ✅ Ensure CSRF is stored in cookies
+# CSRF_COOKIE_HTTPONLY = False  # ✅ Allows JavaScript to read the CSRF token
+# CSRF_COOKIE_SECURE = True  # ✅ Ensure this is True for HTTPS
+# CSRF_USE_SESSIONS = False  # ✅ Ensure CSRF is stored in cookies
 
 # settings.py (Django)
 FRONTEND_URL = "https://recychbs-app-c05d5f684be1.herokuapp.com"  # Set this to your actual frontend URL
