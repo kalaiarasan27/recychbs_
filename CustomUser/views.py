@@ -907,13 +907,22 @@ class PasswordResetRequestView(APIView):
 
 
 # Confirm the new password
+from django.utils.encoding import force_str  # Ensure correct import
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.models import User
+from django.utils.http import urlsafe_base64_decode
+
+@method_decorator(csrf_exempt, name='dispatch')
 class PasswordResetConfirmView(APIView):
-    renderer_classes = [JSONRenderer]
-    @csrf_exempt
     def post(self, request, uidb64, token):
         print("inside function")
         new_password = request.data.get('password')
-        print("this is password:",new_password)
+        print("this is password:", new_password)
+        
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)
@@ -925,6 +934,7 @@ class PasswordResetConfirmView(APIView):
                 return Response({"message": "Invalid token"}, status=400)
         except User.DoesNotExist:
             return Response({"message": "User not found"}, status=404)
+
 
 # from django.contrib.auth import views as auth_views
 
