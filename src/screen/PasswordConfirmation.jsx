@@ -38,6 +38,8 @@ const PasswordResetConfirm = () => {
 
 
     try {
+      console.log("inside try");
+      
       const response = await fetch(`reset/${uid}/${token}/`, {
         method: 'POST',
         credentials: 'include',
