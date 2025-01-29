@@ -33,7 +33,7 @@ const PasswordResetConfirm = () => {
       return cookieValue;
     }
 
-    console.log(password);
+    console.log(csrfToken);
 
     try {
       const response = await fetch(`reset/${uid}/${token}/`, {
