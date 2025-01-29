@@ -916,7 +916,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.models import User
 from django.utils.http import urlsafe_base64_decode
 
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
 class PasswordResetConfirmView(APIView):
     def post(self, request, uidb64, token):
         print("inside function")
