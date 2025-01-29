@@ -25,31 +25,31 @@ const PasswordResetConfirm = () => {
   //     return Cookies.get("csrftoken"); // Extract CSRF token from cookies
   // };
   
-    const csrfToken = getCookie("csrftoken");
+    // const csrfToken = getCookie("csrftoken");
 
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === `${name}=`) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    }
+    // function getCookie(name) {
+    //   let cookieValue = null;
+    //   if (document.cookie && document.cookie !== "") {
+    //     const cookies = document.cookie.split(";");
+    //     for (let i = 0; i < cookies.length; i++) {
+    //       const cookie = cookies[i].trim();
+    //       if (cookie.substring(0, name.length + 1) === `${name}=`) {
+    //         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   return cookieValue;
+    // }
 
 
     // const csrfToken = getCSRFToken();
 
-    if (!csrfToken) {
-        console.error("CSRF token not found. Make sure the backend provides it.");
-        return;
-    }
-    console.log(csrfToken);
+    // if (!csrfToken) {
+    //     console.error("CSRF token not found. Make sure the backend provides it.");
+    //     return;
+    // }
+    // console.log(csrfToken);
     
 
 
@@ -62,7 +62,7 @@ const PasswordResetConfirm = () => {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'X-CSRFToken': csrfToken
+          // 'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({ password }),
       });
