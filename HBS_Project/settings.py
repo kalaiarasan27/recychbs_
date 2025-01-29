@@ -54,7 +54,6 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',  # Should come before AuthenticationMiddleware
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',  #
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # Correctly placed
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -63,10 +62,8 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication', 
-   ],
+        'rest_framework.renderers.JSONRenderer',
+    ],
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -264,8 +261,8 @@ CORS_ALLOWED_ORIGINS = [
     'https://app.recychbs.in',
     'https://recychbs-app-c05d5f684be1.herokuapp.com',  # React app's URL
     'https://recychbs-admin-app-527051e76757.herokuapp.com',
-    'http://recychbs.in',
-    'http://recychbsadmin.in',
+    'https://recychbs.in',
+    'https://recychbsadmin.in',
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
 ]
@@ -284,10 +281,9 @@ CSRF_TRUSTED_ORIGINS = [
     'https://new-hbs-admin-82beda5bc10a.herokuapp.com',
     'https://app.recychbs.in',
     'https://recychbs-app-c05d5f684be1.herokuapp.com', 
-    'http://recychbs.in',
     'https://recychbs-admin-app-527051e76757.herokuapp.com',
-    'http://recychbsadmin.in',
-
+    'https://recychbs.in',
+    'https://recychbsadmin.in',
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
 ]
@@ -379,9 +375,6 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1  # Password reset token will be valid for 1 day
 #     'chrome-extension://eejfoncpjfgmeleakejdcanedmefagga',
 # ]
 
-# CSRF_COOKIE_HTTPONLY = False  # ✅ Allows JavaScript to read the CSRF token
-# CSRF_COOKIE_SECURE = True  # ✅ Ensure this is True for HTTPS
-# CSRF_USE_SESSIONS = False  # ✅ Ensure CSRF is stored in cookies
 
 # settings.py (Django)
 FRONTEND_URL = "https://recychbs-app-c05d5f684be1.herokuapp.com"  # Set this to your actual frontend URL
