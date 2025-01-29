@@ -114,6 +114,9 @@ const OtpVerification = () => {
     return cookieValue;
   }
 
+  console.log(csrfToken);
+  
+
   const handleClick = (e) => {
     e.preventDefault();
     setTimer(30);

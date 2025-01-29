@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import logo from '../assets/image/logotrans.png'; 
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import Cookies from "js-cookie";
+
+
 
 const PasswordResetConfirm = () => {
   const [password, setPassword] = useState('');
@@ -16,23 +19,36 @@ const PasswordResetConfirm = () => {
       return;
     }
 
-    const csrfToken = getCookie("csrftoken");
 
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === `${name}=`) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
+
+    const getCSRFToken = () => {
+      return Cookies.get("csrftoken"); // Extract CSRF token from cookies
+  };
+  
+    // const csrfToken = getCookie("csrftoken");
+
+    // function getCookie(name) {
+    //   let cookieValue = null;
+    //   if (document.cookie && document.cookie !== "") {
+    //     const cookies = document.cookie.split(";");
+    //     for (let i = 0; i < cookies.length; i++) {
+    //       const cookie = cookies[i].trim();
+    //       if (cookie.substring(0, name.length + 1) === `${name}=`) {
+    //         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   return cookieValue;
+    // }
+
+
+    const csrfToken = getCSRFToken();
+
+    if (!csrfToken) {
+        console.error("CSRF token not found. Make sure the backend provides it.");
+        return;
     }
-
     console.log(csrfToken);
     
 

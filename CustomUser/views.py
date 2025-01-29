@@ -32,6 +32,14 @@ from rest_framework.response import Response
 from django.conf import settings
 from rest_framework.renderers import JSONRenderer
 
+# Confirm the new password
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth.models import User
+
+
 # for pdf convertion 
 
 from django.core.files import File
@@ -906,17 +914,9 @@ class PasswordResetRequestView(APIView):
             return Response({"message": "User with this email does not exist"}, status=404)
 
 
-# Confirm the new password
-from django.utils.encoding import force_str
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.models import User
-from django.utils.http import urlsafe_base64_decode
 
-# @method_decorator(csrf_exempt, name='dispatch')
+
+@method_decorator(csrf_exempt, name='dispatch')
 class PasswordResetConfirmView(APIView):
     def post(self, request, uidb64, token):
         print("inside function")
