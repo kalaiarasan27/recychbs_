@@ -40,6 +40,7 @@ const PasswordResetConfirm = () => {
     try {
       const response = await fetch(`reset/${uid}/${token}/`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
