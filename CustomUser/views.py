@@ -882,7 +882,6 @@ def login_view(request):
 # Send reset password email
 
 class PasswordResetRequestView(APIView):
-    @csrf_exempt
     def post(self, request):
         email = request.data.get('email')
         UserModel = get_user_model()
@@ -918,7 +917,6 @@ class PasswordResetRequestView(APIView):
 
 # @method_decorator(csrf_exempt, name='dispatch')
 class PasswordResetConfirmView(APIView):
-    @csrf_exempt
     def post(self, request, uidb64, token):
         print("inside function")
         csrf_token = get_token(request)  # Get CSRF token

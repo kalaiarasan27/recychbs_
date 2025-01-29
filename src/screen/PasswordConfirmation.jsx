@@ -21,11 +21,11 @@ const PasswordResetConfirm = () => {
 
 
 
-    const getCSRFToken = () => {
-      return Cookies.get("csrftoken"); // Extract CSRF token from cookies
-  };
+  //   const getCSRFToken = () => {
+  //     return Cookies.get("csrftoken"); // Extract CSRF token from cookies
+  // };
   
-    // const csrfToken = getCookie("csrftoken");
+    const csrfToken = getCookie("csrftoken");
 
     function getCookie(name) {
       let cookieValue = null;
@@ -43,7 +43,7 @@ const PasswordResetConfirm = () => {
     }
 
 
-    const csrfToken = getCSRFToken();
+    // const csrfToken = getCSRFToken();
 
     if (!csrfToken) {
         console.error("CSRF token not found. Make sure the backend provides it.");
