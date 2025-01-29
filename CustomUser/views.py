@@ -916,7 +916,7 @@ class PasswordResetRequestView(APIView):
 
 
 
-@method_decorator(csrf_exempt, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
 class PasswordResetConfirmView(APIView):
     def post(self, request, uidb64, token):
         print("inside function")
