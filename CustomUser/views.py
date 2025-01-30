@@ -1326,12 +1326,14 @@ import base64
 def Get_DealerDetails(request):
 
     print("inside the get dealers function")
+
     try:
     # Fetch the data from the Dealer_Details model
 
         dealer_data = list(Dealer_Details.objects.values())
         
         dealer_profiles = []
+        print(dealer_data)
 
         # Loop through each dealer in dealer_data
         for dealer in dealer_data:
@@ -1382,7 +1384,7 @@ def Get_DealerDetails(request):
 
         clears = [var for var in file_paths if var]
       
-
+        print("this is clears",clears)
         images = []
         # print("this is clears:",clears)
 
@@ -1409,7 +1411,8 @@ def Get_DealerDetails(request):
             'dealer_profiles': dealer_profiles,
             "images": images
         }
-
+        
+        print("this is data",data)
         return JsonResponse(data, safe=False, status=200)
     except Exception as e:
         print(e)
