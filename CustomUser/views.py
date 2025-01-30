@@ -881,6 +881,7 @@ def login_view(request):
 
 # Send reset password email
 
+@method_decorator(csrf_exempt, name='dispatch')
 class PasswordResetRequestView(APIView):
     @csrf_exempt
     def post(self, request):
