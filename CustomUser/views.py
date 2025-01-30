@@ -1391,23 +1391,29 @@ def Get_DealerDetails(request):
         # print("this is clears:",clears)
         for filename in clears:
             
-            print(filename)
-            try:
-                print("inside try")
-                response = s3_client.get_object(Bucket='mybucket', Key=filename)
-                print("after connection")
-                file_content = response['Body'].read()
-                print("after file contme")
+                print(filename)
+                try:
+                    print("Inside try")
+                    response = s3_client.get_object(Bucket="mybucket", Key=filename)
+                    print("After connection")
 
-                # Encode the image content to Base64
-                encoded_image = base64.b64encode(file_content).decode('utf-8')
-                images.append({"filename": filename, "content": encoded_image})
-            except s3_client.exceptions.NoSuchKey:
-                print(f"File not found: {filename}")
-                images.append({"filename": filename, "content": None})
-            except Exception as e:
-                print(f"An error occurred for {filename}: {e}")
-                images.append({"filename": filename, "content": None})
+                    file_content = response.get("Body").read()  # Use .get() to prevent KeyError
+                    print("After file content")
+
+                    # Encode the image content to Base64
+                    encoded_image = base64.b64encode(file_content).decode("utf-8")
+                    images.append({"filename": filename, "content": encoded_image})
+
+                except ClientError as e:
+                    if e.response["Error"]["Code"] == "NoSuchKey":
+                        print(f"File not found: {filename}")
+                    else:
+                        print(f"An error occurred for {filename}: {e}")
+                    images.append({"filename": filename, "content": None})
+
+                except Exception as e:
+                    print(f"Unexpected error for {filename}: {e}")
+                    images.append({"filename": filename, "content": None})
     # Or handle as needed
 
             # return JsonResponse({"images": images}, safe=False)
