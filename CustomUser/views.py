@@ -949,6 +949,10 @@ class PasswordResetConfirmView(APIView):
                     return Response({"message": "Invalid or expired token"}, status=400)
             except User.DoesNotExist:
                 return Response({"message": "User not found"}, status=404)
+        else:
+            print("else block")
+            return Response({"message": "method id not post request"}, status=404)
+
 
 
 # from django.contrib.auth import views as auth_views
