@@ -1380,40 +1380,26 @@ def Get_DealerDetails(request):
       
         # print("this is clears",clears)
         images = []
-        s3_client = boto3.client(
-            's3',
-            endpoint_url='http://82.112.238.156:9000',  
-            aws_access_key_id='minioadmin',          
-            aws_secret_access_key='minioadmin',      
-            region_name='us-east-1'                  
-        )
+        
         # print("this is clears:",clears)
         # print("this is clears:",clears)
         for filename in clears:
             
-                print(filename)
-                try:
-                    print("Inside try")
-                    response = s3_client.get_object(Bucket="mybucket", Key=filename)
-                    print("After connection")
+            print(filename)
+            try:
+                print("inside try")
+                response = s3_client.get_object(Bucket='mybucket', Key=filename)
+                print("after connection")
+                file_content = response['Body'].read()
+                print("after file contme")
 
-                    file_content = response.get("Body").read()  # Use .get() to prevent KeyError
-                    print("After file content")
-
-                    # Encode the image content to Base64
-                    encoded_image = base64.b64encode(file_content).decode("utf-8")
-                    images.append({"filename": filename, "content": encoded_image})
-
-                except ClientError as e:
-                    if e.response["Error"]["Code"] == "NoSuchKey":
-                        print(f"File not found: {filename}")
-                    else:
-                        print(f"An error occurred for {filename}: {e}")
-                    images.append({"filename": filename, "content": None})
-
-                except Exception as e:
-                    print(f"Unexpected error for {filename}: {e}")
-                    images.append({"filename": filename, "content": None})
+                # Encode the image content to Base64
+                encoded_image = base64.b64encode(file_content).decode('utf-8')
+                images.append({"filename": filename, "content": encoded_image})
+           
+            except Exception as e:
+                print(f"An error occurred for : {e}")
+                images.append({"filename": filename, "content": None})
     # Or handle as needed
 
             # return JsonResponse({"images": images}, safe=False)
