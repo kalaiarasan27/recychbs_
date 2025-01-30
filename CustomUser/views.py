@@ -1392,12 +1392,8 @@ def Get_DealerDetails(request):
             
             print(filename)
             try:
-                print("inside try")
                 response = s3_client.get_object(Bucket='mybucket', Key=filename)
-                print("after connection")
                 file_content = response['Body'].read()
-                print("after file contme")
-
                 # Encode the image content to Base64
                 encoded_image = base64.b64encode(file_content).decode('utf-8')
                 images.append({"filename": filename, "content": encoded_image})
