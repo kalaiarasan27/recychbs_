@@ -894,6 +894,7 @@ class PasswordResetRequestView(APIView):
 
             print(user,uid,token)
             reset_url = f"{settings.FRONTEND_URL}/reset/{uid}/{token}"
+            print(reset_url)
 
             # Render HTML email template with context
             html_message = render_to_string('password_reset/password_resetemail.html', {
