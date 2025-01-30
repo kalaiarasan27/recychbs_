@@ -890,6 +890,8 @@ class PasswordResetRequestView(APIView):
             user = UserModel.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
             token = default_token_generator.make_token(user)
+
+            print(user,uid,token)
             reset_url = f"{settings.FRONTEND_URL}/reset/{uid}/{token}"
 
             # Render HTML email template with context
