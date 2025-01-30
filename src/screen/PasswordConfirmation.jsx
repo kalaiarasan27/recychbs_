@@ -62,7 +62,7 @@ const PasswordResetConfirm = () => {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          // 'X-CSRFToken': csrfToken
+          'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({ password }),
       });
