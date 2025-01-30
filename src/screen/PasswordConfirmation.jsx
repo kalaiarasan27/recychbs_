@@ -56,11 +56,14 @@ const PasswordResetConfirm = () => {
     console.log(uid);
     console.log(token);
     
+    const url =`reset/${uid}/${token}/`
+    console.log(url);
+    
     
     try {
       console.log("inside try",csrfToken);
       
-      const response = await fetch(`reset/${uid}/${token}/`, {
+      const response = await fetch(url, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -70,7 +73,7 @@ const PasswordResetConfirm = () => {
         },
         body: JSON.stringify({ password }),
       });
-      console.log(response);
+      console.log(url);
       if (response.ok) {
         setMessage('Password reset successful.');
         navigate('/login');
