@@ -924,30 +924,31 @@ class PasswordResetRequestView(APIView):
 class PasswordResetConfirmView(APIView):
     @csrf_exempt
     def post(self, request, uidb64, token):
-        print("inside function")
-        # csrf_token = get_token(request)  # Get CSRF token
-        # print("CSRF Token:", csrf_token) 
-        
-        # Get and validate new password
-        new_password = request.data.get('password')
-        if not new_password:
-            return Response({"message": "Password is required"}, status=400)
-        
-        try:
-            uid = force_str(urlsafe_base64_decode(uidb64))
-        except (TypeError, ValueError, OverflowError):
-            return Response({"message": "Invalid user identifier"}, status=400)
-        try:
-            user = User.objects.get(pk=uid)
-            if default_token_generator.check_token(user, token):
-                user.set_password(new_password)
-                user.save()
-                return Response({"message": "Password reset successful"}, status=200)
-            else:
-                print(f"Token validation failed for user: {user}")
-                return Response({"message": "Invalid or expired token"}, status=400)
-        except User.DoesNotExist:
-            return Response({"message": "User not found"}, status=404)
+        if request.method =="POST":
+            print("inside function")
+            # csrf_token = get_token(request)  # Get CSRF token
+            # print("CSRF Token:", csrf_token) 
+            
+            # Get and validate new password
+            new_password = request.data.get('password')
+            if not new_password:
+                return Response({"message": "Password is required"}, status=400)
+            
+            try:
+                uid = force_str(urlsafe_base64_decode(uidb64))
+            except (TypeError, ValueError, OverflowError):
+                return Response({"message": "Invalid user identifier"}, status=400)
+            try:
+                user = User.objects.get(pk=uid)
+                if default_token_generator.check_token(user, token):
+                    user.set_password(new_password)
+                    user.save()
+                    return Response({"message": "Password reset successful"}, status=200)
+                else:
+                    print(f"Token validation failed for user: {user}")
+                    return Response({"message": "Invalid or expired token"}, status=400)
+            except User.DoesNotExist:
+                return Response({"message": "User not found"}, status=404)
 
 
 # from django.contrib.auth import views as auth_views
