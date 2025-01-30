@@ -54,7 +54,7 @@ const PasswordResetConfirm = () => {
 
 
     try {
-      console.log("inside try");
+      console.log("inside try",csrfToken);
       
       const response = await fetch(`reset/${uid}/${token}/`, {
         method: 'POST',
