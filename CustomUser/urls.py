@@ -60,6 +60,7 @@ urlpatterns = [
     path('handle_checkbox/', handle_checkbox, name='handle_checkbox'),
 
 
+    path('fetch-file', fetch_files, name='fetch-file'),
 
 
 

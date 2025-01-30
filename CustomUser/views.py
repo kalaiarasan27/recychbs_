@@ -2304,3 +2304,50 @@ def handle_checkbox(request):
         print(active)
         return JsonResponse({'status': 'success', 'isChecked': is_checked})
     return JsonResponse({'status': 'failed'}, status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+def fetch_files(request):
+    try:
+        # Variables for filenames
+        var1 = "6354506f-864a-4a35-86b7-2adeda0355f0_i1st.jpg"
+        var2 = "673e0bad-acca-48af-a713-4a61d1d345ec_i1st.jpg"
+        var3 = "bottle.jpeg"
+        var4 = ""  # Empty variable
+
+        # Filter out empty or None values
+        filenames = [var for var in [var1, var2, var3, var4] if var]
+
+        images = []
+        for filename in filenames:
+            try:
+                # Fetch the object from S3
+                response = s3_client.get_object(Bucket='mybucket', Key=filename)
+                file_content = response['Body'].read()
+                # Encode the image content to Base64
+                encoded_image = base64.b64encode(file_content).decode('utf-8')
+                images.append({"filename": filename, "content": encoded_image})
+            except Exception as file_error:
+                # Skip files that cause an error and continue processing others
+                images.append({"filename": filename, "content": None, "error": str(file_error)})
+
+        return JsonResponse({"images": images}, safe=False)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
