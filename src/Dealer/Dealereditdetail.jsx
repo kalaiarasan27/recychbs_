@@ -60,7 +60,7 @@ const Dealereditdetail = () => {
   useEffect(() => {
     const fetchDealerDetails = async () => {
       try {
-        const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/fetchDealerEditDetails/');
+        const response = await fetch('/fetchDealerEditDetails/');
         const dealer_data = await response.json();
         
         const data = {
