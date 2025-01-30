@@ -1387,7 +1387,7 @@ def Get_DealerDetails(request):
         # print("this is clears",clears)
         images = []
         # print("this is clears:",clears)
-        print("this is clears:",clears)
+        # print("this is clears:",clears)
         for filename in clears:
         
             try:
@@ -1413,7 +1413,7 @@ def Get_DealerDetails(request):
             "images": images
         }
         
-        # print("this is data",data)
+        print("this is data",data)
         return JsonResponse(data, safe=False, status=200)
     except Exception as e:
         print(e)
