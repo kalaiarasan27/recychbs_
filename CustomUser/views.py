@@ -921,10 +921,11 @@ class PasswordResetRequestView(APIView):
 
 # @method_decorator(csrf_exempt, name='dispatch')
 class PasswordResetConfirmView(APIView):
+    @csrf_exempt
     def post(self, request, uidb64, token):
         print("inside function")
-        csrf_token = get_token(request)  # Get CSRF token
-        print("CSRF Token:", csrf_token) 
+        # csrf_token = get_token(request)  # Get CSRF token
+        # print("CSRF Token:", csrf_token) 
         
         # Get and validate new password
         new_password = request.data.get('password')
