@@ -1333,7 +1333,7 @@ def Get_DealerDetails(request):
         dealer_data = list(Dealer_Details.objects.values())
         
         dealer_profiles = []
-        print(dealer_data)
+        # print(dealer_data)
 
         # Loop through each dealer in dealer_data
         for dealer in dealer_data:
@@ -1384,7 +1384,7 @@ def Get_DealerDetails(request):
 
         clears = [var for var in file_paths if var]
       
-        print("this is clears",clears)
+        # print("this is clears",clears)
         images = []
         # print("this is clears:",clears)
 
@@ -1392,8 +1392,9 @@ def Get_DealerDetails(request):
         
             try:
                 response = s3_client.get_object(Bucket='mybucket', Key=filename)
-                # print("this is responce",response)
+                print("this is responce",response)
                 file_content = response['Body'].read()
+                print("this is file content",file_content)
                 encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
                 images.append({"filename": filename, "content": encoded_image})
             except s3_client.exceptions.NoSuchKey:
@@ -1412,7 +1413,7 @@ def Get_DealerDetails(request):
             "images": images
         }
         
-        print("this is data",data)
+        # print("this is data",data)
         return JsonResponse(data, safe=False, status=200)
     except Exception as e:
         print(e)
