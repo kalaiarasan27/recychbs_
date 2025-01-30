@@ -2148,24 +2148,29 @@ def get_dealers_status(request):
 
 @csrf_exempt  # Use this decorator if CSRF protection is causing issues (not recommended for production)
 def update_dealer_status(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        dealer_id = data.get('id')
-        account_status = data.get('active')
-        print(account_status)
+    try:
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            dealer_id = data.get('id')
+            account_status = data.get('active')
+            print(account_status)
 
-        # Assuming you have a Dealer model
-        try:
-            dealer_details= Dealer_Details.objects.get(id=dealer_id)
-            dealer = DealerProfile.objects.get(user_id=dealer_details.Dealer_ID)
-            dealer.account = account_status
-            dealer.save()
+            # Assuming you have a Dealer model
+            try:
+                dealer_details= Dealer_Details.objects.get(id=dealer_id)
+                dealer = DealerProfile.objects.get(user_id=dealer_details.Dealer_ID)
+                dealer.account = account_status
+                dealer.save()
 
-            return JsonResponse({'message': 'Status updated successfully'}, status=200)
-        except Dealer_Details.DoesNotExist:
-            return JsonResponse({'error': 'Dealer not found'}, status=404)
+                return JsonResponse({'message': 'Status updated successfully'}, status=200)
+            except Dealer_Details.DoesNotExist:
+                return JsonResponse({'error': 'Dealer not found'}, status=404)
 
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+        return JsonResponse({'error': 'Invalid request'}, status=400)
+    except Exception as e:
+        print("Except zBlock")
+        return JsonResponse({'error': 'Invalid Error'}, status=400)
+
 
 
 
