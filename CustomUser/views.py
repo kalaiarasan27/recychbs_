@@ -1387,7 +1387,7 @@ def Get_DealerDetails(request):
         # print("this is clears",clears)
         images = []
         # print("this is clears:",clears)
-
+        print("this is clears:",clears)
         for filename in clears:
         
             try:
