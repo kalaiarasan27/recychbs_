@@ -1392,10 +1392,9 @@ def Get_DealerDetails(request):
         
             try:
                 response = s3_client.get_object(Bucket='mybucket', Key=filename)
-                print("this is responce",response)
                 file_content = response['Body'].read()
-                print("this is file content",file_content)
-                encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
+                # Encode the image content to Base64
+                encoded_image = base64.b64encode(file_content).decode('utf-8')
                 images.append({"filename": filename, "content": encoded_image})
             except s3_client.exceptions.NoSuchKey:
                 print(f"File not found: {filename}")
