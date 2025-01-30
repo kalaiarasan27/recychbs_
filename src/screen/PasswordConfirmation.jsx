@@ -56,7 +56,7 @@ const PasswordResetConfirm = () => {
     console.log(uid);
     console.log(token);
     
-    const url =`reset/${uid}/${token}/`
+    const url =`https://recychbs.in/reset/${uid}/${token}/`
     console.log(url);
     
     
