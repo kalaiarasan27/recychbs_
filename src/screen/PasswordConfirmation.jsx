@@ -53,6 +53,10 @@ const PasswordResetConfirm = () => {
     
 
 
+    console.log(uid);
+    console.log(token);
+    
+    
     try {
       console.log("inside try",csrfToken);
       
