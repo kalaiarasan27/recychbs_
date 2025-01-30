@@ -1325,6 +1325,7 @@ import base64
 @csrf_exempt
 def Get_DealerDetails(request):
 
+    print("inside the get dealers function")
     try:
     # Fetch the data from the Dealer_Details model
 
