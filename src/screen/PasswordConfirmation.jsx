@@ -64,7 +64,7 @@ const PasswordResetConfirm = () => {
       console.log("inside try",csrfToken);
       
       const response = await fetch(url, {
-        method: 'POST',
+        method: 'GET',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
