@@ -1313,13 +1313,7 @@ def GetScrap(request):
 
 
 # Admin Site--------
-s3_client = boto3.client(
-            's3',
-            endpoint_url='http://82.112.238.156:9000',  
-            aws_access_key_id='minioadmin',          
-            aws_secret_access_key='minioadmin',      
-            region_name='us-east-1'                  
-        )
+
 import base64
 
 @csrf_exempt
@@ -1386,6 +1380,13 @@ def Get_DealerDetails(request):
       
         # print("this is clears",clears)
         images = []
+        s3_client = boto3.client(
+            's3',
+            endpoint_url='http://82.112.238.156:9000',  
+            aws_access_key_id='minioadmin',          
+            aws_secret_access_key='minioadmin',      
+            region_name='us-east-1'                  
+        )
         # print("this is clears:",clears)
         # print("this is clears:",clears)
         for filename in clears:
@@ -2168,7 +2169,7 @@ def update_dealer_status(request):
 
         return JsonResponse({'error': 'Invalid request'}, status=400)
     except Exception as e:
-        print("Except zBlock")
+        print("Except zBlock",e)
         return JsonResponse({'error': 'Invalid Error'}, status=400)
 
 
