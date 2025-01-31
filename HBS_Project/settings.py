@@ -344,6 +344,7 @@ from django.conf import settings
 # AWS_S3_FILE_OVERWRITE = True
 # AWS_S3_VERITY = True
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
 
 
 # Static files (CSS, JavaScript, etc.)
@@ -380,3 +381,7 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1  # Password reset token will be valid for 1 day
 FRONTEND_URL = "https://recychbs.in"  # Set this to your actual frontend URL
 
 GDAL_LIBRARY_PATH = os.path.join('C:\\OSGeo4W\\bin\\adal.dll')  # Adjust 'gdal304.dll' as necessary
+
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
