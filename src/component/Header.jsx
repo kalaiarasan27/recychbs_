@@ -11,29 +11,29 @@ import { FcFaq } from "react-icons/fc";
 import { LuLogOut } from "react-icons/lu";
 import { RiCustomerService2Line, RiListOrdered2 } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
-
+ 
 const Header = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const isHomeDealerPage = location.pathname === '/Homeuser';
-
+ 
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
-
+ 
  
   const handleLogout = () => {
     // Clear authentication status
     navigate("/");
-
+ 
     // Prevent back navigation by modifying history
     window.history.pushState(null, "", window.location.href);
-
+ 
     // Disable the back button
     window.onpopstate = function (event) {
       window.history.pushState(null, "", window.location.href);
     };
   };
-
+ 
   // Prevent default backspace behavior on the whole document
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -41,96 +41,183 @@ const Header = () => {
         event.preventDefault();
       }
     };
-
+ 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
+ 
   return (
     <>
-      <div className="container-fluid">
+      <div>
         <div className="header-fixed">
-          <div className="headersection">
-            <div style={{ display: "flex", alignItems: "center" }}>
-              {!isHomeDealerPage && (
-                <FaArrowLeft onClick={() => navigate(-1)} className="back-button" />
-              )}
-              <div className="header-logo-part">
-                <img
-                  src={logo}
-                  style={{ height: "50px", width: "60px", margin: "0 5px" }}
-                  alt="logo"
-                />
-                <p className="header-logo-text m-0 p-0">RECYCHBS</p>
-              </div>
-            </div>
-            <div style={{ display: "flex", padding: "0 5px", marginLeft: "10px" }}>
-              <FaLocationDot
+          <div className="headersection-desktop">
+            <div className="col-2 d-flex flex-column justify-content-center">
+              <img
+                src={logo}
+                alt="Logo"
                 style={{
-                  color: "#fff",
-                  width: "20px",
-                  height: "20px",
-                  marginRight: "5px",
+                  width: "50px",
+                  height: "45px",
+                  marginLeft:"20%"
                 }}
               />
-              <LocationDisplay />
             </div>
-            <div style={{ display: "flex" }}>
-              <div
-                className="d-none d-md-block"
-                style={{ cursor: "pointer", marginLeft: "20px" }}
-                onClick={() => navigate("/Homeuser")}
+            <div className="col-8 d-flex flex-column px-1 justify-content-center align-items-center">
+              <p
+                className="text-white p-0 m-0"
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textAlign: "left",
+                }}
               >
-                <FaHome className="icons-bottom" />
-              </div>
-              <div
-                className="d-none d-md-block"
-                style={{ cursor: "pointer", marginLeft: "20px" }}
-                onClick={() => navigate("/Userlogopage")}
-              >
-                <FaUser className="icons-bottom" />
-              </div>
-              <div style={{ position: "relative", marginLeft: "20px" }}>
-                <IoIosNotifications
+                RECYCHBS
+              </p>
+              <div className="" style={{ display: "flex", alignItems: "center" }}>
+                <FaLocationDot
                   style={{
-                    height: "25px",
-                    width: "25px",
-                    cursor: "pointer",
                     color: "#fff",
-                  }}
-                  onClick={() => navigate("/Usernotification")}
-                />
-                <span
-                  style={{
-                    position: "absolute",
-                    top: "-5px",
-                    right: "-5px",
-                    backgroundColor: "red",
-                    color: "white",
-                    borderRadius: "50%",
                     width: "15px",
                     height: "15px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "12px",
-                    fontWeight: "bold",
+                    marginRight: "5px",
+                    marginTop: "-10px",
                   }}
-                >
-                  17
-                </span>
-              </div>
-
-              <div
-                className="d-none d-md-block"
-                style={{ cursor: "pointer", marginLeft: "20px" }}
-                onClick={toggleDrawer}
-              >
-                <IoMenuSharp className="icons-bottom" />
+                />
+                <div style={{ color: "#fff" }}>
+                  <LocationDisplay />
+                </div>
               </div>
             </div>
+            <div className="col-2 flex-row d-flex">
+              <div className="col-3 d-flex flex-column align-items-center justify-content-center">
+                <div style={{ cursor: "pointer" }} onClick={() => navigate("/Homeuser")}>
+                  <FaHome className="icons-bottom" />
+                </div>
+              </div>
+              <div className="col-3 d-flex flex-column align-items-center justify-content-center">
+                <div style={{ cursor: "pointer" }} onClick={() => navigate("/Userlogopage")}>
+                  <FaUser className="icons-bottom" />
+                </div>
+              </div>
+              <div className="col-3 d-flex flex-column align-items-center justify-content-center">
+                <div style={{ position: "relative" }}>
+                  <IoIosNotifications
+                    style={{ height: "20px", width: "20px", cursor: "pointer", color: "#fff" }}
+                    onClick={() => navigate("/Usernotification")}
+                  />
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-5px",
+                      right: "-5px",
+                      backgroundColor: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      width: "15px",
+                      height: "15px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "10px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    17
+                  </span>
+                </div>
+              </div>
+              <div className="col-3 d-flex flex-column align-items-center justify-content-center">
+                <div style={{ cursor: "pointer" }} onClick={toggleDrawer}>
+                  <IoMenuSharp className="icons-bottom" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="headersection-mobile">
+            <div className="col-2 d-flex flex-column justify-content-center align-items-center">
+              <img
+                src={logo}
+                alt="Logo"
+                style={{
+                  width: "50px",
+                  height: "45px",
+                }}
+              />
+            </div>
+            <div className="col-8 d-flex flex-column px-1 justify-content-center align-items-center">
+              <p
+                className="text-white p-0 m-0"
+                style={{
+                  fontSize: "20px",
+                  fontWeight: "bold",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textAlign: "left",
+                }}
+              >
+                RECYCHBS
+              </p>
+              <div className="" style={{ display: "flex", alignItems: "center" }}>
+                <FaLocationDot
+                  style={{
+                    color: "#fff",
+                    width: "15px",
+                    height: "15px",
+                    marginRight: "5px",
+                    marginTop: "-10px",
+                  }}
+                />
+                <div style={{ color: "#fff" }}>
+                  <LocationDisplay />
+                </div>
+              </div>
+            </div>
+            <div className="col-2 flex-row d-flex align-items-center justify-content-center">
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <IoIosNotifications
+        style={{
+          height: "20px",
+          width: "20px",
+          cursor: "pointer",
+          color: "#fff",
+        }}
+        onClick={() => navigate("/Usernotification")}
+      />
+      <span
+        style={{
+          position: "absolute",
+          top: "-5px",
+          right: "-5px",
+          backgroundColor: "red",
+          color: "white",
+          borderRadius: "50%",
+          width: "15px",
+          height: "15px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "10px",
+          fontWeight: "bold",
+        }}
+      >
+        17
+      </span>
+    </div>
+</div>
+ 
           </div>
         </div>
         <div
@@ -293,5 +380,5 @@ const Header = () => {
     </>
   );
 };
-
+ 
 export default Header;

@@ -15,18 +15,36 @@
   z-index: 1000;
   background-color: #000;
 }
-.headersection{
+.headersection-desktop{
+  display: flex;
+  padding: 5px;
+}
+.headersection-mobile{
+  display: none;
+}
+ 
+@media (max-width: 768px) {
+  .headersection-mobile{
+    display: flex;
+    padding: 5px;
+  }
+  .headersection-desktop{
+    display: none;
+  }
+}
+ 
+ 
+/* .headersection{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-}
+} */
 .header-logo-part{
   display: flex;
   flex-direction: row;
   justify-content: center;
     align-items: center;
-
+ 
 }
 .search-header-container {
   display: flex;
@@ -75,7 +93,7 @@
   height: 350px;
   overflow: hidden;
 }
-
+ 
 .homeuser-img{
   height: 100%;
   width: 100%;
@@ -100,29 +118,18 @@
 /* /////-------bottom-------////// */
  
 .icons-bottom{
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   color: #fff;
 }
 .icons-bottom-text{
   color: #fff;
   text-align: center;
-  font-size: 14px;
+  font-size: 10px;
 }
 .bottom-fixed {
 display: none;
 }
-/* .desktop-need{
-  display: flex;
-} */
-/* .mobile-need{
-  display: none;
-} */
-/* .desktop-need-loc{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 .bottom-fixed-btn {
   position: fixed;
   bottom: 80px;
@@ -132,9 +139,9 @@ display: none;
   justify-content: center;
   align-items: center;
 }
-
+ 
 .bottom-fixed-btn button {
-  font-size: 16px; 
+  font-size: 16px;
   font-weight: 700;
   background-color: #111; /* Dark background */
   color: #fff; /* White text */
@@ -149,13 +156,13 @@ display: none;
   font-family: 'Arial', sans-serif;
   outline: none;
 }
-
+ 
 .bottom-fixed-btn button:hover {
   background-color: #333; /* Change background on hover */
   transform: translateY(-3px); /* Lift effect on hover */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Shadow increase on hover */
 }
-
+ 
 .bottom-fixed-btn .ring {
   position: absolute;
   top: 50%; /* Center vertically */
@@ -169,14 +176,14 @@ display: none;
   z-index: 0; /* Place it below the button */
   animation: ring 1.5s infinite; /* Infinite wave animation */
 }
-
-
+ 
+ 
 .bottom-fixed-btn .button:hover {
   transform: translateY(-3px); /* Lift effect on hover */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Shadow increase on hover */
 }
-
-.bottom-fixed-btn .button:hover + .ring, 
+ 
+.bottom-fixed-btn .button:hover + .ring,
 .bottom-fixed-btn .button:focus + .ring {
   opacity: 1; /* Show ring on hover */
 }
@@ -243,7 +250,7 @@ display: none;
     justify-content: space-between;
   }
   .bottom-fixed-btn button {
-    font-size: 12px; 
+    font-size: 12px;
     font-weight: 700;
   }
   .footerpage{
@@ -398,22 +405,22 @@ display: none;
   top: 0;
   left: 0;
   background-color: rgba(255, 255, 255, 0.8);
-  z-index: 9999; 
+  z-index: 9999;
 }
  
 .loading-spinner video {
-  width: 240px; 
+  width: 240px;
   height: 240px;
 }
 @media (max-width: 576px) {
   .loading-spinner video {
-    width: 140px; 
+    width: 140px;
     height: 140px;
   }
 }
-
+ 
 /* ------Application status----- */
-
+ 
 .application-container{
   background: url(./assets/image/background.jpg);
   background-position: center;
@@ -429,26 +436,26 @@ display: none;
 .application-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start; 
+  justify-content: flex-start;
 }
-
+ 
 .application-header img {
   height: 70px;
     width: 85px;
-  margin-right: 10px; 
+  margin-right: 10px;
 }
-
+ 
 .application-layer{
   color: #fff;
   padding: 30px;
   border-radius: 30px;
   box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.5);
   margin: 40px ;
-  
+ 
 }
 .line-vertical {
   border-left: 3px dashed #e277f3;
-  height: 50px; 
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -466,7 +473,7 @@ display: none;
 .application-button:hover{
   background-color: #e277f3;
 }
-
+ 
 @media (max-width: 576px) {
   .application-layer{
     margin: 0;
@@ -476,12 +483,12 @@ display: none;
   margin-top: 15px;
   padding: 10px;
 }
-
+ 
 @media (max-width: 600px) {
   .container-fluid {
     padding: 5px; /* Less padding on smaller screens */
   }
-
+ 
   .card-box {
     padding: 10px; /* Additional styling adjustments for smaller screens */
   }

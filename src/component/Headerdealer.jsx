@@ -7,64 +7,68 @@ import { IoIosNotifications } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { BiSolidUserAccount } from "react-icons/bi";
-import {FaPaypal } from "react-icons/fa";
+import { FaPaypal } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { IoMdHelpCircleOutline } from "react-icons/io";
 import { LuListOrdered } from "react-icons/lu";
 import { RiCustomerService2Line, RiSecurePaymentLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 import { width } from "@fortawesome/free-solid-svg-icons/fa0";
-
+ 
 const Headerdealer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
-
+ 
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
-
+ 
   return (
     <>
       <div className="">
         <div className="header-fixed">
-          <div className="headersection desktop-need" style={{ width: "100%" }}>
-            <div className="col-3 d-flex align-items-center ps-5">
-              <img
-                src={logotrans}
-                alt="Logo"
-                style={{
-                  width: "40px",
-                  height: "40px",
-                }}
-              />
-              <p className="text-white m-0" style={{ fontSize: "30px" }}>
-                RECYCHBS
-              </p>
-            </div>
-            <div className="col-6">
-            <div style={{display:"flex"}}>
-             <FaLocationDot
-              style={{
-                color: "#fff",
-                width: "20px",
-                height: "20px",
-                marginRight: "5px",
-              }}
-            />
-            <LocationDisplay />
-             </div>
-            </div>
-
-            <div className="col-3 flex-row d-flex">
-              <div className="col-2 d-flex flex-column align-items-center justify-content-center">
-                <div class="form-check form-switch">
-                  <input
-                    className="form-check-input"
-                    style={{ width: "40px", height: "20px", cursor: "pointer" }}
-                    type="checkbox"
-                    role="switch"
-                    id="flexSwitchCheckDefault"
+          <div className="headersection-desktop">
+          <div className="col-3 d-flex flex-column justify-content-center">
+                <img
+                  src={logotrans}
+                  alt="Logo"
+                  style={{
+                    width: "50px",
+                    height: "45px",
+                    marginLeft:"20%"
+                  }}
+                />
+ 
+              </div>
+            <div className="col-6 d-flex flex-column px-1 justify-content-center align-items-center">
+                <p
+                  className="text-white p-0 m-0"
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textAlign: "left",
+                  }}
+                >
+                  RECYCHBS
+                </p>
+                <div className="" style={{ display: "flex", alignItems: "center" }}>
+                  <FaLocationDot
+                    style={{
+                      color: "#fff",
+                      width: "15px",
+                      height: "15px",
+                      marginRight: "5px",
+                      marginTop: "-10px",
+                    }}
                   />
+                  <div style={{ color: "#fff" }}>
+                    <LocationDisplay />
+                  </div>
                 </div>
               </div>
+ 
+            <div className="col-3 flex-row d-flex">
               <div className="col-2 d-flex flex-column align-items-center justify-content-center">
                 <div style={{ cursor: "pointer" }} onClick={() => navigate("/Homedealer")}>
                   <FaHome className="icons-bottom" />
@@ -79,9 +83,20 @@ const Headerdealer = () => {
                 <FaPaypal className="icons-bottom" />
               </div>
               <div className="col-2 d-flex flex-column align-items-center justify-content-center">
+                <div class="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    style={{ width: "35px", height: "18px", cursor: "pointer" }}
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                  />
+                </div>
+              </div>
+              <div className="col-2 d-flex flex-column align-items-center justify-content-center">
                 <div style={{ position: "relative" }}>
                   <IoIosNotifications
-                    style={{ height: "30px", width: "30px", cursor: "pointer", color: "#fff" }}
+                    style={{ height: "20px", width: "20px", cursor: "pointer", color: "#fff" }}
                     onClick={() => navigate("/Dealernotification")}
                   />
                   <span
@@ -92,12 +107,12 @@ const Headerdealer = () => {
                       backgroundColor: "red",
                       color: "white",
                       borderRadius: "50%",
-                      width: "20px",
-                      height: "20px",
+                      width: "15px",
+                      height: "15px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: "12px",
+                      fontSize: "10px",
                       fontWeight: "bold",
                     }}
                   >
@@ -112,102 +127,93 @@ const Headerdealer = () => {
               </div>
             </div>
           </div>
-          <div
-  className="headersection mobile-need header-fixed"
-  style={{ flexDirection: "column" }}
->
-  <div
-    className="p-2"
-    style={{
-      display: "flex",
-      width: "100%",
-      justifyContent: "space-between",
-      alignItems: "center",
-    }}
-  >
-    <div className="col-3 d-flex flex-column">
-      <img
-        src={logotrans}
-        alt="Logo"
-        style={{
-          width: "45px",
-          height: "45px",
-          marginLeft: "20px",
-          textAlign: "right", 
-        }}
-      />
-      
-    </div>
-    <div className="col-3 d-flex flex-column" style={{ width: "150px", }}>
-    <p
-      className="text-white m-0 ps-2"
-      style={{
-        fontSize: "20px", // Adjusted font size
-        fontWeight: "bold",
-        textOverflow: "ellipsis",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
-        maxWidth: "200px", // Adjusted max width
-        textAlign: "left", // Align text to the left
-      }}
-    >
-      RECYCHBS
-    </p>
-    </div>
-    <div className="col-3 d-flex align-items-center justify-content-center">
-      <div class="form-check form-switch col-6 d-flex justify-content-end">
-        <input
-          className="form-check-input"
-          style={{ width: "50px", height: "25px", cursor: "pointer" }}
-          type="checkbox"
-          role="switch"
-          id="flexSwitchCheckDefault"
-        />
-      </div>
-      <div className="col-6 d-flex justify-content-end">
-        <div style={{ position: "relative" }}>
-          <IoIosNotifications
-            style={{ height: "30px", width: "30px", cursor: "pointer", color: "#fff" }}
-            onClick={() => navigate("/Dealernotification")}
-          />
-          <span
-            style={{
-              position: "absolute",
-              top: "-5px",
-              right: "-5px",
-              backgroundColor: "red",
-              color: "white",
-              borderRadius: "50%",
-              width: "20px",
-              height: "20px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "12px",
-              fontWeight: "bold",
-            }}
-          >
-            17
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div className="col-6" style={{ display: "flex", alignItems: "center", width: '85%'  }}>
-    <FaLocationDot
-      style={{
-        color: "#fff",
-        width: "20px",
-        height: "20px",
-        marginRight: "5px",
-        // marginTop: "-25px",
-      }}
-    />
-    <marquee behavior="scroll" direction="left" style={{ color: "#fff", width: '90%' }}>
-      <LocationDisplay />
-    </marquee>
-  </div>
-</div>
+          <div className="headersection-mobile">
+            <div
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div className="col-2 d-flex flex-column justify-content-center align-items-center">
+                <img
+                  src={logotrans}
+                  alt="Logo"
+                  style={{
+                    width: "50px",
+                    height: "45px",
+                  }}
+                />
+ 
+              </div>
+              <div className="col-8 d-flex flex-column px-1 justify-content-center align-items-center">
+                <p
+                  className="text-white p-0 m-0"
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textAlign: "left",
+                  }}
+                >
+                  RECYCHBS
+                </p>
+                <div className="" style={{ display: "flex", alignItems: "center" }}>
+                  <FaLocationDot
+                    style={{
+                      color: "#fff",
+                      width: "15px",
+                      height: "15px",
+                      marginRight: "5px",
+                      marginTop: "-10px",
+                    }}
+                  />
+                  <div style={{ color: "#fff" }}>
+                    <LocationDisplay />
+                  </div>
+                </div>
+              </div>
+              <div className="col-2 d-flex align-items-center justify-content-end">
+                <div class="form-check form-switch">
+                  <input
+                    className="form-check-input"
+                    style={{ width: "35px", height: "18px", cursor: "pointer" }}
+                    type="checkbox"
+                    role="switch"
+                    id="flexSwitchCheckDefault"
+                  />
+                </div>
+                <div style={{ position: "relative" }}>
+                  <IoIosNotifications
+                    style={{ height: "20px", width: "20px", cursor: "pointer", color: "#fff" }}
+                    onClick={() => navigate("/Dealernotification")}
+                  />
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: "-5px",
+                      right: "-5px",
+                      backgroundColor: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      width: "15px",
+                      height: "15px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "10px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    17
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div
           className="container-fluid bottom-fixed"
@@ -365,7 +371,7 @@ const Headerdealer = () => {
             </div>
           </div>
         </div>
-
+ 
         {drawerOpen && (
           <div
             className="overlay"
@@ -385,5 +391,5 @@ const Headerdealer = () => {
     </>
   );
 };
-
+ 
 export default Headerdealer;

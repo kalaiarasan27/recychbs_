@@ -7,8 +7,9 @@ function Homedealer() {
   const navigate = useNavigate();
   return (
     <>
-      <Headerdealer />
+      
       <div className="container-fluid topbottom">
+      <Headerdealer />
         <div className="orderpage ">
           <div className="orders-section d-flex">
             <div className="col-12 col-lg-6 d-none d-lg-flex justify-content-center align-items-center">

@@ -3,13 +3,17 @@ import Header from "../../component/Header";
 import group from "../../assets/image/friendly.webp";
 import scrapcar from "../../assets/image/scrap-car.jpg";
 import hands from "../../assets/image/hands.webp";
+import { useEffect } from "react";
 
 const Career = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <Header />
       <div
-        className="container-fluid topbottom-user mx-0 px-0"
+        className="topbottom-user"
         style={{ backgroundColor: "#fff" }}
       >
         <div className="aboutus-header">

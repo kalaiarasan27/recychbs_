@@ -72,7 +72,7 @@ function Homeuser() {
   return (
     <>
       <Header />
-      <div className="container-fluid topbottom-user">
+      <div className="topbottom-user pb-0 mb-0">
       <div className="slideshow-container" style={{ position: "relative", overflow: "hidden" }}>
           {slides.map((src, index) => (
             <div
