@@ -6,6 +6,7 @@ import json
 from django.shortcuts import render,get_object_or_404
 import logging
 import os
+from urllib.parse import urlparse, parse_qs
 from django.views.generic import TemplateView
 from django.contrib.auth import login as django_login
 from django.contrib.auth.hashers import make_password
