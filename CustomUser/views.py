@@ -1352,117 +1352,64 @@ def Get_DealerDetails(request):
         # return JsonResponse({"images": dealer_data}, safe=False)
         file_paths = []
 
-        # Loop through each dealer and add the URL for each image field
+        # Initialize S3 client
+        s3_client = boto3.client(
+                    's3',
+                    endpoint_url='http://82.112.238.156:9000',  
+                    aws_access_key_id='minioadmin',          
+                    aws_secret_access_key='minioadmin',      
+                    region_name='us-east-1'                  
+                )
+
         for dealer in dealer_data:
             dealer_details = Dealer_Details.objects.get(Dealer_ID=dealer['Dealer_ID'])
 
-            # Add the full URLs for the image fields
-            dealer['Aadhar_Front_Photo'] = dealer_details.Aadhar_Front_Photo.url if dealer_details.Aadhar_Front_Photo else None
-            dealer['Aadhar_Back_Photo'] = dealer_details.Aadhar_Back_Photo.url if dealer_details.Aadhar_Back_Photo else None
-            dealer['PAN_Photo'] = dealer_details.PAN_Photo.url if dealer_details.PAN_Photo else None
-            dealer['LICENSE_Front_Photo'] = dealer_details.LICENSE_Front_Photo.url if dealer_details.LICENSE_Front_Photo else None
-            dealer['LICENSE_Back_Photo'] = dealer_details.LICENSE_Back_Photo.url if dealer_details.LICENSE_Back_Photo else None
-            dealer['RC_BOOK_Photo'] = dealer_details.RC_BOOK_Photo.url if dealer_details.RC_BOOK_Photo else None
-            dealer['Bank_Statement_Photo'] = dealer_details.Bank_Statement_Photo.url if dealer_details.Bank_Statement_Photo else None
-            dealer['PassBook_Photo'] = dealer_details.PassBook_Photo.url if dealer_details.PassBook_Photo else None
-            dealer['extradata_field1'] = dealer_details.extradata_field1.url if dealer_details.extradata_field1 else None
-            dealer['extradata_field2'] = dealer_details.extradata_field2.url if dealer_details.extradata_field2 else None
-            dealer['extradata_field3'] = dealer_details.extradata_field3.url if dealer_details.extradata_field3 else None
-            dealer['extradata_field4'] = dealer_details.extradata_field4.url if dealer_details.extradata_field4 else None
+            # Fields to fetch dynamically
+            image_fields = [
+                'Aadhar_Front_Photo', 'Aadhar_Back_Photo', 'PAN_Photo',
+                'LICENSE_Front_Photo', 'LICENSE_Back_Photo', 'RC_BOOK_Photo',
+                'Bank_Statement_Photo', 'PassBook_Photo',
+                'extradata_field1', 'extradata_field2', 'extradata_field3', 'extradata_field4'
+            ]
 
-        # return JsonResponse({"images": dealer}, safe=False)
+            print(image_fields)
+            # Store file URLs and contents dynamically
+            for field in image_fields:
+                image_obj = getattr(dealer_details, field, None)
+                image_url = image_obj.url if image_obj else None
+                dealer[field] = image_url  # Store URL
 
-        # connection.close()
-            # print("this is aathar",dealer['Aadhar_Front_Photo'])
-            file_paths.extend([
-                dealer['Aadhar_Front_Photo'],
-                dealer['Aadhar_Back_Photo'],
-                dealer['PAN_Photo'],
-                dealer['LICENSE_Front_Photo'],
-                dealer['LICENSE_Back_Photo'],
-                dealer['RC_BOOK_Photo'],
-                dealer['Bank_Statement_Photo'],
-                dealer['PassBook_Photo'],
-                dealer['extradata_field1'],
-                dealer['extradata_field2'],
-                dealer['extradata_field3'],
-                dealer['extradata_field4']
-            ])
+                if image_url:
+                    file_paths.append(image_url)
 
+            # Fetch and encode images dynamically
+            for field in image_fields:
+                if dealer[field]:  # Only process existing images
+                    try:
+                        print(f"Fetching {dealer[field]} from S3...")
 
-        # return JsonResponse(file_paths, safe=False, status=200)
+                        decoded_key = urllib.parse.unquote(dealer[field])  # Decode special characters
+                        response = s3_client.get_object(Bucket='mybucket', Key=decoded_key)
 
+                        # response = s3_client.get_object(Bucket='mybucket', Key=dealer[field])
+                        file_content = response['Body'].read()
 
-        clears = [var for var in file_paths if var]
-    #     # Extract only the file name without query parameters
+                        # Store Base64 encoded image inside dealer details
+                        dealer[f"{field}_base64"] = base64.b64encode(file_content).decode('utf-8') if file_content else None
 
-        filenames = [os.path.basename(urlparse(file_path).path) for file_path in clears]
+                    except Exception as e:
+                        print(f"Error fetching {dealer[field]}: {str(e)}")
+                        dealer[f"{field}_base64"] = None  # Handle missing images gracefully
 
-
-        # return JsonResponse(filenames, safe=False, status=200)
-
-        # return JsonResponse(clears, safe=False, status=200)
+    except Exception as e:
+                print(f"Error fetching {dealer[field]}: {str(e)}")
+                return JsonResponse(e, safe=False, status=500)
 
 
-    #     # print("this is file files")
-
-    #     # print(filenames)
-        s3_client = boto3.client(
-                's3',
-                endpoint_url='http://82.112.238.156:9000',  
-                aws_access_key_id='minioadmin',          
-                aws_secret_access_key='minioadmin',      
-                region_name='us-east-1'                  
-            )
-
-        print("File names are--------------------------------------------",filenames)
-    #     # filenames = [var2, var1, var3]
-
-
-
-        images = []
-
-        for files in filenames:
-        
-        #    for file in files:
-                try:
-                    
-
-                    print("inside try")
-
-                    response = s3_client.get_object(Bucket='mybucket', Key=files)
-                    print("crossed responce")
-                    file_content = response['Body'].read()
-                    
-                    encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
-                    images.append({"filename": files, "content": encoded_image})
-
-                    
-                # except s3_client.exceptions.NoSuchKey:
-                #     print(f"File not found: {file}")
-                #     images.append({"filename": file, "content": None})
-                # except Exception as e:
-                #     print(f"An error occurred for {file}: {e}")
-                #     images.append({"filename": file, "content": None})
-                except Exception as e:
-                    print("this is error",e)
-
-    # return JsonResponse(images, safe=False, status=200)
-
-    #     # except Exception as e:
-    #     print(e)
-    # Or handle as needed
-    # except Exception as e:
-    #         print(e)
-        # return JsonResponse({"images": images}, safe=False)
-
-        data = {
-            'dealer_details': dealer_data,
-            'dealer_profiles': dealer_profiles,
-            "images": images,
-            'files_are':filenames
-        }
-
+    data = {
+        'dealer_details': dealer_data,
+        'dealer_profiles': dealer_profiles,
+    }
         return JsonResponse(data, safe=False, status=200)
     except Exception as e:
             print(e)
