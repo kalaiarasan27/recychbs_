@@ -1326,7 +1326,6 @@ import base64
 def Get_DealerDetails(request):
     # Fetch the data from the Dealer_Details model
     try:
-
         dealer_data = list(Dealer_Details.objects.values())
         # dealer_id  = Dealer_Details.objects.all()
         # dealer_profiles = list(DealerProfile.objects.filter(Dealer_ID = dealer_id).values())
@@ -1350,6 +1349,8 @@ def Get_DealerDetails(request):
 
         print(" this is ok")
         # return JsonResponse({"images": dealer_data}, safe=False)
+
+
         file_paths = []
 
         # Initialize S3 client
@@ -1403,18 +1404,13 @@ def Get_DealerDetails(request):
 
     except Exception as e:
                 print(f"Error fetching {dealer[field]}: {str(e)}")
-                return JsonResponse(e, safe=False, status=500)
-
 
     data = {
         'dealer_details': dealer_data,
         'dealer_profiles': dealer_profiles,
     }
-        return JsonResponse(data, safe=False, status=200)
-    except Exception as e:
-            print(e)
-            return JsonResponse("Error at last", safe=False, status=500)
 
+    return JsonResponse(data, safe=False, status=200)
 
 @csrf_exempt
 def Get_UserProfile(request):
