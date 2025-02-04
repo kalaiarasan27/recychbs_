@@ -69,6 +69,10 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 
+import urllib.parse
+
+
+
 
 class IndexView(TemplateView):
     def get_template_names(self):
