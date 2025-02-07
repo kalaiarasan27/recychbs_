@@ -8,7 +8,7 @@ const Dealeraccount = () => {
   useEffect(() => {
     const fetchDealerDetails = async () => {
       try {
-        const response = await fetch('/fetchDealerEditDetails/');
+        const response = await fetch('fetchDealerEditDetails/');
         const dealer_data = await response.json();
         const data = {
           name: dealer_data.name,

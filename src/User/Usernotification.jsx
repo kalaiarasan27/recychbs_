@@ -15,8 +15,8 @@ const Usernotification = () => {
   // console.log(userDetails);
   
   useEffect(() => {
-    // fetch('http://127.0.0.1:8000/Get_UserNotification/')
-    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/Get_UserNotification/')
+    // fetch('Get_UserNotification/')
+    fetch('Get_Notification/')
       .then(response => response.json())
       .then(data => {
         console.log(data);

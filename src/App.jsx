@@ -69,10 +69,10 @@ import Base64Testing from './Dealer/Base64Testing';
 import Base64Testing2 from './Dealer/Base64Testing2';
 import LocationTesting from './Dealer/locationTesting';
 import NearbyUsers from './Dealer/nearbyUsers';
-import UserPage from './User/webSocketUser';
-import DealerPage from './User/WebSocketTesting';
-import Testing2 from './User/testing2';
-import Testing3 from './User/testing3';
+import PhoneAuth from './screen/PhoneAuth';
+import Orders from './Dealer/Orders';
+import Headerdealer from './component/Headerdealer';
+
 
 function App() {
 
@@ -93,12 +93,13 @@ function App() {
           <Route path='/Notification' element={<Notification />} />
           <Route path='/Datadel' element={<Datadel />} />
           <Route path='/Applicationstatus' element={<Applicationstatus />} />
+          <Route path='/PhoneAuth' element={<PhoneAuth />} />
 
           {/* ----------------------///DEALER////---------------------------- */}
           <Route path='/Homedealer' element={
-            // <ProtectedRoute requiredRole="DEALER">
+            <ProtectedRoute requiredRole="DEALER">
               <Homedealer />
-            // </ProtectedRoute>
+            </ProtectedRoute>
           } />
           <Route path='/Todayscrap' element={
             <ProtectedRoute requiredRole="DEALER">
@@ -118,6 +119,11 @@ function App() {
           <Route path='/Completeorder' element={
             <ProtectedRoute requiredRole="DEALER">
               <Completeorder />
+            </ProtectedRoute>
+          } />
+          <Route path='/Orders' element={
+            <ProtectedRoute requiredRole="DEALER">
+              <Orders />
             </ProtectedRoute>
           } />
           <Route path='/Completeorderdetail' element={
@@ -232,10 +238,7 @@ function App() {
            <Route path='/Base64Testing2' element={<Base64Testing2 />} />
            <Route path='/locationTesting' element={<LocationTesting />} />
            <Route path='/nearbyUsers' element={<NearbyUsers />} />
-           <Route path="/wsUser" element={<UserPage />} />
-           <Route path="/wsDealer" element={<DealerPage />} />
-           <Route path="/wsDealer1" element={<Testing2 />} />
-           <Route path="/wsDealer2" element={<Testing3 />} />
+
           {/* ----------------------///USER////---------------------------- */}
           {/* <Route path='/Homeuser' element={
             <ProtectedRoute requiredRole="USER">

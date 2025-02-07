@@ -1,29 +1,10 @@
+import Headerdealer from "../../component/Headerdealer";
 function Dealercustomer() {
   return(
       <>
-          <div
-              className="container-fluid"
-              style={{
-                  backgroundColor: "#000",
-                  color: "#fff",
-                  paddingTop: "20px",
-                  fontSize: "17px",
-                  fontWeight: "200",
-                  paddingLeft: "30px",
-                  paddingRight: "30px"
-              }}
-          >
-              <div
-                  style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                  }}
-              >
-              </div>
-              <div style={{ marginTop: "70px", display: "flex", alignItems: "center" }}>
+      <Headerdealer />
+          <div className="container-fluid topbottom">
                   <span style={{ fontSize: "24px", fontWeight: "bold" }}>Customer Service</span>
-              </div>
               
               <div style={{ marginTop: "20px" }}>
                   

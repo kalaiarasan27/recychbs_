@@ -24,7 +24,7 @@ function Todayscrap() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('fetch/')
+    fetch('Get-Scrap-Type/')
       .then(response => response.json())
       .then(data =>{ 
         setData(data);

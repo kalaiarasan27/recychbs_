@@ -24,8 +24,8 @@ const NearbyUsers = () => {
     useEffect(() => {
         const fetchNearbyUsers = async () => {
             try {
-                // const response = await fetch('http://127.0.0.1:8000/nearby-users/', {
-                const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/nearbyUsers/', {
+                // const response = await fetch('nearby-users/', {
+                const response = await fetch('nearbyUsers/', {
                     credentials: 'include',
                     headers: {
                       'Content-Type': 'application/json',

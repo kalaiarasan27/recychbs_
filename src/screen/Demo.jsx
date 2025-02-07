@@ -287,8 +287,8 @@ export default Demo;
 //   loginType: activeLogin // Add secondVariable as a new field
 // };
  
-//     fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/login-form/', {
-//       // fetch('http://127.0.0.1:8000/login-form/ ', {
+//     fetch('login-form/', {
+//       // fetch('login-form/ ', {
  
 //         method: 'POST',
 //         credentials: 'include', // Ensures cookies are sent

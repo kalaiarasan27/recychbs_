@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle, AiOutlineUpload, AiOutlineHourglass } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import logo from '../assets/image/logotrans.png';
 import Alert from "../component/Alert";
 import { BiErrorCircle } from 'react-icons/bi'; // Example of another icon
+import { FiUploadCloud, FiCheckCircle } from "react-icons/fi"; 
 
 const Applicationstatus = () => {
   const [alertType, setAlertType] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [status, setStatus] = useState('waiting');
+  const [status, setStatus] = useState('extradata');
   const [require, requirestatus] = useState('');
   const [showRequirementMessage, setShowRequirementMessage] = useState(true);
   const [showExtraDataInput, setShowExtraDataInput] = useState(false);
@@ -17,6 +18,104 @@ const Applicationstatus = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
    
+  const [selectedOptions, setSelectedOptions] = useState([true,,false,true,false,false,false,true]);
+  const [errors, setErrors] = useState({
+    aadharfront: '',
+    aadharback: '',
+    panCard: '',
+    statement: '',
+    passbook: '',
+    licensefront: '',
+    licenseback: '',
+    vehicle: '',
+  });
+    const [fileNames, setFileNames] = useState({
+      aadharfront: "",
+      aadharback: "",
+      panCard: "",
+      licensefront: "",
+      licenseback: "",
+      vehicle: "",
+      statement: "",
+      passbook: ""
+    });
+     const fileInputRefs = {
+        aadharfront: useRef(null),
+        aadharback: useRef(null),
+        panCard: useRef(null),
+        licensefront: useRef(null),
+        licenseback: useRef(null),
+        vehicle: useRef(null),
+        statement: useRef(null),
+        passbook: useRef(null)
+      };
+
+      const handleFileChange = (fileType) => (e) => {
+        const file = e.target.files[0];
+        const validFormats = [
+          'image/jpeg', 
+          'image/png', 
+          'application/pdf', 
+          'application/msword', 
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+        ];
+      
+        // Reset any existing errors for the specific file type
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [fileType]: '', // Clear previous error
+        }));
+      
+        // Handle case when no file is selected
+        if (!file) {
+          setFileNames((prevFileNames) => ({
+            ...prevFileNames,
+            [fileType]: null, // Clear the file name
+          }));
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            [fileType]: 'No file selected.',
+          }));
+          return;
+        }
+      
+        // Validate the file format
+        if (!validFormats.includes(file.type)) {
+          setFileNames((prevFileNames) => ({
+            ...prevFileNames,
+            [fileType]: null, // Clear the invalid file
+          }));
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            [fileType]: 'Invalid file format. Please upload JPG, PNG, PDF, DOC, or DOCX.',
+          }));
+          return;
+        }
+      
+        // If the file is valid, update the file name and base64 data
+        setFileNames((prevFileNames) => ({
+          ...prevFileNames,
+          [fileType]: file,
+        }));
+      
+        // Read the file as base64 and update the file data
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64String = reader.result.replace("data:", "").replace(/^.+,/, "");
+          setFilesData((prevData) => ({
+            ...prevData,
+            [fileType]: { base64: base64String, file_name: file.name }, // Update the base64 and name for this field
+          }));
+        };
+        
+        reader.readAsDataURL(file);  // Convert the file to base64
+      };
+      
+      
+        const handleIconClick = (fileType) => {
+          fileInputRefs[fileType].current.click();
+        };
+      
 
   // const toggleStatus = () => {
   //   setStatus((prevStatus) => {
@@ -50,13 +149,29 @@ const Applicationstatus = () => {
     setAlertMessage('');
   };
 
-  const handleFileChange = (event) => {
-    const selectedFiles = Array.from(event.target.files);
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
-    if (event.target.files.length > 0) {
-      setError('');
-    }
-  };
+  // const handleFileChange = (event) => {
+  //   const selectedFiles = Array.from(event.target.files);
+  //   const validFormats = [
+  //     'image/jpeg', 
+  //     'image/png', 
+  //     'application/pdf', 
+  //     'application/msword', 
+  //     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  //   ];
+
+  //   // Filter valid files based on their types
+  //   const validFiles = selectedFiles.filter(file => validFormats.includes(file.type));
+
+  //   // If there are invalid files, set the error message
+  //   if (selectedFiles.length > 0 && validFiles.length === 0) {
+  //     setError('Unsupported file type. Please upload JPG, PNG, PDF, DOC, or DOCX files.');
+  //   } else {
+  //     // If there are valid files, reset error and add them to the files array
+  //     setError('');
+  //     setFiles((prevFiles) => [...prevFiles, ...validFiles]);
+  //   }
+  // };
+  
 
  
   const handleRemoveFile = (fileName) => {
@@ -86,7 +201,7 @@ const Applicationstatus = () => {
           const fetchStatus = async () => {
             try {
               const response = await fetch('FetchStatusActive/',{
-            // const response = await fetch('http://127.0.0.1:8000/FetchStatusActive/ ', {
+            // const response = await fetch('FetchStatusActive/ ', {
               credentials: 'include', // Ensures cookies are sent
               'X-CSRFToken':csrfToken
               }); // Django API endpoint
@@ -119,23 +234,80 @@ const Applicationstatus = () => {
 const handleSubmit = async () => {
   // Clear previous error message
   setError('');
+  let newErrors = { ...errors }; // Create a copy of the current errors
+
+  // Check each selected option and validate
+  if (selectedOptions[0] && !fileNames.aadharfront) {
+    newErrors.aadharfront = 'Aadhar Front Image is required.';
+  } else {
+    newErrors.aadharfront = '';
+  }
+
+  if (selectedOptions[1] && !fileNames.aadharback) {
+    newErrors.aadharback = 'Aadhar Back Image is required.';
+  } else {
+    newErrors.aadharback = '';
+  }
+
+  if (selectedOptions[2] && !fileNames.panCard) {
+    newErrors.panCard = 'PAN Card Image is required.';
+  } else {
+    newErrors.panCard = '';
+  }
+
+  if (selectedOptions[3] && !fileNames.statement) {
+    newErrors.statement = 'Bank Statement is required.';
+  } else {
+    newErrors.statement = '';
+  }
+
+  if (selectedOptions[4] && !fileNames.passbook) {
+    newErrors.passbook = 'PassBook Image is required.';
+  } else {
+    newErrors.passbook = '';
+  }
+
+  if (selectedOptions[5] && !fileNames.licensefront) {
+    newErrors.licensefront = 'License Front Image is required.';
+  } else {
+    newErrors.licensefront = '';
+  }
+
+  if (selectedOptions[6] && !fileNames.licenseback) {
+    newErrors.licenseback = 'License Back Image is required.';
+  } else {
+    newErrors.licenseback = '';
+  }
+
+  if (selectedOptions[7] && !fileNames.vehicle) {
+    newErrors.vehicle = 'RC Book Image is required.';
+  } else {
+    newErrors.vehicle = '';
+  }
+
+  // Update the errors state
+  setErrors(newErrors);
+
+  // Check if there are any errors
+  const hasErrors = Object.values(newErrors).some(error => error !== '');
+  if (hasErrors) {
+    return; // Stop submission if there are errors
+  }
 
   // Validate input
-  if (files.length === 0 && message.trim() === '') {
-    setError('Please upload a file or enter a message.'); // Set error message
-    return; // Prevent submission
-  }
+  // if (files.length === 0 && message.trim() === '') {
+  //   setError('Please upload a file or enter a message.'); // Set error message
+  //   return; // Prevent submission
+  // }
   setShowRequirementMessage(false);
-  setStatus('waiting');
-  displayAlert('success', 'Data Uploaded');
+  
 
   const uploadFile = new FormData();
   files.forEach((file, index) => {
     uploadFile.append(`file${index}`, file);
   });
   uploadFile.append('message', message);
-  console.log("Response is OK",uploadFile);
-
+  displayAlert('loading', 'Uploading, please wait...');
   try {
     const response = await fetch('send_extraData/', {
       method: 'POST',
@@ -147,14 +319,18 @@ const handleSubmit = async () => {
     });
     if (response.ok) {
       const data = await response.json();
-      console.log("Response is OK",uploadFile);
+      console.log("Response is OK");
+      setStatus('waiting');
+      displayAlert('success', 'Data Uploaded');
     } else {
       const data = await response.json();
-      console.log("Response is not OK",uploadFile);
+      console.log("Response is not OK");
+      displayAlert('error', 'Failed to upload the data');
       setError(data.error);
     }
   } catch (error) {
     console.error('Error submitting data:', error);
+    displayAlert('error', 'Error submitting data');
   }
 
   setFiles([]);
@@ -260,7 +436,398 @@ const handleSubmit = async () => {
                 onBlur={(e) => (e.target.style.border = "1px solid #e277f3")}
               />
              </div>
-             <div
+             <div className="phonemail" style={{ maxWidth: '800px', margin: '0 auto' }}>
+  <div className="phonemail-gap" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+  {selectedOptions[0] && (
+    <div style={{ marginLeft: "7px",marginRight: "7px"}}>
+      <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>
+        Aadhar Front Image <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p>
+      </label>
+      <div className={`uploaddiv ps-2 ${errors.aadharfront ? "error" : ""}`}>
+        <input
+          type="file"
+          ref={fileInputRefs.aadharfront}
+          style={{ display: "none" }}
+          onChange={handleFileChange("aadharfront")}
+          accept=".jpg, .jpeg, .png, .pdf, .doc, .docx"
+        />
+        <div
+          onClick={() => handleIconClick("aadharfront")}
+          style={{
+            cursor: "pointer",
+            fontSize: "24px",
+            flexDirection: "column",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {fileNames.aadharfront ? (
+            <>
+              <FiCheckCircle className="uploadicon" style={{ color: 'green' }} />
+              <a style={{ fontSize: "14px", color: 'black' }}>Click here for Re-upload</a>
+            </>
+          ) : (
+            <>
+              <FiUploadCloud className="uploadicon" style={{ color: 'black' }} />
+              <a style={{ fontSize: "14px", color: 'black' }}>Upload</a>
+            </>
+          )}
+        </div>
+      </div>
+      <p style={{ fontSize: "14px", marginTop: "10px" }}>
+        Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+      </p>
+      <p style={{ fontSize: "15px", marginTop: "10px", color: fileNames.aadharfront ? "lightgreen" : "white" }}>
+        Selected file: {fileNames.aadharfront && fileNames.aadharfront.name ? fileNames.aadharfront.name : "No file selected"}
+      </p>
+      <p className="error-warning">{errors.aadharfront}</p>
+    </div>
+  )}
+   {selectedOptions[1] && (
+    <div style={{ marginLeft: "7px",marginRight: "7px"}}>
+      <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>
+        Aadhar Back Image <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p>
+      </label>
+      <div className={`uploaddiv ps-2 ${errors.aadharback ? "error" : ""}`}>
+        <input
+          type="file"
+          ref={fileInputRefs.aadharback}
+          style={{ display: "none" }}
+          onChange={handleFileChange("aadharback")}
+          accept=".jpg, .jpeg, .png, .pdf, .doc, .docx"
+        />
+        <div
+          onClick={() => handleIconClick("aadharback")}
+          style={{
+            cursor: "pointer",
+            fontSize: "24px",
+            flexDirection: "column",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {fileNames.aadharback ? (
+            <>
+              <FiCheckCircle className="uploadicon" style={{ color: 'green' }} />
+              <a style={{ fontSize: "14px", color: 'black' }}>Click here for Re-upload</a>
+            </>
+          ) : (
+            <>
+              <FiUploadCloud className="uploadicon" style={{ color: 'black' }}/>
+              <a style={{ fontSize: "14px", color: 'black' }}>Upload</a>
+            </>
+          )}
+        </div>
+      </div>
+      <p style={{ fontSize: "14px", marginTop: "10px" }}>
+        Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+      </p>
+      <p style={{ fontSize: "15px", marginTop: "10px", color: fileNames.aadharback ? "lightgreen" : "white" }}>
+        Selected file: {fileNames.aadharback ? fileNames.aadharback.name : "No file selected"}
+      </p>
+      <p className="error-warning">{errors.aadharback}</p>
+    </div>
+   )}
+   {selectedOptions[2] && (
+    <div style={{ marginLeft: "7px",marginRight: "7px"}}>
+      <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>PAN Card Image <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p></label>
+                    <div  className={`uploaddiv ps-2 ${
+                      errors.panCard ? "error" : ""
+                    }`}>
+                      <input
+                        type="file"
+                        ref={fileInputRefs.panCard}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange("panCard")}
+                        accept=".jpg, .jpeg, .png, .pdf, .doc, .docx" 
+                      />
+                      <div
+                        onClick={() => handleIconClick("panCard")}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "24px",
+                          flexDirection: "column",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                         {fileNames.panCard ? (
+                      <>
+                      <FiCheckCircle className="uploadicon" style={{ color: 'green' }} /> 
+                      <a style={{ fontSize: "14px", color: 'black'}}>Click here for Re-upload</a>
+                      </>
+                    ) : (
+                      <>
+                      <FiUploadCloud className="uploadicon" style={{ color: 'black' }}/>
+                      <a style={{ fontSize: "14px", color: 'black'}}>Upload</a>
+                      </>
+                    )}
+                      </div>
+                    </div>
+                    <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                      Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+                    </p>
+                    <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.panCard ? "lightgreen" : "white" }}>
+                      Selected file:{" "}
+                      {fileNames.panCard
+                        ? fileNames.panCard.name
+                        : "No file selected"}
+                    </p>
+                    <p className="error-warning">{errors.panCard}</p>
+    </div>
+   )}
+   {selectedOptions[3] && (
+    <div style={{ marginLeft: "7px",marginRight: "7px"}}>
+      <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>Bank Statement <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p></label>
+                    <div  className={`uploaddiv ps-2 ${
+                      errors.statement ? "error" : ""
+                    }`}>
+                      <input
+                        type="file"
+                        ref={fileInputRefs.statement}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange("statement")}
+                        accept=".jpg, .jpeg, .png, .pdf, .doc, .docx" 
+                      />
+                      <div
+                        onClick={() => handleIconClick("statement")}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "24px",
+                          flexDirection: "column",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                         {fileNames.statement ? (
+                      <>
+                      <FiCheckCircle className="uploadicon" style={{ color: 'green' }} /> 
+                      <a style={{ fontSize: "14px", color: 'black'}}>Click here for Re-upload</a>
+                      </>
+                    ) : (
+                      <>
+                      <FiUploadCloud className="uploadicon" style={{ color: 'black' }} />
+                      <a style={{ fontSize: "14px", color: 'black'}}>Upload</a>
+                      </>
+                    )}
+                      </div>
+                    </div>
+                    <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                      Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+                    </p>
+                    <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.statement ? "lightgreen" : "white" }}>
+                      Selected file:{" "}
+                      {fileNames.statement
+                        ? fileNames.statement.name
+                        : "No file selected"}
+                    </p>
+                    <p className="error-warning">{errors.statement}</p>
+    </div>
+   )}
+   {selectedOptions[4] && (
+    <div style={{ marginLeft: "7px",marginRight: "7px"}}>
+      <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>PassBook Image <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p></label>
+                    <div  className={`uploaddiv ps-2 ${
+                      errors.passbook ? "error" : ""
+                    }`}>
+                      <input
+                        type="file"
+                        ref={fileInputRefs.passbook}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange("passbook")}
+                        accept=".jpg, .jpeg, .png, .pdf, .doc, .docx" 
+                      />
+                      <div
+                        onClick={() => handleIconClick("passbook")}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "24px",
+                          flexDirection: "column",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                         {fileNames.passbook ? (
+                      <>
+                      <FiCheckCircle className="uploadicon" style={{ color: 'green' }} /> 
+                      <a style={{ fontSize: "14px", color: 'black'}}>Click here for Re-upload</a>
+                      </>
+                    ) : (
+                      <>
+                      <FiUploadCloud className="uploadicon" style={{ color: 'black' }} />
+                      <a style={{ fontSize: "14px", color: 'black'}}>Upload</a>
+                      </>
+                    )}
+                      </div>
+                    </div>
+                    <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                      Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+                    </p>
+                    <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.passbook ? "lightgreen" : "white" }}>
+                      Selected file:{" "}
+                      {fileNames.passbook
+                        ? fileNames.passbook.name
+                        : "No file selected"}
+                    </p>
+                    <p className="error-warning">{errors.passbook}</p>
+    </div>
+   )}
+   {selectedOptions[5] && (
+    <div style={{ marginLeft: "7px",marginRight: "7px"}}>
+                <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>License Front Image <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p></label>
+                  <div  className={`uploaddiv ps-2 ${
+                      errors.licensefront ? "error" : ""
+                    }`}>
+                      <input
+                        type="file"
+                        ref={fileInputRefs.licensefront}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange("licensefront")}
+                        accept=".jpg, .jpeg, .png, .pdf, .doc, .docx" 
+                      />
+                      <div
+                        onClick={() => handleIconClick("licensefront")}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "24px",
+                          flexDirection: "column",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                         {fileNames.licensefront ? (
+                      <>
+                      <FiCheckCircle className="uploadicon" style={{ color: 'green' }} /> 
+                      <a style={{ fontSize: "14px", color: 'black'}}>Click here for Re-upload</a>
+                      </>
+                    ) : (
+                      <>
+                      <FiUploadCloud className="uploadicon" style={{ color: 'black' }} />
+                      <a style={{ fontSize: "14px", color: 'black'}}>Upload</a>
+                      </>
+                    )}
+                      </div>
+                    </div>
+                    <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                      Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+                    </p>
+                    <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.licensefront ? "lightgreen" : "white" }}>
+                      Selected file:{" "}
+                      {fileNames.licensefront
+                        ? fileNames.licensefront.name
+                        : "No file selected"}
+                    </p>
+                    <p className="error-warning">{errors.licensefront}</p>
+    </div>
+   )}
+   {selectedOptions[6] && (
+    <div style={{ marginLeft: "7px",marginRight: "7px"}}>
+      <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>License Back Image <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p></label>
+                    <div  className={`uploaddiv ps-2 ${
+                      errors.licenseback ? "error" : ""
+                    }`}>
+                      <input
+                        type="file"
+                        ref={fileInputRefs.licenseback}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange("licenseback")}
+                        accept=".jpg, .jpeg, .png, .pdf, .doc, .docx" 
+                      />
+                      <div
+                        onClick={() => handleIconClick("licenseback")}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "24px",
+                          flexDirection: "column",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                         {fileNames.licenseback ? (
+                      <>
+                      <FiCheckCircle className="uploadicon" style={{ color: 'green' }} /> 
+                      <a style={{ fontSize: "14px", color: 'black'}}>Click here for Re-upload</a>
+                      </>
+                    ) : (
+                      <>
+                      <FiUploadCloud className="uploadicon" style={{ color: 'black' }}/>
+                      <a style={{ fontSize: "14px", color: 'black'}}>Upload</a>
+                      </>
+                    )}
+                      </div>
+                    </div>
+                    <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                      Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+                    </p>
+                    <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.licenseback ? "lightgreen" : "white" }}>
+                      Selected file:{" "}
+                      {fileNames.licenseback
+                        ? fileNames.licenseback.name
+                        : "No file selected"}
+                    </p>
+                    <p className="error-warning">{errors.licenseback}</p>
+    </div>
+   )}
+   {selectedOptions[7] && (
+    <div style={{ marginLeft: "7px",marginRight: "7px"}}>
+      <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>RC Book Image <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p></label>
+                    <div className={`uploaddiv ps-2 ${
+                      errors.vehicle ? "error" : ""
+                    }`}>
+                      <input
+                        type="file"
+                        ref={fileInputRefs.vehicle}
+                        style={{ display: "none" }}
+                        onChange={handleFileChange("vehicle")}
+                        accept=".jpg, .jpeg, .png, .pdf, .doc, .docx" 
+                      />
+                      <div
+                        onClick={() => handleIconClick("vehicle")}
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "24px",
+                          flexDirection: "column",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                         {fileNames.vehicle ? (
+                      <>
+                      <FiCheckCircle className="uploadicon" style={{ color: 'green' }} /> 
+                      <a style={{ fontSize: "14px", color: 'black'}}>Click here for Re-upload</a>
+                      </>
+                    ) : (
+                      <>
+                      <FiUploadCloud className="uploadicon" style={{ color: 'black' }} />
+                      <a style={{ fontSize: "14px", color: 'black'}}>Upload</a>
+                      </>
+                    )}
+                      </div>
+                    </div>
+                    <p style={{ fontSize: "14px", marginTop: "10px" }}>
+                      Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+                    </p>
+                    <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.vehicle ? "lightgreen" : "white" }}>
+                      Selected file:{" "}
+                      {fileNames.vehicle
+                        ? fileNames.vehicle.name
+                        : "No file selected"}
+                    </p>
+                    <p className="error-warning">{errors.vehicle}</p>
+      </div>
+   )}
+  </div>
+</div>
+
+             {/* <div
                style={{
                  display: "flex",
                  borderRadius: "5px",
@@ -276,6 +843,7 @@ const handleSubmit = async () => {
                  id="file-upload"
                  multiple
                  onChange={handleFileChange}
+                 accept=".jpg,.jpeg,.png,.pdf,.doc,.docx" 
                  style={{
                    position: "absolute",
                    width: "100%",
@@ -304,23 +872,24 @@ const handleSubmit = async () => {
                </label>
              </div>
              <div style={{ marginTop: "20px" }}>
-               {files.length > 0 && (
-                 <ul>
-                   {files.map((file, index) => (
-                     <li key={index}>
-                       {file.name}
-                       <button
-                         onClick={() => handleRemoveFile(file.name)}
-  className="application-button"
-                       >
-                         Remove
-                       </button>
-                     </li>
-                   ))}
-                 </ul>
-               )}
-             </div>
-             {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+                {files.length > 0 && (
+                  <ul>
+                    {files.map((file, index) => (
+                      <li key={index}>
+                        {file.name}
+                        <button
+                          onClick={() => handleRemoveFile(file.name)}
+                          className="application-button"
+                          style={{ marginTop: "10px" }}
+                        >
+                          Remove
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+             {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>} */}
              <div className="d-flex justify-content-center mt-5">
                <button className="application-button" onClick={handleSubmit}>
                  SUBMIT

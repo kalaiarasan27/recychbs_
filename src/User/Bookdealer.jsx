@@ -66,54 +66,25 @@ const Bookdealer = () => {
 
     const csrfToken = getCookie("csrftoken");
 
-    const getCurrentLocationAndSubmit = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            
-            // Combine answer with location data in the request body
-            // fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/bookdealer/', {
-            fetch('bookdealer/', {
-              credentials: 'include',
-              method: 'POST',
-              body: JSON.stringify({ latitude, longitude, answer }), // Include latitude, longitude, and answer
-              headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken,
-              },
-            })
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
-              }
-              return response.json();
-            })
-            .then(data => {
-              setErrorMessage(data.message);
-              navigate("/Successful");
-            })
-            .catch(error => {
-              setErrorMessage('Failed to send message: ' + error.message);
-              console.error('Error:', error);
-            });
-          },
-          (error) => {
-            console.error('Error getting location:', error.message);
-            setErrorMessage('Failed to retrieve location: ' + error.message);
-          }
-        );
-      } else {
-        console.error('Geolocation is not supported by this browser.');
-        setErrorMessage('Geolocation is not supported by this browser.');
-      }
-    };
-  
-    // Call the function to get location and submit the data
-    getCurrentLocationAndSubmit();
-
+    fetch('bookdealer/', {
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify(answer),
+      headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+      },
+    })
+   
+    .then(data => {
+      setErrorMessage(data.message);
+      navigate("/Successful");
+    })
+    .catch(error => {
+      setErrorMessage('Failed to send message: ' + error.message);
+      console.error('Error:', error);
+    });
   };
-
 
   return (
     <>

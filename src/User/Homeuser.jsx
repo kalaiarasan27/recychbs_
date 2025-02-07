@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Header from "../component/Header";
-import logo from "../assets/image/istockphoto.jpg";
-import logo1 from "../assets/image/recyc.jpeg";
-import logo2 from "../assets/image/Designer.png";
+// import logo from "../assets/image/bg-fixed.jpg";
+// import logo1 from "../assets/image/recyc.jpeg";
+// import logo2 from "../assets/image/Designer.png";
+import logo from "../assets/image/banner.jpg";
+import logo1 from "../assets/image/banner1.jpg";
+import logo2 from "../assets/image/banner2.png";
+import logo3 from "../assets/image/banner3.png";
+import logo4 from "../assets/image/banner4.png";
 import bottle from "../assets/image/bottle.jpeg";
 import card from "../assets/image/card.jpeg";
 import cocount from "../assets/image/cocount.jpeg";
@@ -25,7 +30,7 @@ import { CiSearch } from "react-icons/ci";
 function Homeuser() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
-  const slides = [logo, logo1, logo2];
+  const slides = [logo3, logo2, logo, logo4];
  
   useEffect(() => {
     const interval = setInterval(() => {
@@ -45,23 +50,49 @@ function Homeuser() {
     setActiveIndex((prevIndex) => (prevIndex + 1) % slides.length);
   };
  
-  const items = [
-    { title: "PLASTIC", cost: 500, scrapimg: bottle },
-    { title: "CARBOARD", cost: 556, scrapimg: card },
-    { title: "COCONUT SHELL", cost: 500, scrapimg: cocount },
-    { title: "SYNTEX TANKS", cost: 500, scrapimg: drum },
-    { title: "GLASSES", cost: 570, scrapimg: glass },
-    { title: "IRON", cost: 556, scrapimg: iron2 },
-    { title: "E-WASTE", cost: 556, scrapimg: mbl },
-    { title: "NOTE & BOOKS", cost: 556, scrapimg: paper },
-    { title: "PVC PIPES", cost: 556, scrapimg: scrap },
-    { title: "BRONZE", cost: 556, scrapimg: scrap1 },
-    { title: "ALUMINIUM", cost: 556, scrapimg: scrap2 },
-    { title: "COPPER", cost: 556, scrapimg: scrap3 },
-    { title: "BATTERIES", cost: 556, scrapimg: scrap4 },
-    { title: "TYRES", cost: 556, scrapimg: tyre },
-    { title: "ELECTRICAL WIRES", cost: 556, scrapimg: wire },
-  ];
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch('User_Scrap_Type/')
+      .then(response => response.json())
+      .then(data =>{ 
+        setData(data);
+    
+    
+    })
+      .catch(error => console.error('Error fetching data:', error));
+  }, []);
+
+const items = []
+
+// Loop based on the response data length
+for (let i = 0; i < data.length; i++) {
+  items.push({
+    title: data[i].Scrap_Name,
+    cost: data[i].Current_Price_Per_KG,
+    scrapimg: data[i].Scrap_Image
+  });
+}
+
+console.log(items);
+
+  // const items = [
+  //   { title: "PLASTIC", cost: 500, scrapimg: bottle },
+  //   { title: "CARBOARD", cost: 556, scrapimg: card },
+  //   { title: "COCONUT SHELL", cost: 500, scrapimg: cocount },
+  //   { title: "SYNTEX TANKS", cost: 500, scrapimg: drum },
+  //   { title: "GLASSES", cost: 570, scrapimg: glass },
+  //   { title: "IRON", cost: 556, scrapimg: iron2 },
+  //   { title: "E-WASTE", cost: 556, scrapimg: mbl },
+  //   { title: "NOTE & BOOKS", cost: 556, scrapimg: paper },
+  //   { title: "PVC PIPES", cost: 556, scrapimg: scrap },
+  //   { title: "BRONZE", cost: 556, scrapimg: scrap1 },
+  //   { title: "ALUMINIUM", cost: 556, scrapimg: scrap2 },
+  //   { title: "COPPER", cost: 556, scrapimg: scrap3 },
+  //   { title: "BATTERIES", cost: 556, scrapimg: scrap4 },
+  //   { title: "TYRES", cost: 556, scrapimg: tyre },
+  //   { title: "ELECTRICAL WIRES", cost: 556, scrapimg: wire },
+  // ];
   const filteredItems = items.filter(
     (item) =>
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -72,7 +103,7 @@ function Homeuser() {
   return (
     <>
       <Header />
-      <div className="topbottom-user pb-0 mb-0">
+      <div className="container-fluid topbottom-user">
       <div className="slideshow-container" style={{ position: "relative", overflow: "hidden" }}>
           {slides.map((src, index) => (
             <div
@@ -173,7 +204,8 @@ function Homeuser() {
         <div class="ring"></div>
         <button
           onClick={() => navigate("/Scrapselect")}
-        >
+          style={{ fontFamily: "Vollkorn, serif" }}
+          >
           Book Dealer
         </button>
       </div>

@@ -8,7 +8,7 @@ const Useraccount = () => {
   const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
-    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/GetUserDetails/')
+    fetch('GetUserDetails/')
       .then(response => response.json())
       .then(data => {
         console.log(data);

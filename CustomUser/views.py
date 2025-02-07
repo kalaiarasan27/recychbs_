@@ -2305,24 +2305,6 @@ def handle_checkbox(request):
         print(active)
         return JsonResponse({'status': 'success', 'isChecked': is_checked})
     return JsonResponse({'status': 'failed'}, status=400)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
 def fetch_files(request):
     try:

@@ -6,16 +6,12 @@ import hands from "../../assets/image/hands.webp";
 import { BsInstagram } from "react-icons/bs";
 import { FaFacebookF, FaLinkedinIn } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { useEffect } from "react";
 
 const Aboutus = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
   return (
     <>
       <Header />
-      <div className="topbottom-user" style={{backgroundColor:"#fff"}}>
+      <div className="container-fluid topbottom-user mx-0 px-0" style={{backgroundColor:"#fff", padding: '0px'}}>
         <div className="aboutus-header">
           {/* <img src={logo} style={{ height: "200px", width: "250px" }} /> */}
           <span></span>

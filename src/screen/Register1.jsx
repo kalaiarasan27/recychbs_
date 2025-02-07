@@ -115,21 +115,46 @@ const Register1 = () => {
   }, [selectedState]);
  
   const handleChange = (e) => {
-    const { name, value } = e.target;
-  
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, type, checked } = e.target;
+    
+    // Update formData based on the input type
+    if (type === "checkbox") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: checked, // Update checkbox value (true or false)
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value, // Update other fields (e.g., text inputs)
+      }));
+    }
   
     // Clear error message if the input is empty or in the correct format
     if (value.trim() === "" || validateInput(name, value)) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        [name]: "",
+        [name]: "", // Clear error for text inputs
+      }));
+    }
+  
+    // Clear error for checkbox (Terms) if it's checked
+    if (name === "terms" && checked) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        terms: "", // Clear error for the Terms checkbox if checked
+      }));
+    }
+  
+    // If ReCAPTCHA changes, clear the CAPTCHA error message
+    if (name === "captcha" && value) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        captcha: "", // Clear error if CAPTCHA is completed
       }));
     }
   };
+  
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -264,6 +289,9 @@ const Register1 = () => {
       newErrors.password = "Password is required.";
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
+    if (!formData.terms) {
+      newErrors.terms = "You must agree to the Terms and Conditions.";
+    }
  
     return newErrors;
   };
@@ -280,6 +308,13 @@ const Register1 = () => {
     setErrors(validationErrors);
 
     const formErrors = validateForm();
+
+    if (!captchaValue) {
+      formErrors.captcha = "Please complete the reCAPTCHA.";
+    }
+  
+    // Check if Terms and Conditions are not agreed to
+    
     if (Object.keys(formErrors).length === 0) {
       if (!captchaValue) {
         setError("Please complete the reCAPTCHA.");
@@ -593,10 +628,14 @@ const Register1 = () => {
  
               <input type="hidden" name="role" value={formData.role} />
               <ReCAPTCHA
-                sitekey="6Lfv4zQqAAAAAKAqWKH0hazJhWnjHmpH8WYMoiNp"
-                onChange={(value) => setCaptchaValue(value)}
-                className="mt-4"
-              />
+              sitekey="6Lfv4zQqAAAAAKAqWKH0hazJhWnjHmpH8WYMoiNp"
+              onChange={(value) => {
+                setCaptchaValue(value);  // Save CAPTCHA value
+                handleChange({ target: { name: 'captcha', value } }); // Trigger handleChange for CAPTCHA
+              }}
+              className="mt-4"
+            />
+              {errors.captcha && <p style={{ color: "red"}}>{errors.captcha}</p>}
              
               <div className="terms mt-4">
                 <input
@@ -621,6 +660,7 @@ const Register1 = () => {
                   </Link>
                 </label>
               </div>
+              {errors.terms && <p style={{ color: "red"}}>{errors.terms}</p>}
               {message && <p style={{ color: "green" }}>{message}</p>}
  
               {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}

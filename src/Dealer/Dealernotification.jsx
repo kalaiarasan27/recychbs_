@@ -1,19 +1,36 @@
-import React from 'react';
+import React,{ useState, useEffect } from 'react';
 import Headerdealer from '../component/Headerdealer';
 
 const Dealernotification = () => {
-  const notifications = [
-    { head: "dealer 1", title: "comment", message: "your order" },
-    { head: "dealer 2", title: "comment", message: "your order" },
-    { head: "dealer 3", title: "comment", message: "your order" },
-  ];
+  // const notifications = [
+  //   { head: "dealer 1", title: "comment", message: "your order" },
+  //   { head: "dealer 2", title: "comment", message: "your order" },
+  //   { head: "dealer 3", title: "comment", message: "your order" },
+  // ];
+
+  const [notificationDetails, setnotificationDetails] = useState([]);
+ 
+  useEffect(() => {
+    // fetch('Get_UserNotification/')
+    fetch('Get_Notification/')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setnotificationDetails(data);
+         // Set loading to false after data is fetched
+      })
+      .catch(error => {
+        console.error('Error fetching details:', error);
+      });
+  }, []);
+
 
   return (
  <>
  <Headerdealer/>
     <div className="container-fluid topbottom">
       <div className="loginn">
-        {notifications.map((item, index) => (
+        {notificationDetails.map((item, index) => (
           <div
             key={index}
             style={{
@@ -25,7 +42,7 @@ const Dealernotification = () => {
               color: "#fff",
             }}
           >
-            <span>{item.head}</span>
+            <span>{item.id}</span>
             <span>{item.title}</span>
             <span>{item.message}</span>
           </div>

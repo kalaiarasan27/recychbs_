@@ -31,7 +31,7 @@ const Forgotpassword = () => {
     return cookieValue;
   }
       const response = await fetch('password-reset/', {
-      // const response = await fetch('http://127.0.0.1:8000/password-reset/', {
+      // const response = await fetch('password-reset/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -46,10 +46,6 @@ const Forgotpassword = () => {
       if (response.ok) {
         setMessage(data.message);  // Success message
         console.log(data.message);
-        setTimeout(() => {
-          setSuccess('Password reset link has been sent to your email.');
-          // navigate('/Login'); // Navigate to the login page or wherever you want
-        }, 1000);
         setErrorMessage('');  // Clear any previous errors
       } else {
         setErrorMessage(data.error);  // Error message from the backend
@@ -81,7 +77,10 @@ const Forgotpassword = () => {
 
     // Implement the logic to handle password reset (e.g., API call)
     // For now, simulate a successful submission
- 
+    setTimeout(() => {
+      setSuccess('Password reset link has been sent to your email.');
+      // navigate('/Login'); // Navigate to the login page or wherever you want
+    }, 1000);
   };
 
   return (

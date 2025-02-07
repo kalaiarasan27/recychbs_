@@ -6,8 +6,8 @@ const DisplayUploadedFile = () => {
   // Function to fetch the file from Django and display it
   const fetchAndDisplayFile = async () => {
     try {
-      // const response = await fetch('http://127.0.0.1:8000/get-file/');
-      const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/get-file/');
+      // const response = await fetch('get-file/');
+      const response = await fetch('get-file/');
       const fileData = await response.json();
 
       // Create a Blob from the base64 string and generate a URL for the image

@@ -128,6 +128,19 @@ const handleBlur = (e) => {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
+     // Perform validation and error handling as needed
+     const role = activeLogin.toLowerCase();
+     const currentErrors = { ...errors };
+     
+     currentErrors[role].email = validateEmail(formData[role].email);
+     currentErrors[role].password = validatePassword(formData[role].password);
+   
+     setErrors(currentErrors);
+   
+     const hasErrors = Object.values(currentErrors[role]).some((error) => error);
+     if (hasErrors) {
+       return;
+     }
     const csrfToken = getCookie('csrftoken');
   
     function getCookie(name) {
@@ -255,24 +268,12 @@ const handleBlur = (e) => {
   })
   .catch(error => {
     console.log("Error:", error);
-  });
-    // .finally(() => {
+  })
+    .finally(() => {
       setLoading(false); // Set loading to false when API call is complete
-    // });
+    });
   
-    // Perform validation and error handling as needed
-    const role = activeLogin.toLowerCase();
-    const currentErrors = { ...errors };
-    
-    currentErrors[role].email = validateEmail(formData[role].email);
-    currentErrors[role].password = validatePassword(formData[role].password);
-  
-    setErrors(currentErrors);
-  
-    const hasErrors = Object.values(currentErrors[role]).some((error) => error);
-    if (hasErrors) {
-      return;
-    }
+   
   };
   
  
@@ -371,7 +372,7 @@ const handleBlur = (e) => {
                     Forgot Password?
                   </a>
                   {/* {message && <p style={{ color: "green" }}>{message}</p>} */}
-                  {error && <p style={{ color: "red" }}>{error}</p>}
+                  {/* {error && <p style={{ color: "red" }}>{error}</p>} */}
                   <button
                     type="submit"
                     style={{ textDecoration: "none" }}
@@ -449,8 +450,8 @@ const handleBlur = (e) => {
                   >
                     Forgot Password?
                   </a>
-                  {/* {message && <p style={{ color: "green" }}>{message}</p>} */}
-                  {error && <p style={{ color: "red" }}>{error}</p>}
+                  {/* {message && <p style={{ color: "green" }}>{message}</p>} 
+                  {error && <p style={{ color: "red" }}>{error}</p>}  */}
                   <button
                     type="submit"
                     style={{ textDecoration: "none" }}

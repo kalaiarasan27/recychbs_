@@ -47,7 +47,7 @@
 //     e.preventDefault();
 //     const enteredOtp = otp.join("");
  
-//     fetch("https://django-djreact-app-d5af3d4e3559.herokuapp.com/otp/", {
+//     fetch("otp/", {
 //       method: "POST",
 //       credentials: "include",
 //       headers: {

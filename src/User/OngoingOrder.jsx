@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import SortableTable from "../component/SortableTable"; // Import your SortableTable component
 import Header from "../component/Header";
@@ -17,26 +17,6 @@ function OngoingOrder() {
   };
 
 
-  const [otp, setOtp] = useState(null);
-  console.log("Otp is",otp);
-
-  useEffect(() => {
-    fetch('ongoing_order/')
-    // fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/ongoing_order/')
-       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setOtp(data.order_otp); 
-        console.log(data.order_id); // Access the 'order_otp' key
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }, []);
   const [bill, setBill] = useState(null);
   const [quantity, setQuantity] = useState({});
   const [scrapItems, setScrapItems] = useState([
@@ -262,7 +242,7 @@ function OngoingOrder() {
             <div className="otp-display col-12 col-lg-4 col-md-12 col-sm-12">
               <div className="otp-box">
                 <p>Your OTP is:</p>
-                <div className="otp-digits">{otp}</div>
+                <div className="otp-digits">566757</div>
               </div>
             </div>
           </div>

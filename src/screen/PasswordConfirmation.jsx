@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../assets/image/logotrans.png'; 
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import Cookies from "js-cookie";
-
-
 
 const PasswordResetConfirm = () => {
   const [password, setPassword] = useState('');
@@ -19,18 +16,12 @@ const PasswordResetConfirm = () => {
       return;
     }
 
-
-
-  //   const getCSRFToken = () => {
-  //     return Cookies.get("csrftoken"); // Extract CSRF token from cookies
-  // };
+    const csrfToken = getCookie('csrftoken');
   
-    const csrfToken = getCookie("csrftoken");
-
     function getCookie(name) {
       let cookieValue = null;
-      if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
           const cookie = cookies[i].trim();
           if (cookie.substring(0, name.length + 1) === `${name}=`) {
@@ -42,30 +33,9 @@ const PasswordResetConfirm = () => {
       return cookieValue;
     }
 
-
-    // const csrfToken = getCSRFToken();
-
-    // if (!csrfToken) {
-    //     console.error("CSRF token not found. Make sure the backend provides it.");
-    //     return;
-    // }
-    // console.log(csrfToken);
-    
-
-
-    console.log(uid);
-    console.log(token);
-    
-    const url =`https://recychbs.in/reset/${uid}/${token}/`
-    console.log(url);
-    
-    
     try {
-      console.log("inside try",csrfToken);
-      
-      const response = await fetch(url, {
+      const response = await fetch(`reset/${uid}/${token}/`, {
         method: 'POST',
-        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -73,7 +43,7 @@ const PasswordResetConfirm = () => {
         },
         body: JSON.stringify({ password }),
       });
-      console.log(url);
+
       if (response.ok) {
         setMessage('Password reset successful.');
         navigate('/login');

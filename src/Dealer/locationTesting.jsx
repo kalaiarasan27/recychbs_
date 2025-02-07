@@ -21,8 +21,8 @@ const UserLocation = () => {
     return cookieValue;
     }
   const updateLocation = (latitude, longitude) => {
-    // fetch('http://127.0.0.1:8000/update-location/', {
-    fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/update-location/', {
+    // fetch('update-location/', {
+    fetch('update-location/', {
       method: 'POST',
       credentials: 'include',
       headers: {

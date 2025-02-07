@@ -3,17 +3,13 @@ import Header from "../../component/Header";
 import recycling from "../../assets/image/recycling.jpg";
 import scrapcar from "../../assets/image/scrap-car.jpg";
 import hands from "../../assets/image/hands.webp";
-import { useEffect } from "react";
 
 
 const Fulfillment = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
   return (
     <>
       <Header />
-        <div className="topbottom-user" style={{backgroundColor:"#fff"}}>
+        <div className="container-fluid topbottom-user mx-0 px-0" style={{backgroundColor:"#fff", padding: '0px'}}>
         <div className="aboutus-header">
           {/* <img src={logo} style={{ height: "200px", width: "250px" }} /> */}
           <span></span>

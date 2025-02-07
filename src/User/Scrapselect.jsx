@@ -15,7 +15,7 @@
 //   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/SelectScrap/')
+//     fetch('SelectScrap/')
 //       .then(response => response.json())
 //       .then(data => setData(data))
 //       .catch(error => console.error('Error fetching data:', error));
@@ -60,7 +60,7 @@
 //     const csrfToken = getCookie('csrftoken');
 
 //     try {
-//       const response = await fetch('https://django-djreact-app-d5af3d4e3559.herokuapp.com/ScrapSelection/', {
+//       const response = await fetch('ScrapSelection/', {
 //         method: "POST",
 //         body: formData,
 //         credentials: "include",
@@ -193,7 +193,7 @@ const Scrapselect = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch('SelectScrap/')
+    fetch('User_Scrap_Type/')
       .then(response => response.json())
       .then(data =>{ 
         setData(data);
@@ -343,8 +343,8 @@ console.log(scrapDetail);
     try {
       // Send the form data to the server
       const response = await fetch(
+        // 'http://localhost:8000/ScrapSelection/',
         'ScrapSelection/',
-        // 'https://django-djreact-app-d5af3d4e3559.herokuapp.com/ScrapSelection/',
         {
           method: "POST",
           body: formData,
