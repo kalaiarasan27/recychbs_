@@ -89,6 +89,8 @@ class IndexView(TemplateView):
 # Application Status
 
 @csrf_exempt
+
+@csrf_exempt
 def approve_dealer(request):
     try:
         if request.method == 'POST':
@@ -97,11 +99,22 @@ def approve_dealer(request):
             dealer_id = data.get('dealer_id') 
             dealer_email = data.get('dealer_email') 
             requirement = data.get('inputValue')
+            field_list = data.get('selectedItems')
 
             print(status)
             print(dealer_id)
             print(requirement)
-            print(dealer_email)
+            print("lists are",field_list)
+
+            json_data = {str(i): False for i in range(len(field_list))}
+            print(json_data)
+
+                # Fill in the values based on the index
+            for item in field_list:
+                index = str(item['index'])  # Convert index to string for JSONField
+                json_data[index] = True
+            
+            print(json_data)
 
             table = Dealer_Details.objects.get(id = dealer_id)
             dealer_name = table.Dealer_Name
