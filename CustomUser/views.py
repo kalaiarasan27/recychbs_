@@ -99,28 +99,24 @@ def approve_dealer(request):
             dealer_id = data.get('dealer_id') 
             dealer_email = data.get('dealer_email') 
             requirement = data.get('inputValue')
-            field_list = data.get('selectedItems')
+            field_list = data.get('selectedOptions')
 
             print(status)
             print(dealer_id)
             print(requirement)
-            print("lists are",field_list)
+            print("lists are",field_list)# Get all possible indices # Initialize json_data with all False values
+            # Store the list directly in JSONField
+            json_data = [bool(value) for value in field_list]  # Convert all values to True/False
 
-            json_data = {str(i): False for i in range(len(field_list))}
-            print(json_data)
+            print("Final JSON Data:", json_data)  # Debugging output
 
-                # Fill in the values based on the index
-            for item in field_list:
-                index = str(item['index'])  # Convert index to string for JSONField
-                json_data[index] = True
-            
-            print(json_data)
 
             table = Dealer_Details.objects.get(id = dealer_id)
             dealer_name = table.Dealer_Name
 
             table.application_status = status
             table.requirements = requirement
+            table.extra_fields_list = json_data
             table.save()
 
             # message =""
@@ -1153,7 +1149,7 @@ def dealer_details(request):
         print("Dealer Deatails Sent")
         connection.close()
 
-        return JsonResponse({"message":"Form Sended","status":"S"},status=200)
+        return JsonResponse({"message":"Form Sent","status":"S"},status=200)
     except Exception as e:
         print(e)
         return JsonResponse({"error":"Internel Error"},status=500)

@@ -341,7 +341,7 @@ const Register1 = () => {
         return cookieValue;
       }
    
-      fetch("register-form/", {
+      fetch("http://127.0.0.1:8000/register-form/", {
      
         credentials: 'include', 
         method: "POST",
@@ -664,6 +664,7 @@ const Register1 = () => {
               {message && <p style={{ color: "green" }}>{message}</p>}
  
               {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
+              {emailError && <p style={{ color: "red" }}>{emailError}</p>}
  
           <button
   onClick={handleSubmit}

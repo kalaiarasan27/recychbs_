@@ -163,7 +163,7 @@ const handleBlur = (e) => {
       loginType: activeLogin
     };
     setLoading(true);
-    fetch('login-form/', {
+    fetch(' http://127.0.0.1:8000/login-form/', {
       method: 'POST',
       credentials: 'include',
       headers: {

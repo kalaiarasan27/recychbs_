@@ -200,7 +200,7 @@ const Applicationstatus = () => {
           // Fetch status from Django when the component loads
           const fetchStatus = async () => {
             try {
-              const response = await fetch('FetchStatusActive/',{
+              const response = await fetch('http://127.0.0.1:8000/FetchStatusActive/',{
             // const response = await fetch('FetchStatusActive/ ', {
               credentials: 'include', // Ensures cookies are sent
               'X-CSRFToken':csrfToken
@@ -222,6 +222,8 @@ const Applicationstatus = () => {
               console.log(data[0].application_status);
               console.log(data[0].requirements);
               console.log(data[0].Dealer_ID);
+              console.log(data);
+              console.log(data.extra_fields_list);
               (data.status);
             } catch (error) {
               console.error('Error fetching status:', error);
@@ -309,7 +311,7 @@ const handleSubmit = async () => {
   uploadFile.append('message', message);
   displayAlert('loading', 'Uploading, please wait...');
   try {
-    const response = await fetch('send_extraData/', {
+    const response = await fetch('http://127.0.0.1:8000/send_extraData/', {
       method: 'POST',
       body: uploadFile,
       credentials: 'include',
