@@ -226,7 +226,7 @@ def send_extraData(request):
                 print("--",unique_name)
 
             except Exception as e:
-                print(f"Error during file upload for {file.name}: {str(e)}")
+                print(f"Error during file upload for : {str(e)}")
 
         if request.FILES.get('aadharback'):
             aadharback = request.FILES.get('aadharback')
@@ -243,7 +243,7 @@ def send_extraData(request):
                 print("--",unique_name)
 
             except Exception as e:
-                print(f"Error during file upload for {file.name}: {str(e)}")
+                print(f"Error during file upload for : {str(e)}")
             print("aadharback is here") 
         if request.FILES.get('panCard'):
             panCard = request.FILES.get('panCard')
@@ -260,7 +260,7 @@ def send_extraData(request):
                 print("--",unique_name)
 
             except Exception as e:
-                print(f"Error during file upload for {file.name}: {str(e)}")
+                print(f"Error during file upload for : {str(e)}")
 
             print("pancard is here")
         if request.FILES.get('licensefront'):
@@ -278,7 +278,7 @@ def send_extraData(request):
                 print("--",unique_name)
 
             except Exception as e:
-                print(f"Error during file upload for {file.name}: {str(e)}")
+                print(f"Error during file upload for : {str(e)}")
 
             print("bankpassbook is here")
         if request.FILES.get('licenseback'):
@@ -296,7 +296,7 @@ def send_extraData(request):
                 print("--",unique_name)
 
             except Exception as e:
-                print(f"Error during file upload for {file.name}: {str(e)}")
+                print(f"Error during file upload for: {str(e)}")
 
             print("licenseback is here")
         if request.FILES.get('vehicle'):
@@ -314,7 +314,7 @@ def send_extraData(request):
                 print("--",unique_name)
 
             except Exception as e:
-                print(f"Error during file upload for {file.name}: {str(e)}")
+                print(f"Error during file upload for: {str(e)}")
 
             print("vehicle is here")
         if request.FILES.get('statement'):
@@ -332,7 +332,7 @@ def send_extraData(request):
                 print("--",unique_name)
 
             except Exception as e:
-                print(f"Error during file upload for {file.name}: {str(e)}")
+                print(f"Error during file upload for : {str(e)}")
 
             print("statement is here")
         if request.FILES.get('passbook'):
@@ -350,7 +350,7 @@ def send_extraData(request):
                 print("--",unique_name)
 
             except Exception as e:
-                print(f"Error during file upload for {file.name}: {str(e)}")
+                print(f"Error during file upload for : {str(e)}")
 
             print("passbook is here")
         
