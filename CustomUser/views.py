@@ -93,6 +93,8 @@ class IndexView(TemplateView):
 @csrf_exempt
 def approve_dealer(request):
     try:
+        print("Function Called")
+
         if request.method == 'POST':
             data = json.loads(request.body)
             status = data.get('status')
@@ -120,30 +122,30 @@ def approve_dealer(request):
             table.save()
 
             # message =""
-        if status == "approved":
-            # Load the HTML template and render it with context
-                html_content = render_to_string('email_templates/dealer_AcceptEmail.html', {'dealer_name': dealer_name})
-                # Create a plain-text version by stripping HTML tags
-                text_content = strip_tags(html_content)
-                
-                subject = 'Welcome to Our Service!'
-                from_email = settings.EMAIL_HOST_USER
-                to_email =dealer_email
-                
-                # Create the email
-                email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-                email.attach_alternative(html_content, "text/html")  # Attach HTML content
-        
-                # Send the email
-                email.send()
-        #         send_mail(
-        #     "Accepet your request",
-        #     message,
-        #     settings.EMAIL_HOST_USER,
-        #     ["kalai73579@gmail.com"],
-        #     fail_silently=False
-        # )
-        connection.close()
+            if status == "approved":
+                # Load the HTML template and render it with context
+                    html_content = render_to_string('email_templates/dealer_AcceptEmail.html', {'dealer_name': dealer_name})
+                    # Create a plain-text version by stripping HTML tags
+                    text_content = strip_tags(html_content)
+                    
+                    subject = 'Welcome to Our Service!'
+                    from_email = settings.EMAIL_HOST_USER
+                    to_email =dealer_email
+                    
+                    # Create the email
+                    email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+                    email.attach_alternative(html_content, "text/html")  # Attach HTML content
+            
+                    # Send the email
+                    email.send()
+            #         send_mail(
+            #     "Accepet your request",
+            #     message,
+            #     settings.EMAIL_HOST_USER,
+            #     ["kalai73579@gmail.com"],
+            #     fail_silently=False
+            # )
+            connection.close()
     except Exception as e:
         print("The error is ",e)
 
@@ -153,6 +155,8 @@ def approve_dealer(request):
 def fetch_approve_dealer(request):
     try:
         user = request.user.id
+        print(user)
+
         id = DealerProfile.objects.get(user_id=user)
         dealer_id = id.Dealer_ID
         print(dealer_id)
@@ -169,28 +173,32 @@ def fetch_approve_dealer(request):
         print(e)
 
     return JsonResponse(data,safe=False,status = 200)
-
+@csrf_exempt
 def send_extraData(request):
     try:
         user = request.user.id
         dealer_data = DealerProfile.objects.get(user_id=user)
         dealer_id = dealer_data.Dealer_ID
+        data = Dealer_Details.objects.get(Dealer_ID = dealer_id)
+
          
-        files = [
-            request.FILES.getlist('file0'),
-            request.FILES.getlist('file1'),
-            request.FILES.getlist('file2'),
-            request.FILES.getlist('file3'),
-        ]
+        # files = [
+        #     request.FILES.getlist('file0'),
+        #     request.FILES.getlist('file1'),
+        #     request.FILES.getlist('file2'),
+        #     request.FILES.getlist('file3'),
+        # ]
+        print("This is Backend Value - ", request.POST)
+        print("This is Backend Value - ", request.FILES)
 
-        
-        # Extract the message or boolean from request.POST
-        message = request.POST.get('message')
-        print('This is Backend Value - ', message)
-
-        # Flatten the list of files
-        clears = [file for file_group in files for file in file_group if file]
-        print('Files to upload:', clears)
+        aadharfront = None
+        aadharback = None
+        panCard = None
+        licensefront = None
+        licenseback = None
+        vehicle = None
+        statement = None
+        passbook = None
 
         # Configure S3 client
         s3_client = boto3.client(
@@ -202,38 +210,199 @@ def send_extraData(request):
         )
         BUCKET_NAME = 'mybucket'
 
+        message = request.POST.get('message')
+        if request.FILES.get('aadharfront'):
+            try:
+                aadharfront = request.FILES.get('aadharfront')
+                    # Extract the file extension
+                _, file_extension = os.path.splitext(aadharfront.name)  
+
+                # Generate a unique filename with the same extension
+                unique_name = f"{uuid.uuid4()}{file_extension}"  
+
+
+                s3_client.upload_fileobj(aadharfront, BUCKET_NAME, unique_name)
+                data.Aadhar_Front_Photo = unique_name
+                print("--",unique_name)
+
+            except Exception as e:
+                print(f"Error during file upload for {file.name}: {str(e)}")
+
+        if request.FILES.get('aadharback'):
+            aadharback = request.FILES.get('aadharback')
+            try:
+                    # Extract the file extension
+                _, file_extension = os.path.splitext(aadharback.name)  
+
+                # Generate a unique filename with the same extension
+                unique_name = f"{uuid.uuid4()}{file_extension}"  
+
+
+                s3_client.upload_fileobj(aadharback, BUCKET_NAME, unique_name)
+                data.Aadhar_Back_Photo = unique_name
+                print("--",unique_name)
+
+            except Exception as e:
+                print(f"Error during file upload for {file.name}: {str(e)}")
+            print("aadharback is here") 
+        if request.FILES.get('panCard'):
+            panCard = request.FILES.get('panCard')
+            try:
+                    # Extract the file extension
+                _, file_extension = os.path.splitext(panCard.name)  
+
+                # Generate a unique filename with the same extension
+                unique_name = f"{uuid.uuid4()}{file_extension}"  
+
+
+                s3_client.upload_fileobj(panCard, BUCKET_NAME, unique_name)
+                data.PAN_Photo = unique_name
+                print("--",unique_name)
+
+            except Exception as e:
+                print(f"Error during file upload for {file.name}: {str(e)}")
+
+            print("pancard is here")
+        if request.FILES.get('licensefront'):
+            licensefront = request.FILES.get('licensefront')
+            try:
+                    # Extract the file extension
+                _, file_extension = os.path.splitext(licensefront.name)  
+
+                # Generate a unique filename with the same extension
+                unique_name = f"{uuid.uuid4()}{file_extension}"  
+
+
+                s3_client.upload_fileobj(licensefront, BUCKET_NAME, unique_name)
+                data.LICENSE_Front_Photo = unique_name
+                print("--",unique_name)
+
+            except Exception as e:
+                print(f"Error during file upload for {file.name}: {str(e)}")
+
+            print("bankpassbook is here")
+        if request.FILES.get('licenseback'):
+            licenseback = request.FILES.get('licenseback')
+            try:
+                    # Extract the file extension
+                _, file_extension = os.path.splitext(licenseback.name)  
+
+                # Generate a unique filename with the same extension
+                unique_name = f"{uuid.uuid4()}{file_extension}"  
+
+
+                s3_client.upload_fileobj(licenseback, BUCKET_NAME, unique_name)
+                data.LICENSE_Back_Photo = unique_name
+                print("--",unique_name)
+
+            except Exception as e:
+                print(f"Error during file upload for {file.name}: {str(e)}")
+
+            print("licenseback is here")
+        if request.FILES.get('vehicle'):
+            vehicle = request.FILES.get('vehicle')
+            try:
+                    # Extract the file extension
+                _, file_extension = os.path.splitext(vehicle.name)  
+
+                # Generate a unique filename with the same extension
+                unique_name = f"{uuid.uuid4()}{file_extension}"  
+
+
+                s3_client.upload_fileobj(vehicle, BUCKET_NAME, unique_name)
+                data.RC_BOOK_Photo = unique_name
+                print("--",unique_name)
+
+            except Exception as e:
+                print(f"Error during file upload for {file.name}: {str(e)}")
+
+            print("vehicle is here")
+        if request.FILES.get('statement'):
+            statement = request.FILES.get('statement')
+            try:
+                    # Extract the file extension
+                _, file_extension = os.path.splitext(statement.name)  
+
+                # Generate a unique filename with the same extension
+                unique_name = f"{uuid.uuid4()}{file_extension}"  
+
+
+                s3_client.upload_fileobj(statement, BUCKET_NAME, unique_name)
+                data.Bank_Statement_Photo = unique_name
+                print("--",unique_name)
+
+            except Exception as e:
+                print(f"Error during file upload for {file.name}: {str(e)}")
+
+            print("statement is here")
+        if request.FILES.get('passbook'):
+            passbook = request.FILES.get('passbook')
+            try:
+                    # Extract the file extension
+                _, file_extension = os.path.splitext(passbook.name)  
+
+                # Generate a unique filename with the same extension
+                unique_name = f"{uuid.uuid4()}{file_extension}"  
+
+
+                s3_client.upload_fileobj(passbook, BUCKET_NAME, unique_name)
+                data.PassBook_Photo = unique_name
+                print("--",unique_name)
+
+            except Exception as e:
+                print(f"Error during file upload for {file.name}: {str(e)}")
+
+            print("passbook is here")
+        
+        # Extract the message or boolean from request.POST
+        print('This is Backend Value - ', message)
+        data.dealer_message = message
+        data.save()
+        files = [aadharfront, aadharback, panCard, licensefront, licenseback, vehicle, statement, passbook]
+        print("This is Backend Value - ", files)
+
+        # Flatten the list of files
+        clears = [file for file in files if file]  # Remove None values
+
+        print('Files to upload:', clears)
+
+
+
         uploaded_files = []
         failed_files = []
+        print("failed",failed_files)
 
-        for file in clears:
-            try:
-                # Generate a unique name for the file
-                unique_name = f"{uuid.uuid4()}_{file.name}"
-                print(f"Uploading file: {unique_name}")
+        # for file in clears:
+        #     try:
+        #         # Generate a unique name for the file
+        #         unique_name = f"{uuid.uuid4()}_{file.name}"
+        #         print(f"Uploading file: {unique_name}")
 
-                # Upload the file to the bucket
-                s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
-                uploaded_files.append(unique_name)
-            except Exception as e:
-                logging.error(f"Error during file upload for {file.name}: {str(e)}")
-                failed_files.append({'file_name': file.name, 'error': str(e)})
+        #         # Upload the file to the bucket
+        #         s3_client.upload_fileobj(file, BUCKET_NAME, unique_name)
+        #         uploaded_files.append(unique_name)
+        #     except Exception as e:
+        #         logging.error(f"Error during file upload for {file.name}: {str(e)}")
+        #         failed_files.append({'file_name': file.name, 'error': str(e)})
 
         # Return a response based on the result
         print("before if")
       
        
         print(" inside else")
-        data = Dealer_Details.objects.get(Dealer_ID = dealer_id)
         print("this is dealer id  ",data)
         print(uploaded_files)
-        print(" this is first",uploaded_files[0])
-        extra = [var for var in uploaded_files if var]
-        data.extradata_field1 = extra[0] if len(extra) > 0 and extra[0] else None
-        data.extradata_field2 = extra[1] if len(extra) > 1 and extra[1] else None
-        data.extradata_field3 = extra[2] if len(extra) > 2 and extra[2] else None
-        data.extradata_field4 = extra[3] if len(extra) > 3 and extra[3] else None
-        data.dealer_message=message if message else None
-        data.save()
+        # print(" this is first",uploaded_files[0])
+        # extra = [var for var in uploaded_files if var]
+        # print(extra)
+
+
+        # data.extradata_field1 = extra[0] if len(extra) > 0 and extra[0] else None
+        # data.extradata_field2 = extra[1] if len(extra) > 1 and extra[1] else None
+        # data.extradata_field3 = extra[2] if len(extra) > 2 and extra[2] else None
+        # data.extradata_field4 = extra[3] if len(extra) > 3 and extra[3] else None
+        # data.dealer_message=message if message else None
+        # data.save()
 
         print("after if")
         return JsonResponse({

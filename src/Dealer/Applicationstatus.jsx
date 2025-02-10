@@ -18,7 +18,7 @@ const Applicationstatus = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
    
-  const [selectedOptions, setSelectedOptions] = useState([true,,false,true,false,false,false,true]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
   const [errors, setErrors] = useState({
     aadharfront: '',
     aadharback: '',
@@ -200,8 +200,8 @@ const Applicationstatus = () => {
           // Fetch status from Django when the component loads
           const fetchStatus = async () => {
             try {
-              const response = await fetch('http://127.0.0.1:8000/FetchStatusActive/',{
-            // const response = await fetch('FetchStatusActive/ ', {
+              // const response = await fetch('http://127.0.0.1:8000/FetchStatusActive/',{
+            const response = await fetch('FetchStatusActive/ ', {
               credentials: 'include', // Ensures cookies are sent
               'X-CSRFToken':csrfToken
               }); // Django API endpoint
@@ -219,11 +219,12 @@ const Applicationstatus = () => {
                   else if (data[0].application_status === "rejected"){
                     displayAlert('error', 'Your Profile is rejected');
                   }
+                  setSelectedOptions( data[0].extra_fields_list);
               console.log(data[0].application_status);
               console.log(data[0].requirements);
               console.log(data[0].Dealer_ID);
               console.log(data);
-              console.log(data.extra_fields_list);
+              console.log("extra fiekds are",data[0].extra_fields_list);
               (data.status);
             } catch (error) {
               console.error('Error fetching status:', error);
@@ -305,13 +306,26 @@ const handleSubmit = async () => {
   
 
   const uploadFile = new FormData();
-  files.forEach((file, index) => {
-    uploadFile.append(`file${index}`, file);
+  // files.forEach((file, index) => {
+  //   uploadFile.append(`file${index}`, file);
+  // });
+
+
+  // Append each file if it exists
+  Object.entries(fileNames).forEach(([key, file]) => {
+    if (file) {
+      uploadFile.append(key, file);
+    }
   });
+
+
   uploadFile.append('message', message);
+
+  console.log("uploadFile",uploadFile);
+  
   displayAlert('loading', 'Uploading, please wait...');
   try {
-    const response = await fetch('http://127.0.0.1:8000/send_extraData/', {
+    const response = await fetch('/send_extraData/', {
       method: 'POST',
       body: uploadFile,
       credentials: 'include',
