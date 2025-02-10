@@ -239,11 +239,7 @@ console.log(filesData);
 const handleFileChange = (fileType) => (e) => {
   const file = e.target.files[0];
   const validFormats = [
-    'image/jpeg', 
-    'image/png', 
-    'application/pdf', 
-    'application/msword', 
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    'application/pdf'
   ];
 
   // Reset any existing errors for the specific file type
@@ -273,7 +269,7 @@ const handleFileChange = (fileType) => (e) => {
     }));
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [fileType]: 'Invalid file format. Please upload JPG, PNG, PDF, DOC, or DOCX.',
+      [fileType]: 'Upload only pdf',
     }));
     return;
   }
@@ -902,7 +898,7 @@ const getStepTitle = (step) => {
                   ref={fileInputRefs.statement}
                   style={{ display: "none" }}
                   onChange={handleFileChange("statement")}
-                  accept=".jpg, .jpeg, .png, .pdf, .doc, .docx" 
+                  accept=".pdf" 
                 />
                 <div
                   onClick={() => handleIconClick("statement")}
@@ -929,7 +925,7 @@ const getStepTitle = (step) => {
                 </div>
               </div>
               <p style={{ fontSize: "14px", marginTop: "10px" }}>
-                Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+                Supported formats: PNG
               </p>
               <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.statement ? "green" : "black"}}>
                 Selected file:{" "}
