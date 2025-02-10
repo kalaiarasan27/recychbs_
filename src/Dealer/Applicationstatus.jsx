@@ -18,7 +18,7 @@ const Applicationstatus = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
    
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([false,false,false,false,false,false,false,false]);
   const [errors, setErrors] = useState({
     aadharfront: '',
     aadharback: '',
