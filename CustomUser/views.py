@@ -357,6 +357,7 @@ def send_extraData(request):
         # Extract the message or boolean from request.POST
         print('This is Backend Value - ', message)
         data.dealer_message = message
+        data.application_status = 'waiting'
         data.save()
         files = [aadharfront, aadharback, panCard, licensefront, licenseback, vehicle, statement, passbook]
         print("This is Backend Value - ", files)
