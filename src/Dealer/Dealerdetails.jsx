@@ -925,7 +925,7 @@ const getStepTitle = (step) => {
                 </div>
               </div>
               <p style={{ fontSize: "14px", marginTop: "10px" }}>
-                Supported formats: PNG
+                Supported formats: PDF
               </p>
               <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.statement ? "green" : "black"}}>
                 Selected file:{" "}
