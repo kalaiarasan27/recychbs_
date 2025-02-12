@@ -219,12 +219,14 @@ const Applicationstatus = () => {
                   else if (data[0].application_status === "rejected"){
                     displayAlert('error', 'Your Profile is rejected');
                   }
+                  if( data[0].extra_fields_list){
                   setSelectedOptions( data[0].extra_fields_list);
+                  }
               console.log(data[0].application_status);
               console.log(data[0].requirements);
               console.log(data[0].Dealer_ID);
               console.log(data);
-              console.log("extra fiekds are",data[0].extra_fields_list);
+              console.log("extra fields are",data[0].extra_fields_list);
               (data.status);
             } catch (error) {
               console.error('Error fetching status:', error);
