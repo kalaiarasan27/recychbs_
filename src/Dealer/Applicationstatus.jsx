@@ -661,7 +661,7 @@ const handleSubmit = async () => {
                       </div>
                     </div>
                     <p style={{ fontSize: "14px", marginTop: "10px" }}>
-                      Supported formats: JPG, JPEG, PNG, PDF, DOC, DOCX
+                      Supported format: PDF
                     </p>
                     <p style={{ fontSize: "15px", marginTop: "10px",  color: fileNames.statement ? "lightgreen" : "white" }}>
                       Selected file:{" "}
