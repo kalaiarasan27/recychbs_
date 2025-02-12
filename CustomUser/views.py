@@ -654,52 +654,27 @@ def resend_otp_view(request):
 
             # Generate a random 6-digit OTP
  
-            sms_response = send_sms(otp_phoneNumber, otp) 
+            sms_response = send_sms(Phone_Number, otp) 
             print("sms responce is here")
             print(sms_response) 
             if sms_response:
                 print("inside the if")
                 if sms_response.get('type') == "success":
-                    return JsonResponse({"status": "success"})
+                    return JsonResponse({'message': 'OTP resent successfully!'})
                 else:
                     return JsonResponse({"message": msg}, status=500) # type: ignore
             else:
                 return JsonResponse({"message": "Failed to send OTP."}, status=500)
 
-            return JsonResponse({'message': 'OTP resent successfully!'})
+        return JsonResponse({'message': 'Invalid request method.'}, status=400)
+        
 
-                    # Sinch API endpoint and credentials
-    #         api_url = 'https://sms.api.sinch.com/xms/v1/456369915e064a8084afe1230a57cb33/batches'
-    #         api_key = 'ba911ea3bb0643b18b060eab5170ae7b' 
-            
-    #         # Generate a random 6-digit OTP
-    #         otp = random.randint(100000, 999999)
-    #         print(f"Generated OTP: {otp}")  # This is just for testing, remove it in production
-    #         request.session['otp'] = otp
-    #         # SMS details
-    #         payload = {
-    #             "from": "+1 913 270 1336",  # Sender's number
-    #             "to": [Phone_Number],  # Recipient's number (replace with the actual phone number)
-    #             "body": f"Your OTP code is {otp}. Please use this to verify your account."  # OTP message content
-    #         }
-               
-    #         headers = {
-    #             "Authorization": f"Bearer {api_key}",
-    #             "Content-Type": "application/json"
-    #         }
-    
-    #         # Send the OTP via the Sinch API
-    #         response = requests.post(api_url, headers=headers, data=json.dumps(payload))
-    
-    #         if response.status_code == 201:
-    #             return JsonResponse({'message': 'OTP resent successfully!'})
-    #         else:
-    #             return JsonResponse({'message': 'Failed to resend OTP.'}, status=500)
     except Exception as e:
         print(e)
-    connection.close()
+        connection.close()
+        return JsonResponse(e, status=500) # type: ignore
+
  
-    return JsonResponse({'message': 'Invalid request method.'}, status=400)
 
 # def register_view(request):
 #     try:
