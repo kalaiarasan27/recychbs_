@@ -599,17 +599,43 @@ const handleSubmit = async () => {
    )}
    {selectedOptions[3] && (
     <div style={{ marginLeft: "7px",marginRight: "7px"}}>
-      <label className="HeadText" style={{ display: 'flex', alignItems: 'center' }}>Bank Statement <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p></label>
-                    <div  className={`uploaddiv ps-2 ${
-                      errors.statement ? "error" : ""
-                    }`}>
-                      <input
-                        type="file"
-                        ref={fileInputRefs.statement}
-                        style={{ display: "none" }}
-                        onChange={handleFileChange("statement")}
-                        accept=".jpg, .jpeg, .png, .pdf, .doc, .docx" 
-                      />
+      <label
+  className="HeadText"
+  style={{ display: 'flex', alignItems: 'center' }}
+>
+  Bank Statement
+  <p style={{ color: 'red', margin: 0, paddingLeft: '4px' }}>*</p>
+</label>              
+<div
+  className={`uploaddiv ps-2 ${
+    errors.statement ? 'error' : ''
+  }`}
+>
+  <input
+    type="file"
+    ref={fileInputRefs.statement}
+    style={{ display: 'none' }}
+    onChange={(event) => {
+      const { files } = event.target;
+      if (files.length > 0) {
+        const selectedFile = files[0];
+        const fileType = selectedFile.type;
+
+        if (fileType !== 'application/pdf') {
+          // Display an error if the file is not a PDF
+          alert('Only PDF files are allowed. Please select a valid file.');
+          event.target.value = ''; // Reset the file input
+          return;
+        }
+
+        // If valid, handle the file change
+        handleFileChange("statement")(event);
+      }
+    }}
+    accept=".pdf"
+  />
+
+
                       <div
                         onClick={() => handleIconClick("statement")}
                         style={{
