@@ -651,7 +651,7 @@ def resend_otp_view(request):
             otp = random.randint(100000, 999999)
             request.session['otp'] = otp
                         # OTP Block
-
+            print(f"Generated Resend OTP: {otp}")
             # Generate a random 6-digit OTP
  
             sms_response = send_sms(Phone_Number, otp) 
