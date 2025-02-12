@@ -474,6 +474,7 @@ const Register1 = () => {
   style={{ borderColor: errors.email ? "red" : "" }}
 />
 <p className="error-warning">{errors.email}</p>
+{emailError && <p style={{ color: "red" }}>{emailError}</p>}
 
  
               <div className="input-box">
