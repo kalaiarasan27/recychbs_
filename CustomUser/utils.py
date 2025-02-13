@@ -1,5 +1,30 @@
 # utils.py
 import requests
+from django.http import JsonResponse
+from minio import Minio
+from minio.error import S3Error
+from django.conf import settings
+
+def get_minio_client():
+    try:
+        print(f"{settings.MINIO_ENDPOINT}:{settings.MINIO_PORT}")
+        value =  Minio(
+            f"{settings.MINIO_ENDPOINT}:{settings.MINIO_PORT}",
+            access_key=settings.MINIO_ACCESS_KEY,
+            secret_key=settings.MINIO_SECRET_KEY,
+            secure=True,  
+        )
+        print("value",value)
+        return Minio(
+            f"{settings.MINIO_ENDPOINT}:{settings.MINIO_PORT}",
+            access_key=settings.MINIO_ACCESS_KEY,
+            secret_key=settings.MINIO_SECRET_KEY,
+            secure=True,  # Use True if using HTTPS
+        )
+    except Exception as e:
+        print(f"Error connecting to Minio: {e}")
+        return JsonResponse({'error': 'Error connecting to Minio'}, status=500)
+
 
 DEBOUNCE_API_KEY = '66f195d2ef55b' #'66f02e8eeb216'
 
@@ -31,16 +56,13 @@ def is_image_blurry(image_path):
     """
     try:
         img = Image.open(image_path)
-        # Convert to grayscale
         gray = img.convert('L')
-        # Calculate the variance of the Laplacian
         laplacian = gray.filter(ImageFilter.FIND_EDGES)
         laplacian_array = np.array(laplacian)
         print("laplacian_array",laplacian_array)
         variance = laplacian_array.var()
         print("variance",variance)
-        # Threshold for blur detection
-        threshold = 100  # Adjust this value based on your requirements
+        threshold = 100  
         return variance < threshold
     except Exception as e:
         print(f"Error checking image blur: {e}")

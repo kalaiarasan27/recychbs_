@@ -71,6 +71,11 @@ from channels.layers import get_channel_layer
 
 import urllib.parse
 
+from django.http import JsonResponse
+from django.conf import settings
+from .utils import get_minio_client
+from datetime import timedelta
+import traceback
 
 
 
@@ -157,16 +162,16 @@ def fetch_approve_dealer(request):
         user = request.user.id
         print(user)
 
-        id = DealerProfile.objects.get(user_id=user)
-        dealer_id = id.Dealer_ID
-        print(dealer_id)
+        # id = DealerProfile.objects.get(user_id=user)
+        # dealer_id = id.Dealer_ID
+        # print(dealer_id)
 
         print("User:", request.user)
         print("Authenticated:", request.user.is_authenticated)
 
 
 
-        data  = list(Dealer_Details.objects.filter(Dealer_ID=dealer_id).values())
+        data  = list(Dealer_Details.objects.filter(Dealer_ID=1).values())
         connection.close()
 
     except Exception as e:
@@ -837,7 +842,10 @@ def login_view(request):
 
                 print("login type is-",loginType)
 
+# Correctly convert timedelta to seconds
 
+# Correct usage of timedelta
+                
 
                 print("Request POST is-",request.POST)
                 print("Request POST is-",request.body)
@@ -1076,53 +1084,76 @@ def dealer_details(request):
 
 def fetchDealerEditDetails(request):
     # Filter Dealer_Details and DealerProfile based on the logged-in user's ID
-    print("userrr",request.user)
-    print("request_user",request.user.id)
-    # print("dealer_id",Dealer_id)
 
-    dealer_profile_data = DealerProfile.objects.filter(user_id=request.user.id).first()
-    print("dealer_profile_data",dealer_profile_data)
-    dealer_details_data = Dealer_Details.objects.filter(Dealer_ID=dealer_profile_data.Dealer_ID).first()
-    print("dealer_details_data",dealer_details_data)
-    # Check if dealer details exist for the current user
-    if not dealer_details_data:
-        return JsonResponse({'error': 'Dealer details not found for the current user.'}, status=404)
+    try:
+        print("userrr",request.user)
+        print("request_user",request.user.id)
+        user = request.user.id
+        dealer_profile_data = DealerProfile.objects.filter(user_id=user).first()
+        print("dealer_profile_data",dealer_profile_data)
+        dealer_details_data = Dealer_Details.objects.filter(Dealer_ID=dealer_profile_data.Dealer_ID).first()
+        print("dealer_details_data",dealer_details_data)
 
-    # Format the data for the current dealer
-    formatted_dealer = {
-        'name': dealer_details_data.Dealer_Name,  # Replace 'Name' with actual field name in your model
-        'dob': dealer_details_data.DOB,  # Adjust field names as per your model
-        'aadhar': dealer_details_data.Aadhar_No,
-        'pan': dealer_details_data.PAN_No,
-        'license': dealer_details_data.LICENSE_No,
-        'vehicleNumber': dealer_details_data.Vehicle_No,
-        'vehicleType': dealer_details_data.Vehicle_Type,
-        'bankBookNo': dealer_details_data.Bank_Acc,
-        'ifscCode': dealer_details_data.IFSC_CODE,
-        'bankusername': dealer_details_data.Bank_AccountName,
-        'address': dealer_details_data.Address,
-        'city': dealer_details_data.City,
-        'state': dealer_details_data.State,
-        'pincode': dealer_details_data.Post_Code,
-        'nationality': dealer_details_data.Nationality,
-        'files': {
-            'bankStatement': dealer_details_data.Bank_Statement_Photo.url if dealer_details_data.Bank_Statement_Photo else None,
-            'aadharFrontImage': dealer_details_data.Aadhar_Front_Photo.url if dealer_details_data.Aadhar_Front_Photo else None,
-            'aadharBackImage': dealer_details_data.Aadhar_Back_Photo.url if dealer_details_data.Aadhar_Back_Photo else None,
-            'panImage': dealer_details_data.PAN_Photo.url if dealer_details_data.PAN_Photo else None,
-            'licenseFrontImage': dealer_details_data.LICENSE_Front_Photo.url if dealer_details_data.LICENSE_Front_Photo else None,
-            'licenseBackImage': dealer_details_data.LICENSE_Back_Photo.url if dealer_details_data.LICENSE_Back_Photo else None,
-            'rcBookImage': dealer_details_data.RC_BOOK_Photo.url if dealer_details_data.RC_BOOK_Photo else None,
-            'passbook': dealer_details_data.PassBook_Photo.url if dealer_details_data.PassBook_Photo else None,
+
+
+        minio_client = get_minio_client()
+        bucket_name = settings.MINIO_BUCKET_NAME
+        expires = timedelta(hours=1)  
+
+        image_fields = [
+            'Aadhar_Front_Photo', 'Aadhar_Back_Photo', 'PAN_Photo',
+            'LICENSE_Front_Photo', 'LICENSE_Back_Photo', 'RC_BOOK_Photo',
+            'Bank_Statement_Photo', 'PassBook_Photo',
+            'extradata_field1', 'extradata_field2', 'extradata_field3', 'extradata_field4'
+        ]
+
+        formatted_dealer = {
+            'name': dealer_details_data.Dealer_Name,
+            'dob': dealer_details_data.DOB,
+            'aadhar': dealer_details_data.Aadhar_No,
+            'pan': dealer_details_data.PAN_No,
+            'license': dealer_details_data.LICENSE_No,
+            'vehicleNumber': dealer_details_data.Vehicle_No,
+            'vehicleType': dealer_details_data.Vehicle_Type,
+            'bankBookNo': dealer_details_data.Bank_Acc,
+            'ifscCode': dealer_details_data.IFSC_CODE,
+            'bankusername': dealer_details_data.Bank_AccountName,
+            'address': dealer_details_data.Address,
+            'city': dealer_details_data.City,
+            'state': dealer_details_data.State,
+            'pincode': dealer_details_data.Post_Code,
+            'nationality': dealer_details_data.Nationality,
+            'files': {}
         }
-    }
 
-    # Include phone and email from DealerProfile, if available
-    if dealer_profile_data:
-        formatted_dealer['phone'] = dealer_profile_data.Phone_Number  # Replace with actual field name in your DealerProfile model
+        for field in image_fields:
+            image_obj = getattr(dealer_details_data, field, None) 
+            if image_obj and hasattr(image_obj, 'url'): 
+                try:
+                    decoded_key = urllib.parse.unquote(image_obj.url.split('/')[-1])
 
-    # Return the formatted dealer data as JSON
-    return JsonResponse(formatted_dealer, safe=False, status=200)
+                    presigned_url = minio_client.presigned_get_object(
+                        bucket_name,
+                        decoded_key,
+                        expires
+                    )
+
+                    formatted_dealer['files'][field] = presigned_url
+                    print(f"Generated presigned URL for {field}: {presigned_url}")
+                except Exception as e:
+                    print(f"Error generating presigned URL for {field}: {str(e)}")
+                    formatted_dealer['files'][field] = None  
+            else:
+                formatted_dealer['files'][field] = None  
+
+
+        if dealer_profile_data:
+            formatted_dealer['phone'] = dealer_profile_data.Phone_Number  
+
+        print("formatted_dealer",formatted_dealer)
+        return JsonResponse(formatted_dealer, safe=False, status=200)
+    except Exception as e:
+            print("Error in fetching dealer details:", str(e))
 
 
 
@@ -1265,6 +1296,36 @@ def Get_DealerDetails(request):
 
         # Initialize a list to store dealer profiles
         dealer_profiles = []
+        try:
+            # Expiration time in seconds (convert to timedelta)
+            expires = timedelta(seconds=3600)  # 1 hour
+
+            print("Expires value:", expires)
+            print("Type of expires:", type(expires))  # Debugging: Should be <class 'datetime.timedelta'>
+
+            # Get the MinIO client
+            minio_client = get_minio_client()
+
+            # Bucket and file information
+            bucket_name = settings.MINIO_BUCKET_NAME
+            file_name = "0209f5f8-a8ca-45f0-a296-adf7d987b86e_kindpng_45810.png"
+
+            # Check if the bucket exists
+            if not minio_client.bucket_exists(bucket_name):
+                return JsonResponse({"error": "Bucket does not exist"}, status=404)
+
+            # Generate presigned URL
+            presigned_url = minio_client.presigned_get_object(bucket_name, file_name, expires)
+            print("Generated presigned URL:", presigned_url)
+
+            # Return presigned URL
+            # return JsonResponse({"url": presigned_url}, status=200)
+
+        except Exception as e:
+            import traceback
+            print("Bucket Error is:", e)
+            traceback.print_exc()
+            return JsonResponse({"error": str(e)}, status=405)
 
         # Loop through each dealer in dealer_data
         for dealer in dealer_data:
@@ -1275,21 +1336,23 @@ def Get_DealerDetails(request):
         
             # Append the profiles to dealer_profiles
             dealer_profiles.extend(profiles)
+        dealer_profiles.append({"presigned_url":presigned_url})
 
         print(" this is ok")
         # return JsonResponse({"images": dealer_data}, safe=False)
 
 
+        
         file_paths = []
 
-        # Initialize S3 client
-        s3_client = boto3.client(
-                    's3',
-                    endpoint_url='http://82.112.238.156:9000',  
-                    aws_access_key_id='minioadmin',          
-                    aws_secret_access_key='minioadmin',      
-                    region_name='us-east-1'                  
-                )
+        # Initialize MinIO client
+        minio_client = get_minio_client()
+
+        # Bucket name
+        bucket_name = settings.MINIO_BUCKET_NAME
+
+        # Expiration time for presigned URLs (e.g., 1 hour)
+        expires = timedelta(hours=1)
 
         for dealer in dealer_data:
             dealer_details = Dealer_Details.objects.get(Dealer_ID=dealer['Dealer_ID'])
@@ -1302,35 +1365,31 @@ def Get_DealerDetails(request):
                 'extradata_field1', 'extradata_field2', 'extradata_field3', 'extradata_field4'
             ]
 
-            print(image_fields)
-            # Store file URLs and contents dynamically
+            # Store presigned URLs dynamically
             for field in image_fields:
-                image_obj = getattr(dealer_details, field, None)
+                image_obj = getattr(dealer_details, field, None)  # Fetch image field
                 image_url = image_obj.url if image_obj else None
-                dealer[field] = image_url  # Store URL
 
                 if image_url:
-                    file_paths.append(image_url)
-
-            # Fetch and encode images dynamically
-            for field in image_fields:
-                if dealer[field]:  # Only process existing images
                     try:
-                        print(f"Fetching {dealer[field]} from S3...")
+                        # Decode the file key if it contains special characters
+                        decoded_key = urllib.parse.unquote(image_url.split('/')[-1])
 
-                        decoded_key = urllib.parse.unquote(dealer[field])  # Decode special characters
-                        response = s3_client.get_object(Bucket='mybucket', Key=decoded_key)
+                        # Generate presigned URL
+                        presigned_url = minio_client.presigned_get_object(
+                            bucket_name,
+                            decoded_key,
+                            expires
+                        )
 
-                        # response = s3_client.get_object(Bucket='mybucket', Key=dealer[field])
-                        file_content = response['Body'].read()
-
-                        # Store Base64 encoded image inside dealer details
-                        dealer[f"{field}_base64"] = base64.b64encode(file_content).decode('utf-8') if file_content else None
+                        # Add presigned URL to dealer data
+                        dealer[f"{field}_url"] = presigned_url
 
                     except Exception as e:
-                        print(f"Error fetching {dealer[field]}: {str(e)}")
-                        dealer[f"{field}_base64"] = None  # Handle missing images gracefully
-
+                        print(f"Error generating presigned URL for {field}: {str(e)}")
+                        dealer[f"{field}_url"] = None  # Handle missing or invalid images gracefully
+                else:
+                    dealer[f"{field}_url"] = None  # Handle empty image fields
     except Exception as e:
                 print(f"Error fetching {dealer[field]}: {str(e)}")
 
@@ -2259,3 +2318,7 @@ def fetch_files(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+def generate_csrf(request):
+    csrf_token = get_token(request)  # Generate or retrieve the CSRF token
+    return JsonResponse({'csrfToken': csrf_token})

@@ -4,12 +4,15 @@ import Headerdealer from '../../component/Headerdealer';
 const Dealeraccount = () => {
   const [dealerDetails, setDealerDetails] = useState(null);
   const [hoveredButton, setHoveredButton] = useState(null);
+  const [modalImage, setModalImage] = useState(null);
+
 
   useEffect(() => {
     const fetchDealerDetails = async () => {
       try {
         const response = await fetch('fetchDealerEditDetails/');
         const dealer_data = await response.json();
+        console.log(dealer_data);
         const data = {
           name: dealer_data.name,
           dob: dealer_data.dob,
@@ -30,6 +33,14 @@ const Dealeraccount = () => {
           state: dealer_data.state,
           pincode: dealer_data.pincode,
           nationality:dealer_data.nationality,
+          Aadhar_Front_Photo: dealer_data.files.Aadhar_Front_Photo, 
+          Aadhar_Back_Photo: dealer_data.files.Aadhar_Back_Photo, 
+          PAN_Img: dealer_data.files.PAN_Photo,
+          LICENSE_Front_Photo: dealer_data.files.LICENSE_Front_Photo,
+          LICENSE_Back_Photo: dealer_data.files.LICENSE_Back_Photo,
+          RC_BOOK_Photo: dealer_data.files.RC_BOOK_Photo,
+          Bank_Statement_Photo: dealer_data.files.Bank_Statement_Photo,
+          PassBook_Photo: dealer_data.files.PassBook_Photo,
         };
         setDealerDetails(data);
         console.log("Received data: ", data);
@@ -44,6 +55,14 @@ const Dealeraccount = () => {
 
   const openPdfInNewWindow = (pdf) => {
     window.open(pdf, '_blank');
+  };
+
+  const openModal = (image) => {
+    setModalImage(image);
+  };
+
+  const closeModal = () => {
+    setModalImage(null);
   };
 
   if (!dealerDetails) {
@@ -127,14 +146,15 @@ const Dealeraccount = () => {
                 <button
                   onMouseEnter={() => setHoveredButton('aadharFront')}
                   onMouseLeave={() => setHoveredButton(null)}
-                  onClick={() => openPdfInNewWindow(dealerDetails.aadhar.front)}
+                  // onClick={() => openPdfInNewWindow(dealerDetails.Aadhar_Front_Photo)}
+                  onClick={() => openModal(dealerDetails.Aadhar_Front_Photo)}
                   style={{ ...styles.button, ...(hoveredButton === 'aadharFront' ? styles.buttonHover : {}) }}>
                   Front
                 </button>
                 <button
                   onMouseEnter={() => setHoveredButton('aadharBack')}
                   onMouseLeave={() => setHoveredButton(null)}
-                  onClick={() => openPdfInNewWindow(dealerDetails.aadhar.back)}
+                  onClick={() => openModal(dealerDetails.Aadhar_Back_Photo)}
                   style={{ ...styles.button, ...(hoveredButton === 'aadharBack' ? styles.buttonHover : {}) }}>
                   Back
                 </button>
@@ -147,14 +167,14 @@ const Dealeraccount = () => {
                 <button
                   onMouseEnter={() => setHoveredButton('licenseFront')}
                   onMouseLeave={() => setHoveredButton(null)}
-                  onClick={() => openPdfInNewWindow(dealerDetails.license.front)}
+                  onClick={() => openModal(dealerDetails.LICENSE_Front_Photo)}
                   style={{ ...styles.button, ...(hoveredButton === 'licenseFront' ? styles.buttonHover : {}) }}>
                   Front
                 </button>
                 <button
                   onMouseEnter={() => setHoveredButton('licenseBack')}
                   onMouseLeave={() => setHoveredButton(null)}
-                  onClick={() => openPdfInNewWindow(dealerDetails.license.back)}
+                  onClick={() => openModal(dealerDetails.LICENSE_Back_Photo)}
                   style={{ ...styles.button, ...(hoveredButton === 'licenseBack' ? styles.buttonHover : {}) }}>
                   Back
                 </button>
@@ -166,7 +186,7 @@ const Dealeraccount = () => {
               <button
                 onMouseEnter={() => setHoveredButton('pan')}
                 onMouseLeave={() => setHoveredButton(null)}
-                onClick={() => openPdfInNewWindow(dealerDetails.pan.file)}
+                onClick={() => openModal(dealerDetails.PAN_Img)}
                 style={{ ...styles.button, ...(hoveredButton === 'pan' ? styles.buttonHover : {}) }}>
                 View PAN Card
               </button>
@@ -177,7 +197,7 @@ const Dealeraccount = () => {
               <button
                 onMouseEnter={() => setHoveredButton('rcBook')}
                 onMouseLeave={() => setHoveredButton(null)}
-                onClick={() => openPdfInNewWindow(dealerDetails.rcBook.file)}
+                onClick={() => openModal(dealerDetails.RC_BOOK_Photo)}
                 style={{ ...styles.button, ...(hoveredButton === 'rcBook' ? styles.buttonHover : {}) }}>
                 View RC Book
               </button>
@@ -188,7 +208,7 @@ const Dealeraccount = () => {
               <button
                 onMouseEnter={() => setHoveredButton('bankStatement')}
                 onMouseLeave={() => setHoveredButton(null)}
-                onClick={() => openPdfInNewWindow(dealerDetails.bankStatement.file)}
+                onClick={() => openPdfInNewWindow(dealerDetails.Bank_Statement_Photo)}
                 style={{ ...styles.button, ...(hoveredButton === 'bankStatement' ? styles.buttonHover : {}) }}>
                 View Bank Statement
               </button>
@@ -199,12 +219,60 @@ const Dealeraccount = () => {
               <button
                 onMouseEnter={() => setHoveredButton('bankPassbook')}
                 onMouseLeave={() => setHoveredButton(null)}
-                onClick={() => openPdfInNewWindow(dealerDetails.bankPassbook.file)}
+                onClick={() => openModal(dealerDetails.PassBook_Photo)}
                 style={{ ...styles.button, ...(hoveredButton === 'bankPassbook' ? styles.buttonHover : {}) }}>
                 View Bank Passbook
               </button>
             </DetailCard>
           </div>
+          {modalImage && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1000,
+          }}
+        >
+          <div
+            style={{
+              position: 'relative',
+              backgroundColor: '#fff',
+              padding: '20px',
+              borderRadius: '10px',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+              textAlign: 'center',
+            }}
+          >
+            <img src={modalImage} alt="Document" style={{ maxWidth: '100%', maxHeight: '400px' }} />
+            <button
+              onClick={closeModal}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                backgroundColor: 'red',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '50%',
+                cursor: 'pointer',
+                width: '30px',
+                height: '30px',
+                textAlign: 'center',
+                lineHeight: '30px',
+              }}
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
         </div>
       </div>
     </>

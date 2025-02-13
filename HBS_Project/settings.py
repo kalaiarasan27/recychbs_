@@ -311,49 +311,11 @@ django_heroku.settings(locals())
 
 from django.conf import settings
 
-# AWS Credentials
-# AWS_ACCESS_KEY_ID = os.environ.get('AKIAVFIWJC7UXNYEXGOB')
-# AWS_SECRET_ACCESS_KEY = os.environ.get('2EYRpZPaKjtyJYH+axvlkEDUl6XG0RsO5S48RnZ7')
-# AWS_STORAGE_BUCKET_NAME = '<django-djreact-app-media-bucket>'
-# AWS_S3_REGION_NAME = 'eu-north-1'  # Example: 'us-west-1'
-# AWS_S3_SIGNATURE_VERSION = 's3v4'
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
 
-# # # Static and Media Files
-# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# # # URLs for static and media files
-# MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-
-# # Security and Encryption
-# AWS_S3_OBJECT_PARAMETERS = {
-#     'ServerSideEncryption': 'AES256',  # Optional: Use 'aws:kms' if you're using KMS encryption
-# }
-
-# from decouple import config
-
-# AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
-# AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
-# AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
-# AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-# AWS_S3_REGION_NAME = config('AWS_S3_REGION_NAME')  # e.g. 'us-west-2'
-
-# AWS_DEFAULT_ACL = None  # Or 'public-read' if needed
-# AWS_S3_FILE_OVERWRITE = True
-# AWS_S3_VERITY = True
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
 
-
-# Static files (CSS, JavaScript, etc.)
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
-
-# Media files
-# DEFAULT_FILE_STORAGE = 'CustomUser.storages.MediaStorage'  # Replace with the path to your storages.py
-# MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 
 # SEND EMAIL
@@ -385,3 +347,11 @@ GDAL_LIBRARY_PATH = os.path.join('C:\\OSGeo4W\\bin\\adal.dll')  # Adjust 'gdal30
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 104857600  # 100MB
+
+
+
+MINIO_ENDPOINT = "82.112.238.156"
+MINIO_ACCESS_KEY = "minioadmin"
+MINIO_SECRET_KEY = "minioadmin"
+MINIO_BUCKET_NAME = "mybucket"
+MINIO_PORT =  9000 # Default MinIO port 37883

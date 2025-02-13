@@ -10,7 +10,7 @@ const Applicationstatus = () => {
   const [alertType, setAlertType] = useState('');
   const [alertMessage, setAlertMessage] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const [status, setStatus] = useState('extradata');
+  const [status, setStatus] = useState('waiting');
   const [require, requirestatus] = useState('');
   const [showRequirementMessage, setShowRequirementMessage] = useState(true);
   const [showExtraDataInput, setShowExtraDataInput] = useState(false);

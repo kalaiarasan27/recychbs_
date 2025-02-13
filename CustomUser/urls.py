@@ -70,4 +70,7 @@ urlpatterns = [
 
     path('upload-file/',upload_file , name='upload-file'),
     path('get-file/', get_file, name='get-file'),
+
+    path('generate-csrf/', generate_csrf, name='generate_csrf'),
+
 ]
