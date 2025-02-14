@@ -1311,8 +1311,8 @@ def Get_DealerDetails(request):
             file_name = "0209f5f8-a8ca-45f0-a296-adf7d987b86e_kindpng_45810.png"
 
             # Check if the bucket exists
-            if not minio_client.bucket_exists(bucket_name):
-                return JsonResponse({"error": "Bucket does not exist"}, status=404)
+            # if not minio_client.bucket_exists(bucket_name):
+            #     return JsonResponse({"error": "Bucket does not exist"}, status=404)
 
             # Generate presigned URL
             presigned_url = minio_client.presigned_get_object(bucket_name, file_name, expires)
