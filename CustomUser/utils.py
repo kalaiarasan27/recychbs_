@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from minio import Minio
 from minio.error import S3Error
 from django.conf import settings
+import logging
+import certifi
 
 def get_minio_client():
     try:
@@ -13,13 +15,19 @@ def get_minio_client():
             access_key=settings.MINIO_ACCESS_KEY,
             secret_key=settings.MINIO_SECRET_KEY,
             secure=True,  
+            http_client=certifi.where(),
+
         )
+        logging.basicConfig(level=logging.DEBUG)
+
         print("value",value)
         return Minio(
             f"{settings.MINIO_ENDPOINT}:{settings.MINIO_PORT}",
             access_key=settings.MINIO_ACCESS_KEY,
             secret_key=settings.MINIO_SECRET_KEY,
             secure=True,  # Use True if using HTTPS
+            http_client=certifi.where(),
+
         )
     except Exception as e:
         print(f"Error connecting to Minio: {e}")
