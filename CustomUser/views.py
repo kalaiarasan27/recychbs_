@@ -71,11 +71,6 @@ from channels.layers import get_channel_layer
 
 import urllib.parse
 
-from django.http import JsonResponse
-from django.conf import settings
-from .utils import get_minio_client
-from datetime import timedelta
-import traceback
 
 
 
@@ -162,16 +157,16 @@ def fetch_approve_dealer(request):
         user = request.user.id
         print(user)
 
-        # id = DealerProfile.objects.get(user_id=user)
-        # dealer_id = id.Dealer_ID
-        # print(dealer_id)
+        id = DealerProfile.objects.get(user_id=user)
+        dealer_id = id.Dealer_ID
+        print(dealer_id)
 
         print("User:", request.user)
         print("Authenticated:", request.user.is_authenticated)
 
 
 
-        data  = list(Dealer_Details.objects.filter(Dealer_ID=1).values())
+        data  = list(Dealer_Details.objects.filter(Dealer_ID=dealer_id).values())
         connection.close()
 
     except Exception as e:
@@ -656,7 +651,7 @@ def resend_otp_view(request):
             otp = random.randint(100000, 999999)
             request.session['otp'] = otp
                         # OTP Block
-            print(f"Generated Resend OTP: {otp}")
+
             # Generate a random 6-digit OTP
  
             sms_response = send_sms(Phone_Number, otp) 
@@ -665,20 +660,159 @@ def resend_otp_view(request):
             if sms_response:
                 print("inside the if")
                 if sms_response.get('type') == "success":
-                    return JsonResponse({'message': 'OTP resent successfully!'})
+                    return JsonResponse({"status": "success"})
                 else:
                     return JsonResponse({"message": msg}, status=500) # type: ignore
             else:
                 return JsonResponse({"message": "Failed to send OTP."}, status=500)
 
-        return JsonResponse({'message': 'Invalid request method.'}, status=400)
-        
+            return JsonResponse({'message': 'OTP resent successfully!'})
 
+                    # Sinch API endpoint and credentials
+    #         api_url = 'https://sms.api.sinch.com/xms/v1/456369915e064a8084afe1230a57cb33/batches'
+    #         api_key = 'ba911ea3bb0643b18b060eab5170ae7b' 
+            
+    #         # Generate a random 6-digit OTP
+    #         otp = random.randint(100000, 999999)
+    #         print(f"Generated OTP: {otp}")  # This is just for testing, remove it in production
+    #         request.session['otp'] = otp
+    #         # SMS details
+    #         payload = {
+    #             "from": "+1 913 270 1336",  # Sender's number
+    #             "to": [Phone_Number],  # Recipient's number (replace with the actual phone number)
+    #             "body": f"Your OTP code is {otp}. Please use this to verify your account."  # OTP message content
+    #         }
+               
+    #         headers = {
+    #             "Authorization": f"Bearer {api_key}",
+    #             "Content-Type": "application/json"
+    #         }
+    
+    #         # Send the OTP via the Sinch API
+    #         response = requests.post(api_url, headers=headers, data=json.dumps(payload))
+    
+    #         if response.status_code == 201:
+    #             return JsonResponse({'message': 'OTP resent successfully!'})
+    #         else:
+    #             return JsonResponse({'message': 'Failed to resend OTP.'}, status=500)
     except Exception as e:
         print(e)
-        connection.close()
-        return JsonResponse(e, status=500) # type: ignore
+    connection.close()
+ 
+    return JsonResponse({'message': 'Invalid request method.'}, status=400)
 
+# def register_view(request):
+#     try:
+#         if request.method == 'POST':
+#             data = json.loads(request.body)
+#             request.session['data'] = data
+#             email = data.get('email')
+#             Phone_Number = data.get('contact')
+#             role = data.get('role')
+
+#             is_valid = verify_email_hunter(email)
+#             valid_email = ""
+#             print("email is verified-",is_valid)
+#             print("Before Email valid value",valid_email)
+#             if is_valid:
+#                 valid_email = "Email is Valid"
+#                     # Create user profile based on role
+#                 print("In IF",valid_email)
+
+
+#                 if role == User.USER:
+#                     address = data.get('address')
+#                     city = data.get('city')
+#                     state = data.get('state')
+#                     pincode = data.get('pincode')
+#                     Natioanality = data.get('nationality')
+
+#                     request.session['validated'] = False
+
+#                     address = f"{address},{city},{state},{pincode}"
+#                     if UserProfile.objects.filter(Email=email).exists():
+#                         return JsonResponse({"error":"SomeOne Already Login with this Email"},status=400)
+#                     elif UserProfile.objects.filter(Phone_Number=Phone_Number).exists():
+#                         return JsonResponse({"error":"SomeOne Already Login with this Number"},status=400)
+#                     elif User.objects.filter(email=email).exists():
+#                         return JsonResponse({"error":"SomeOne Already Login with this Email"},status=400)
+#                     elif User.objects.filter(phone_number=Phone_Number).exists():
+#                         return JsonResponse({"error":"SomeOne Already Login with this Number"},status=400)
+#                     else:
+#                         request.session['validated'] = True
+
+#                 elif role == User.DEALER:
+#                     data = json.loads(request.body)
+#                     address = data.get('address')
+#                     city = data.get('city')
+#                     state = data.get('state')
+#                     pincode = data.get('pincode')
+#                     request.session['validated'] = False
+
+#                     address = f"{address},{city},{state},{pincode}"
+#                     if DealerProfile.objects.filter(Email=email).exists():
+#                         return JsonResponse({"error":"SomeOne Already Login with this Email"},status=400)
+#                     elif DealerProfile.objects.filter(Phone_Number=Phone_Number).exists():
+#                         return JsonResponse({"error":"SomeOne Already Login with this Number"},status=400)
+#                     elif User.objects.filter(email=email).exists():
+#                         return JsonResponse({"error":"SomeOne Already Login with this Email"},status=400)
+#                     elif User.objects.filter(phone_number=Phone_Number).exists():
+#                         return JsonResponse({"error":"SomeOne Already Login with this Number"},status=400)
+#                     else:
+#                         request.session['validated'] = True
+
+#                 elif role == User.ADMIN:
+#                     AdminProfile.objects.create(
+#                         user='user',
+#                         role_description=data.get('role_description')
+#                     )
+
+
+
+
+
+#                         # OTP Block
+#                     # Sinch API endpoint and credentials
+#                 # api_url = 'https://sms.api.sinch.com/xms/v1/4d360488b7d24cfe9ebbce4d1f25d4b4/batches'
+#                 # api_key = '569d28ad9d3d4c3ead55ed47e88671c7'  # Replace with your actual API key
+#                 api_url = 'https://sms.api.sinch.com/xms/v1/2465fcd1de8c49ea989e138559b4ce9f/batches'
+#                 api_key = 'cc31b0f9677e43c29b3c27e9eb45b0aa'  # Replace with your actual API key
+                
+#                 # Generate a random 6-digit OTP
+#                 otp = random.randint(100000, 999999)
+#                 print(f"Generated OTP: {otp}")  # This is just for testing, remove it in production
+#                 request.session['otp'] = otp
+#                 # SMS details
+#                 payload = {
+#                     # "from": "447520651333",  # Sender's number
+#                     "from": "447520651020",  # Sender's number
+#                     "to": ["918838983063","919003658692"],  # Recipient's number (replace with the actual phone number)
+#                     "body": f"Your OTP code is {otp}. Please use this to verify your account."  # OTP message content
+#                 }
+                
+#                 # Headers
+#                 headers = {
+#                     "Authorization": f"Bearer {api_key}",
+#                     "Content-Type": "application/json"
+#                 }
+                
+#                 # Send the POST request
+#                 response = requests.post(api_url, headers=headers, data=json.dumps(payload))
+                
+#                 # request.session['otp_response'] = response
+                
+
+
+#                 print("Generated OTP -",otp)
+#                 return JsonResponse({'message': 'User registered successfully'}, status=201)
+#             else:
+#                 valid_email = "Invalid Email.please enter a valid Email"
+#                 print("In else",valid_email)
+#                 return JsonResponse({'email_error':valid_email},status=400)
+            
+#     except Exception as e:
+#         print("Exeption is ",e)
+#     return JsonResponse({'error': 'Invalid method'}, status=405)
 @csrf_exempt# OTP Block
 def register_view(request):
     try:
@@ -842,15 +976,37 @@ def login_view(request):
 
                 print("login type is-",loginType)
 
-# Correctly convert timedelta to seconds
 
-# Correct usage of timedelta
-                
 
                 print("Request POST is-",request.POST)
                 print("Request POST is-",request.body)
                 print("Request is-",request)
 
+
+
+                # print("user is -",user)
+                # if loginType == User.DEALER:
+                #     email = dealer_data.get('email', '')
+                #     password = dealer_data.get('password', '')
+                #     user = authenticate(request, email=email, password=password)
+                #     if user is not None:
+                #         if User.objects.filter(email=email, role=User.DEALER).exists():
+                #             django_login(request, user)
+                #             user = request.user.id  # Assuming the user is logged in
+                #             dealer = DealerProfile.objects.get(user_id=user)
+                #             dealer_id = dealer.Dealer_ID
+                #             data_exists = Dealer_Details.objects.filter(Dealer_ID=dealer_id).first()
+                            
+                #             if data_exists:
+                #                 details_sent = "True"
+                #                 print("form already sent")
+                #                 application_status = data_exists.application_status
+                #             else:
+                #                 details_sent = "False"
+                #                 print("form doesn't  sent yet")
+                #             return JsonResponse({'message': 'Login successfull',"form_submitted":details_sent,"application_status":application_status}, status=200)
+                #         else:
+                #             return JsonResponse({'error': 'Incorrect Username Or Password'}, status=401)
                 if loginType == User.DEALER:
                     email = dealer_data.get('email', '')
                     password = dealer_data.get('password', '')
@@ -962,6 +1118,96 @@ class PasswordResetConfirmView(APIView):
                 return Response({"message": "Invalid token"}, status=400)
         except User.DoesNotExist:
             return Response({"message": "User not found"}, status=404)
+
+# # @method_decorator(csrf_exempt, name='dispatch')
+# class PasswordResetConfirmView(APIView):
+#     @csrf_exempt
+#     def post(self, request, uidb64, token):
+#         if request.method =="GET":
+#             print("inside function")
+#             # csrf_token = get_token(request)  # Get CSRF token
+#             # print("CSRF Token:", csrf_token) 
+            
+#             # Get and validate new password
+#             new_password = request.data.get('password')
+#             if not new_password:
+#                 return Response({"message": "Password is required"}, status=400)
+            
+#             try:
+#                 uid = force_str(urlsafe_base64_decode(uidb64))
+#             except (TypeError, ValueError, OverflowError):
+#                 return Response({"message": "Invalid user identifier"}, status=400)
+#             try:
+#                 user = User.objects.get(pk=uid)
+#                 if default_token_generator.check_token(user, token):
+#                     user.set_password(new_password)
+#                     user.save()
+#                     return Response({"message": "Password reset successful"}, status=200)
+#                 else:
+#                     print(f"Token validation failed for user: {user}")
+#                     return Response({"message": "Invalid or expired token"}, status=400)
+#             except User.DoesNotExist:
+#                 return Response({"message": "User not found"}, status=404)
+#         else:
+#             print("else block")
+#             return Response({"message": "method id not post request"}, status=404)
+
+
+
+# from django.contrib.auth import views as auth_views
+
+# class CustomPasswordResetView(auth_views.PasswordResetView):
+#     template_name = 'password_reset/password_reset_form.html'  # Your custom template
+
+# class CustomPasswordResetDoneView(auth_views.PasswordResetDoneView):
+#     template_name = 'password_reset/password_reset_done.html'  # Your custom template
+
+# class CustomPasswordResetConfirmView(auth_views.PasswordResetConfirmView):
+#     template_name = 'password_reset/password_reset_confirm.html'  # Your custom template
+
+# class CustomPasswordResetCompleteView(auth_views.PasswordResetCompleteView):
+#     template_name = 'password_reset/password_reset_complete.html'  # Your custom template
+
+
+
+# Create a PDF from images
+# def images_to_pdf(image_files):
+#     print("PDF FUNCTION CALLED")
+#     print("PDF FUNCTION FILES-", image_files)
+#     buffer = BytesIO()
+#     c = canvas.Canvas(buffer, pagesize=landscape(letter))
+
+#     images = []
+#     for image_file in image_files:
+#         try:
+#             image = Image.open(image_file)
+#             image.verify()  # Check if the image is valid
+#             images.append(image)
+#             print(f"Loaded image: {image_file}")
+#         except UnidentifiedImageError:
+#             print(f"Error: Unsupported image format for file {image_file}")
+#             return None
+#         except Exception as e:
+#             print(f"Error loading image: {e}")
+#             return None
+
+#     if not images:
+#         print("No valid images were loaded.")
+#         return None
+
+#     width, height = images[0].size  # Use the first image's dimensions
+
+#     for image in images:
+#         temp_image_path = f"/tmp/temp_image_{uuid.uuid4()}.png"
+#         image.save(temp_image_path, format='PNG')
+#         c.drawImage(temp_image_path, 0, 0, width=width, height=height)
+#         os.remove(temp_image_path)
+
+#     c.save()
+#     buffer.seek(0)
+#     return buffer
+
+
 
 @csrf_exempt  # Only if you're handling CSRF in another way
 def dealer_details(request):
@@ -1084,76 +1330,53 @@ def dealer_details(request):
 
 def fetchDealerEditDetails(request):
     # Filter Dealer_Details and DealerProfile based on the logged-in user's ID
+    print("userrr",request.user)
+    print("request_user",request.user.id)
+    # print("dealer_id",Dealer_id)
 
-    try:
-        print("userrr",request.user)
-        print("request_user",request.user.id)
-        user = request.user.id
-        dealer_profile_data = DealerProfile.objects.filter(user_id=user).first()
-        print("dealer_profile_data",dealer_profile_data)
-        dealer_details_data = Dealer_Details.objects.filter(Dealer_ID=dealer_profile_data.Dealer_ID).first()
-        print("dealer_details_data",dealer_details_data)
+    dealer_profile_data = DealerProfile.objects.filter(user_id=request.user.id).first()
+    print("dealer_profile_data",dealer_profile_data)
+    dealer_details_data = Dealer_Details.objects.filter(Dealer_ID=dealer_profile_data.Dealer_ID).first()
+    print("dealer_details_data",dealer_details_data)
+    # Check if dealer details exist for the current user
+    if not dealer_details_data:
+        return JsonResponse({'error': 'Dealer details not found for the current user.'}, status=404)
 
-
-
-        minio_client = get_minio_client()
-        bucket_name = settings.MINIO_BUCKET_NAME
-        expires = timedelta(hours=1)  
-
-        image_fields = [
-            'Aadhar_Front_Photo', 'Aadhar_Back_Photo', 'PAN_Photo',
-            'LICENSE_Front_Photo', 'LICENSE_Back_Photo', 'RC_BOOK_Photo',
-            'Bank_Statement_Photo', 'PassBook_Photo',
-            'extradata_field1', 'extradata_field2', 'extradata_field3', 'extradata_field4'
-        ]
-
-        formatted_dealer = {
-            'name': dealer_details_data.Dealer_Name,
-            'dob': dealer_details_data.DOB,
-            'aadhar': dealer_details_data.Aadhar_No,
-            'pan': dealer_details_data.PAN_No,
-            'license': dealer_details_data.LICENSE_No,
-            'vehicleNumber': dealer_details_data.Vehicle_No,
-            'vehicleType': dealer_details_data.Vehicle_Type,
-            'bankBookNo': dealer_details_data.Bank_Acc,
-            'ifscCode': dealer_details_data.IFSC_CODE,
-            'bankusername': dealer_details_data.Bank_AccountName,
-            'address': dealer_details_data.Address,
-            'city': dealer_details_data.City,
-            'state': dealer_details_data.State,
-            'pincode': dealer_details_data.Post_Code,
-            'nationality': dealer_details_data.Nationality,
-            'files': {}
+    # Format the data for the current dealer
+    formatted_dealer = {
+        'name': dealer_details_data.Dealer_Name,  # Replace 'Name' with actual field name in your model
+        'dob': dealer_details_data.DOB,  # Adjust field names as per your model
+        'aadhar': dealer_details_data.Aadhar_No,
+        'pan': dealer_details_data.PAN_No,
+        'license': dealer_details_data.LICENSE_No,
+        'vehicleNumber': dealer_details_data.Vehicle_No,
+        'vehicleType': dealer_details_data.Vehicle_Type,
+        'bankBookNo': dealer_details_data.Bank_Acc,
+        'ifscCode': dealer_details_data.IFSC_CODE,
+        'bankusername': dealer_details_data.Bank_AccountName,
+        'address': dealer_details_data.Address,
+        'city': dealer_details_data.City,
+        'state': dealer_details_data.State,
+        'pincode': dealer_details_data.Post_Code,
+        'nationality': dealer_details_data.Nationality,
+        'files': {
+            'bankStatement': dealer_details_data.Bank_Statement_Photo.url if dealer_details_data.Bank_Statement_Photo else None,
+            'aadharFrontImage': dealer_details_data.Aadhar_Front_Photo.url if dealer_details_data.Aadhar_Front_Photo else None,
+            'aadharBackImage': dealer_details_data.Aadhar_Back_Photo.url if dealer_details_data.Aadhar_Back_Photo else None,
+            'panImage': dealer_details_data.PAN_Photo.url if dealer_details_data.PAN_Photo else None,
+            'licenseFrontImage': dealer_details_data.LICENSE_Front_Photo.url if dealer_details_data.LICENSE_Front_Photo else None,
+            'licenseBackImage': dealer_details_data.LICENSE_Back_Photo.url if dealer_details_data.LICENSE_Back_Photo else None,
+            'rcBookImage': dealer_details_data.RC_BOOK_Photo.url if dealer_details_data.RC_BOOK_Photo else None,
+            'passbook': dealer_details_data.PassBook_Photo.url if dealer_details_data.PassBook_Photo else None,
         }
+    }
 
-        for field in image_fields:
-            image_obj = getattr(dealer_details_data, field, None) 
-            if image_obj and hasattr(image_obj, 'url'): 
-                try:
-                    decoded_key = urllib.parse.unquote(image_obj.url.split('/')[-1])
+    # Include phone and email from DealerProfile, if available
+    if dealer_profile_data:
+        formatted_dealer['phone'] = dealer_profile_data.Phone_Number  # Replace with actual field name in your DealerProfile model
 
-                    presigned_url = minio_client.presigned_get_object(
-                        bucket_name,
-                        decoded_key,
-                        expires
-                    )
-
-                    formatted_dealer['files'][field] = presigned_url
-                    print(f"Generated presigned URL for {field}: {presigned_url}")
-                except Exception as e:
-                    print(f"Error generating presigned URL for {field}: {str(e)}")
-                    formatted_dealer['files'][field] = None  
-            else:
-                formatted_dealer['files'][field] = None  
-
-
-        if dealer_profile_data:
-            formatted_dealer['phone'] = dealer_profile_data.Phone_Number  
-
-        print("formatted_dealer",formatted_dealer)
-        return JsonResponse(formatted_dealer, safe=False, status=200)
-    except Exception as e:
-            print("Error in fetching dealer details:", str(e))
+    # Return the formatted dealer data as JSON
+    return JsonResponse(formatted_dealer, safe=False, status=200)
 
 
 
@@ -1296,36 +1519,6 @@ def Get_DealerDetails(request):
 
         # Initialize a list to store dealer profiles
         dealer_profiles = []
-        try:
-            # Expiration time in seconds (convert to timedelta)
-            expires = timedelta(seconds=3600)  # 1 hour
-
-            print("Expires value:", expires)
-            print("Type of expires:", type(expires))  # Debugging: Should be <class 'datetime.timedelta'>
-
-            # Get the MinIO client
-            minio_client = get_minio_client()
-
-            # Bucket and file information
-            bucket_name = settings.MINIO_BUCKET_NAME
-            file_name = "0209f5f8-a8ca-45f0-a296-adf7d987b86e_kindpng_45810.png"
-
-            # Check if the bucket exists
-            # if not minio_client.bucket_exists(bucket_name):
-            #     return JsonResponse({"error": "Bucket does not exist"}, status=404)
-
-            # Generate presigned URL
-            presigned_url = minio_client.presigned_get_object(bucket_name, file_name, expires)
-            print("Generated presigned URL:", presigned_url)
-
-            # Return presigned URL
-            # return JsonResponse({"url": presigned_url}, status=200)
-
-        except Exception as e:
-            import traceback
-            print("Bucket Error is:", e)
-            traceback.print_exc()
-            return JsonResponse({"error": str(e)}, status=405)
 
         # Loop through each dealer in dealer_data
         for dealer in dealer_data:
@@ -1336,23 +1529,21 @@ def Get_DealerDetails(request):
         
             # Append the profiles to dealer_profiles
             dealer_profiles.extend(profiles)
-        dealer_profiles.append({"presigned_url":presigned_url})
 
         print(" this is ok")
         # return JsonResponse({"images": dealer_data}, safe=False)
 
 
-        
         file_paths = []
 
-        # Initialize MinIO client
-        minio_client = get_minio_client()
-
-        # Bucket name
-        bucket_name = settings.MINIO_BUCKET_NAME
-
-        # Expiration time for presigned URLs (e.g., 1 hour)
-        expires = timedelta(hours=1)
+        # Initialize S3 client
+        s3_client = boto3.client(
+                    's3',
+                    endpoint_url='http://82.112.238.156:9000',  
+                    aws_access_key_id='minioadmin',          
+                    aws_secret_access_key='minioadmin',      
+                    region_name='us-east-1'                  
+                )
 
         for dealer in dealer_data:
             dealer_details = Dealer_Details.objects.get(Dealer_ID=dealer['Dealer_ID'])
@@ -1365,31 +1556,35 @@ def Get_DealerDetails(request):
                 'extradata_field1', 'extradata_field2', 'extradata_field3', 'extradata_field4'
             ]
 
-            # Store presigned URLs dynamically
+            print(image_fields)
+            # Store file URLs and contents dynamically
             for field in image_fields:
-                image_obj = getattr(dealer_details, field, None)  # Fetch image field
+                image_obj = getattr(dealer_details, field, None)
                 image_url = image_obj.url if image_obj else None
+                dealer[field] = image_url  # Store URL
 
                 if image_url:
+                    file_paths.append(image_url)
+
+            # Fetch and encode images dynamically
+            for field in image_fields:
+                if dealer[field]:  # Only process existing images
                     try:
-                        # Decode the file key if it contains special characters
-                        decoded_key = urllib.parse.unquote(image_url.split('/')[-1])
+                        print(f"Fetching {dealer[field]} from S3...")
 
-                        # Generate presigned URL
-                        presigned_url = minio_client.presigned_get_object(
-                            bucket_name,
-                            decoded_key,
-                            expires
-                        )
+                        decoded_key = urllib.parse.unquote(dealer[field])  # Decode special characters
+                        response = s3_client.get_object(Bucket='mybucket', Key=decoded_key)
 
-                        # Add presigned URL to dealer data
-                        dealer[f"{field}_url"] = presigned_url
+                        # response = s3_client.get_object(Bucket='mybucket', Key=dealer[field])
+                        file_content = response['Body'].read()
+
+                        # Store Base64 encoded image inside dealer details
+                        dealer[f"{field}_base64"] = base64.b64encode(file_content).decode('utf-8') if file_content else None
 
                     except Exception as e:
-                        print(f"Error generating presigned URL for {field}: {str(e)}")
-                        dealer[f"{field}_url"] = None  # Handle missing or invalid images gracefully
-                else:
-                    dealer[f"{field}_url"] = None  # Handle empty image fields
+                        print(f"Error fetching {dealer[field]}: {str(e)}")
+                        dealer[f"{field}_base64"] = None  # Handle missing images gracefully
+
     except Exception as e:
                 print(f"Error fetching {dealer[field]}: {str(e)}")
 
@@ -2318,7 +2513,3 @@ def fetch_files(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
-
-def generate_csrf(request):
-    csrf_token = get_token(request)  # Generate or retrieve the CSRF token
-    return JsonResponse({'csrfToken': csrf_token})

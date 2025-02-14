@@ -11,9 +11,10 @@ const Dealereditdetail = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [invalidFields, setInvalidFields] = useState({});
   
+  // Handle form submission to update the dealer details
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    const csrfToken = getCookie('csrftoken'); 
+    e.preventDefault();  // Prevent default form submission
+    const csrfToken = getCookie('csrftoken'); // Function to get the CSRF token
  
     function getCookie(name) {
         let cookieValue = null;
@@ -31,18 +32,19 @@ const Dealereditdetail = () => {
     }
     try {
       const response = await fetch('updateDealerDetails/', {
-        method: 'POST', 
+        method: 'POST', // or 'PUT' depending on your backend logic
         credentials: "include",
         headers: {
           'Content-Type': 'application/json',
           "X-CSRFToken": csrfToken,
         },
-        body: JSON.stringify(dealerDetails),  
+        body: JSON.stringify(dealerDetails),  // Send the updated dealer details
       });
 
       if (response.ok) {
         const result = await response.json();
         console.log('Successfully updated dealer details:', result);
+        // Optionally handle success (e.g., show a success message)
       } else {
         console.error('Failed to update dealer details');
       }
@@ -79,14 +81,14 @@ const Dealereditdetail = () => {
           pincode: dealer_data.pincode,
           nationality: dealer_data.nationality,
           files: {
-            bankStatement: dealer_data.files.Aadhar_Front_Photo, 
-            aadharFrontImage: dealer_data.files.Aadhar_Back_Photo,
-            aadharBackImage: dealer_data.files.PAN_Photo,
-            panImage: dealer_data.files.LICENSE_Front_Photo,
-            licenseFrontImage: dealer_data.files.LICENSE_Back_Photo,
-            licenseBackImage: dealer_data.files.RC_BOOK_Photo,
-            rcBookImage: dealer_data.files.Bank_Statement_Photo,
-            passbook: dealer_data.files.PassBook_Photo,
+            bankStatement: null,  // Update or leave as null for now
+            aadharFrontImage: null,
+            aadharBackImage: null,
+            panImage: null,
+            licenseFrontImage: null,
+            licenseBackImage: null,
+            rcBookImage: null,
+            passbook: null,
           }
         };
         setDealerDetails(data);
@@ -99,7 +101,7 @@ const Dealereditdetail = () => {
     };
 
     fetchDealerDetails();
-  }, []);  
+  }, []);  // Empty array ensures the useEffect runs only once when the component mounts
 
   const handleEdit = (field) => {
     if (editingField === null) {
@@ -120,9 +122,10 @@ const Dealereditdetail = () => {
     const file = event.target.files[0];
   
     if (file) {
+      // You can set the file as a blob or URL
       setDealerDetails((prev) => ({
         ...prev,
-        files: { ...prev.files, [field]: file }, 
+        files: { ...prev.files, [field]: file }, // Store the file object for later viewing
       }));
   
       // If you want to directly store a URL
@@ -145,9 +148,9 @@ const Dealereditdetail = () => {
     // Check if the file is a URL
     if (typeof file === 'string') {
       window.open(file, '_blank'); // Open the URL directly
-    } else if (typeof file === 'jpg') {
+    } else if (file.type.startsWith('image/') || file.type === 'application/pdf') {
       const fileURL = URL.createObjectURL(file); // Create a URL for the file
-      window.open(fileURL, '_blank'); 
+      window.open(fileURL, '_blank'); // Open in a new tab
     } else {
       alert('This file type cannot be viewed directly.');
     }
@@ -265,7 +268,7 @@ const Dealereditdetail = () => {
         <h2 style={styles.cardTitle}>{title}:</h2>
         {file ? (
           <>
-            {typeof file === 'jpg' ? (
+            {file.type.startsWith('image/') ? (
               <img src={URL.createObjectURL(file)} alt={title} style={styles.image} />
             ) : file.type === 'application/pdf' ? (
               <p>
