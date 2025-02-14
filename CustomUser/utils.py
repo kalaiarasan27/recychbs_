@@ -12,14 +12,14 @@ def get_minio_client():
             f"{settings.MINIO_ENDPOINT}:{settings.MINIO_PORT}",
             access_key=settings.MINIO_ACCESS_KEY,
             secret_key=settings.MINIO_SECRET_KEY,
-            secure=False,  
+            secure=True,  
         )
         print("value",value)
         return Minio(
             f"{settings.MINIO_ENDPOINT}:{settings.MINIO_PORT}",
             access_key=settings.MINIO_ACCESS_KEY,
             secret_key=settings.MINIO_SECRET_KEY,
-            secure=False,  # Use True if using HTTPS
+            secure=True,  # Use True if using HTTPS
         )
     except Exception as e:
         print(f"Error connecting to Minio: {e}")
