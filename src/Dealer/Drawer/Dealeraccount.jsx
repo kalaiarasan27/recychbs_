@@ -11,7 +11,7 @@ const Dealeraccount = () => {
   useEffect(() => {
     const fetchDealerDetails = async () => {
       try {
-        const response = await fetch('fetchDealerEditDetails/');
+        const response = await fetch('http://127.0.0.1:8000/fetchDealerEditDetails/');
         const dealer_data = await response.json();
         
         if (!dealer_data || !dealer_data.files) {
