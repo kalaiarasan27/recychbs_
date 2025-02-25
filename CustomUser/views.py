@@ -2314,7 +2314,10 @@ def get_dealers_status(request):
     return JsonResponse(data, safe=False)
 
 
-
+def get_User_values(request):
+    
+    data = list(UserProfile.objects.values())  # Convert QuerySet to a list of dictionaries
+    return JsonResponse(data, safe=False)
 
 @csrf_exempt  # Use this decorator if CSRF protection is causing issues (not recommended for production)
 def update_dealer_status(request):
