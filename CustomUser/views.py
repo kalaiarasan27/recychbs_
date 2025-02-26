@@ -1327,22 +1327,93 @@ def dealer_details(request):
 
 # dealer Edit details page
 # {
-
+from django.shortcuts import render,get_object_or_404
+import os
+import uuid
+import logging
+import requests  # Needed to download files from URLs
+from botocore.exceptions import NoCredentialsError
+from django.http import JsonResponse
 def fetchDealerEditDetails(request):
-    # Filter Dealer_Details and DealerProfile based on the logged-in user's ID
-    print("userrr",request.user)
-    print("request_user",request.user.id)
+    # Filter Dealer_Details and DeaslerProfile based on the logged-in user's ID
+    # print("userrr",request.user)
+    # print("request_user",request.user.id)
     # print("dealer_id",Dealer_id)
 
-    dealer_profile_data = DealerProfile.objects.filter(user_id=request.user.id).first()
+    dealer_profile_data = DealerProfile.objects.filter(user_id=1).first()
     print("dealer_profile_data",dealer_profile_data)
-    dealer_details_data = Dealer_Details.objects.filter(Dealer_ID=dealer_profile_data.Dealer_ID).first()
+    dealer_details_data = Dealer_Details.objects.filter(Dealer_ID=1).first()
     print("dealer_details_data",dealer_details_data)
     # Check if dealer details exist for the current user
     if not dealer_details_data:
         return JsonResponse({'error': 'Dealer details not found for the current user.'}, status=404)
 
-    # Format the data for the current dealer
+    
+    
+    bank_statement =  str(dealer_details_data.Bank_Statement_Photo) if dealer_details_data.Bank_Statement_Photo else None
+
+    aadhar_front_image = str(dealer_details_data.Aadhar_Front_Photo) if dealer_details_data.Aadhar_Front_Photo else None
+    aadhar_back_image = str(dealer_details_data.Aadhar_Back_Photo) if dealer_details_data.Aadhar_Back_Photo else None
+    pan_image = str(dealer_details_data.PAN_Photo) if dealer_details_data.PAN_Photo else None
+    license_front_image = str(dealer_details_data.LICENSE_Front_Photo) if dealer_details_data.LICENSE_Front_Photo else None
+    license_back_image = str(dealer_details_data.LICENSE_Back_Photo) if dealer_details_data.LICENSE_Back_Photo else None
+    rc_book_image = str(dealer_details_data.RC_BOOK_Photo) if dealer_details_data.RC_BOOK_Photo else None
+    passbook = str(dealer_details_data.PassBook_Photo) if dealer_details_data.PassBook_Photo else None
+
+
+# Print to check
+    # return JsonResponse(bank_statement, safe=False, status=200)
+
+
+    s3_client = boto3.client(
+        's3',
+        endpoint_url='http://82.112.238.156:9000',  
+        aws_access_key_id='minioadmin',          
+        aws_secret_access_key='minioadmin',      
+        region_name='us-east-1'                  
+    )
+
+    BUCKET_NAME = 'mybucket'
+
+
+    file = [
+    bank_statement,
+    aadhar_front_image,
+    aadhar_back_image,
+    pan_image,
+    license_front_image,
+    license_back_image,
+    rc_book_image,
+    passbook
+]
+    # return JsonResponse(file, safe=False, status=200)
+
+    print(file)
+
+    failed_files = []
+    unique_names = []
+
+    # for file in files:
+    for files in file:
+        # if dealer[field]:  # Only process existing images
+            try:
+                print("inside try")
+                response = s3_client.get_object(Bucket='mybucket', Key=files)
+                print("crossed responce")
+                file_content = response['Body'].read()
+                
+                encoded_image = base64.b64encode(file_content).decode('utf-8') if file_content else None
+                unique_names.append({"filename": files, "content": encoded_image})
+
+            except Exception as e:
+                print(f"Error fetching : {str(e)}")
+                # dealer[f"{field}_base64"] = None  # Handle missing images gracefully
+
+    # Include phone number from DealerProfile if available
+     # Adjust field name as needed
+    # return JsonResponse(unique_names, safe=False, status=200)
+
+    
     formatted_dealer = {
         'name': dealer_details_data.Dealer_Name,  # Replace 'Name' with actual field name in your model
         'dob': dealer_details_data.DOB,  # Adjust field names as per your model
@@ -1360,22 +1431,20 @@ def fetchDealerEditDetails(request):
         'pincode': dealer_details_data.Post_Code,
         'nationality': dealer_details_data.Nationality,
         'files': {
-            'bankStatement': dealer_details_data.Bank_Statement_Photo.url if dealer_details_data.Bank_Statement_Photo else None,
-            'aadharFrontImage': dealer_details_data.Aadhar_Front_Photo.url if dealer_details_data.Aadhar_Front_Photo else None,
-            'aadharBackImage': dealer_details_data.Aadhar_Back_Photo.url if dealer_details_data.Aadhar_Back_Photo else None,
-            'panImage': dealer_details_data.PAN_Photo.url if dealer_details_data.PAN_Photo else None,
-            'licenseFrontImage': dealer_details_data.LICENSE_Front_Photo.url if dealer_details_data.LICENSE_Front_Photo else None,
-            'licenseBackImage': dealer_details_data.LICENSE_Back_Photo.url if dealer_details_data.LICENSE_Back_Photo else None,
-            'rcBookImage': dealer_details_data.RC_BOOK_Photo.url if dealer_details_data.RC_BOOK_Photo else None,
-            'passbook': dealer_details_data.PassBook_Photo.url if dealer_details_data.PassBook_Photo else None,
+            'bankStatement': unique_names[0],
+            'aadharFrontImage': unique_names[1],
+            'aadharBackImage': unique_names[2],
+            'panImage': unique_names[3],
+            'licenseFrontImage': unique_names[4],
+            'licenseBackImage':unique_names[5],
+            'rcBookImage': unique_names[6],
+            'passbook': unique_names[7],
         }
     }
-
-    # Include phone and email from DealerProfile, if available
     if dealer_profile_data:
-        formatted_dealer['phone'] = dealer_profile_data.Phone_Number  # Replace with actual field name in your DealerProfile model
+        formatted_dealer['phone'] = dealer_profile_data.Phone_Number
 
-    # Return the formatted dealer data as JSON
+    # Return response as JSON
     return JsonResponse(formatted_dealer, safe=False, status=200)
 
 
