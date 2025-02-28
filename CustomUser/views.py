@@ -1545,21 +1545,13 @@ s3_client = boto3.client(
     aws_access_key_id='minioadmin',
     aws_secret_access_key='minioadmin',
 )
-import base64
 
 @csrf_exempt
 def Get_DealerDetails(request):
     # Fetch the data from the Dealer_Details model
     try:
         dealer_data = list(Dealer_Details.objects.values())
-        # dealer_id  = Dealer_Details.objects.all()
-        # dealer_profiles = list(DealerProfile.objects.filter(Dealer_ID = dealer_id).values())
-        # return JsonResponse({"images": dealer_data}, safe=False)
-
-        # Fetch all dealer details
-        # dealer_data = list(Dealer_Details.objects.values())
-
-        # Initialize a list to store dealer profiles
+        
         dealer_profiles = []
 
         # Loop through each dealer in dealer_data
