@@ -156,18 +156,30 @@ CHANNEL_LAYERS = {
 
 #     }
 # }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'hudsmer',
+#         'HOST':'82.112.238.156',
+#         'USER':'hudsmer_user',
+#         'PASSWORD':'Hudsmer@123',
+#         'PORT':'3306',
+       
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'hudsmer',
-        'HOST':'82.112.238.156',
-        'USER':'hudsmer_user',
-        'PASSWORD':'Hudsmer@123',
+        'NAME': 'revenge',
+        'HOST':'localhost',
+        'USER':'root',
+        'PASSWORD':'Santhosh112',
         'PORT':'3306',
        
     }
 }
-
 
 # DATABASES = {
 #     'default': {
@@ -340,7 +352,7 @@ PASSWORD_RESET_TIMEOUT_DAYS = 1  # Password reset token will be valid for 1 day
 
 
 # settings.py (Django)
-FRONTEND_URL = "https://recychbs.in"  # Set this to your actual frontend URL
+FRONTEND_URL = "https://www.recychbs.in"  # Set this to your actual frontend URL
 
 GDAL_LIBRARY_PATH = os.path.join('C:\\OSGeo4W\\bin\\adal.dll')  # Adjust 'gdal304.dll' as necessary
 

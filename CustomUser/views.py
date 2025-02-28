@@ -88,54 +88,52 @@ class IndexView(TemplateView):
 
 # Application Status
 
-@csrf_exempt
-
+ 
 @csrf_exempt
 def approve_dealer(request):
     try:
         print("Function Called")
-
+ 
         if request.method == 'POST':
             data = json.loads(request.body)
             status = data.get('status')
-            dealer_id = data.get('dealer_id') 
-            dealer_email = data.get('dealer_email') 
+            dealer_id = data.get('dealer_id')
+            dealer_email = data.get('dealer_email')
             requirement = data.get('inputValue')
-            field_list = data.get('selectedOptions')
-
+            field_list = data.get('selectedItems')
+ 
             print(status)
             print(dealer_id)
             print(requirement)
             print("lists are",field_list)# Get all possible indices # Initialize json_data with all False values
             # Store the list directly in JSONField
             json_data = [bool(value) for value in field_list]  # Convert all values to True/False
-
+ 
             print("Final JSON Data:", json_data)  # Debugging output
-
-
+ 
             table = Dealer_Details.objects.get(id = dealer_id)
             dealer_name = table.Dealer_Name
-
+ 
             table.application_status = status
             table.requirements = requirement
             table.extra_fields_list = json_data
             table.save()
-
+ 
             # message =""
             if status == "approved":
                 # Load the HTML template and render it with context
                     html_content = render_to_string('email_templates/dealer_AcceptEmail.html', {'dealer_name': dealer_name})
                     # Create a plain-text version by stripping HTML tags
                     text_content = strip_tags(html_content)
-                    
+                   
                     subject = 'Welcome to Our Service!'
                     from_email = settings.EMAIL_HOST_USER
                     to_email =dealer_email
-                    
+                   
                     # Create the email
                     email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
                     email.attach_alternative(html_content, "text/html")  # Attach HTML content
-            
+           
                     # Send the email
                     email.send()
             #         send_mail(
@@ -146,14 +144,17 @@ def approve_dealer(request):
             #     fail_silently=False
             # )
             connection.close()
+            return JsonResponse({"message ":"Updated successfully"},status = 200)
+ 
     except Exception as e:
         print("The error is ",e)
-
-    return JsonResponse({"message ":"Updated successfully"},status = 200)
-
+ 
+    return JsonResponse({"error ":"Internel Server Error"},status = 500)
+ 
 
 def fetch_approve_dealer(request):
     try:
+
         user = request.user.id
         print(user)
 
@@ -164,8 +165,6 @@ def fetch_approve_dealer(request):
         print("User:", request.user)
         print("Authenticated:", request.user.is_authenticated)
 
-
-
         data  = list(Dealer_Details.objects.filter(Dealer_ID=dealer_id).values())
         connection.close()
 
@@ -173,6 +172,7 @@ def fetch_approve_dealer(request):
         print(e)
 
     return JsonResponse(data,safe=False,status = 200)
+
 @csrf_exempt
 def send_extraData(request):
     try:
@@ -181,13 +181,6 @@ def send_extraData(request):
         dealer_id = dealer_data.Dealer_ID
         data = Dealer_Details.objects.get(Dealer_ID = dealer_id)
 
-         
-        # files = [
-        #     request.FILES.getlist('file0'),
-        #     request.FILES.getlist('file1'),
-        #     request.FILES.getlist('file2'),
-        #     request.FILES.getlist('file3'),
-        # ]
         print("This is Backend Value - ", request.POST)
         print("This is Backend Value - ", request.FILES)
 
@@ -1096,7 +1089,7 @@ class PasswordResetRequestView(APIView):
                 [user.email],
                 html_message=html_message,  # passing the rendered HTML message here
             )
-
+            
             return Response({"message": "Password reset email sent"}, status=200)
         except UserModel.DoesNotExist:
             return Response({"message": "User with this email does not exist"}, status=404)
@@ -1324,9 +1317,6 @@ def dealer_details(request):
         print(e)
         return JsonResponse({"error":"Internel Error"},status=500)
 
-
-# dealer Edit details page
-# {
 from django.shortcuts import render,get_object_or_404
 import os
 import uuid
@@ -1334,12 +1324,10 @@ import logging
 import requests  # Needed to download files from URLs
 from botocore.exceptions import NoCredentialsError
 from django.http import JsonResponse
-def fetchDealerEditDetails(request):
-    # Filter Dealer_Details and DeaslerProfile based on the logged-in user's ID
-    # print("userrr",request.user)
-    # print("request_user",request.user.id)
-    # print("dealer_id",Dealer_id)
 
+
+def fetchDealerEditDetails(request):
+    
     dealer_profile_data = DealerProfile.objects.filter(user_id=1).first()
     print("dealer_profile_data",dealer_profile_data)
     dealer_details_data = Dealer_Details.objects.filter(Dealer_ID=1).first()
@@ -1348,10 +1336,7 @@ def fetchDealerEditDetails(request):
     if not dealer_details_data:
         return JsonResponse({'error': 'Dealer details not found for the current user.'}, status=404)
 
-    
-    
     bank_statement =  str(dealer_details_data.Bank_Statement_Photo) if dealer_details_data.Bank_Statement_Photo else None
-
     aadhar_front_image = str(dealer_details_data.Aadhar_Front_Photo) if dealer_details_data.Aadhar_Front_Photo else None
     aadhar_back_image = str(dealer_details_data.Aadhar_Back_Photo) if dealer_details_data.Aadhar_Back_Photo else None
     pan_image = str(dealer_details_data.PAN_Photo) if dealer_details_data.PAN_Photo else None
@@ -1359,11 +1344,6 @@ def fetchDealerEditDetails(request):
     license_back_image = str(dealer_details_data.LICENSE_Back_Photo) if dealer_details_data.LICENSE_Back_Photo else None
     rc_book_image = str(dealer_details_data.RC_BOOK_Photo) if dealer_details_data.RC_BOOK_Photo else None
     passbook = str(dealer_details_data.PassBook_Photo) if dealer_details_data.PassBook_Photo else None
-
-
-# Print to check
-    # return JsonResponse(bank_statement, safe=False, status=200)
-
 
     s3_client = boto3.client(
         's3',
@@ -1374,7 +1354,6 @@ def fetchDealerEditDetails(request):
     )
 
     BUCKET_NAME = 'mybucket'
-
 
     file = [
     bank_statement,
@@ -1387,7 +1366,6 @@ def fetchDealerEditDetails(request):
     passbook
 ]
     # return JsonResponse(file, safe=False, status=200)
-
     print(file)
 
     failed_files = []
@@ -1409,11 +1387,6 @@ def fetchDealerEditDetails(request):
                 print(f"Error fetching : {str(e)}")
                 # dealer[f"{field}_base64"] = None  # Handle missing images gracefully
 
-    # Include phone number from DealerProfile if available
-     # Adjust field name as needed
-    # return JsonResponse(unique_names, safe=False, status=200)
-
-    
     formatted_dealer = {
         'name': dealer_details_data.Dealer_Name,  # Replace 'Name' with actual field name in your model
         'dob': dealer_details_data.DOB,  # Adjust field names as per your model
@@ -2293,9 +2266,6 @@ def send_notification(request):
             selected_users = data.get('selectedUsers', [])
             all_dealer = data.get('allDealer')
             all_user = data.get('allUser')
-
-
-
 
             print(message)
             print(all_dealer)
