@@ -157,29 +157,29 @@ CHANNEL_LAYERS = {
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'hudsmer',
-#         'HOST':'82.112.238.156',
-#         'USER':'hudsmer_user',
-#         'PASSWORD':'Hudsmer@123',
-#         'PORT':'3306',
-       
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'revenge',
-        'HOST':'localhost',
-        'USER':'root',
-        'PASSWORD':'Santhosh112',
+        'NAME': 'hudsmer',
+        'HOST':'82.112.238.156',
+        'USER':'hudsmer_user',
+        'PASSWORD':'Hudsmer@123',
         'PORT':'3306',
        
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'revenge',
+#         'HOST':'localhost',
+#         'USER':'root',
+#         'PASSWORD':'Santhosh112',
+#         'PORT':'3306',
+       
+#     }
+# }
 
 # DATABASES = {
 #     'default': {

@@ -88,62 +88,69 @@ class IndexView(TemplateView):
 
 # Application Status
 
-@csrf_exempt
-
+ 
 @csrf_exempt
 def approve_dealer(request):
     try:
         print("Function Called")
-
+ 
         if request.method == 'POST':
             data = json.loads(request.body)
             status = data.get('status')
-            dealer_id = data.get('dealer_id') 
-            dealer_email = data.get('dealer_email') 
+            dealer_id = data.get('dealer_id')
+            dealer_email = data.get('dealer_email')
             requirement = data.get('inputValue')
-            field_list = data.get('selectedOptions')
-
+            field_list = data.get('selectedItems')
+ 
             print(status)
             print(dealer_id)
             print(requirement)
             print("lists are",field_list)# Get all possible indices # Initialize json_data with all False values
             # Store the list directly in JSONField
             json_data = [bool(value) for value in field_list]  # Convert all values to True/False
-
+ 
             print("Final JSON Data:", json_data)  # Debugging output
-
-
+ 
             table = Dealer_Details.objects.get(id = dealer_id)
             dealer_name = table.Dealer_Name
-
+ 
             table.application_status = status
             table.requirements = requirement
             table.extra_fields_list = json_data
             table.save()
-
+ 
             # message =""
             if status == "approved":
                 # Load the HTML template and render it with context
                     html_content = render_to_string('email_templates/dealer_AcceptEmail.html', {'dealer_name': dealer_name})
                     # Create a plain-text version by stripping HTML tags
                     text_content = strip_tags(html_content)
-                    
+                   
                     subject = 'Welcome to Our Service!'
                     from_email = settings.EMAIL_HOST_USER
                     to_email =dealer_email
-                    
+                   
                     # Create the email
                     email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
                     email.attach_alternative(html_content, "text/html")  # Attach HTML content
-            
+           
                     # Send the email
                     email.send()
-           
+            #         send_mail(
+            #     "Accepet your request",
+            #     message,
+            #     settings.EMAIL_HOST_USER,
+            #     ["kalai73579@gmail.com"],
+            #     fail_silently=False
+            # )
             connection.close()
+            return JsonResponse({"message ":"Updated successfully"},status = 200)
+ 
     except Exception as e:
         print("The error is ",e)
-
-    return JsonResponse({"message ":"Updated successfully"},status = 200)
+ 
+    return JsonResponse({"error ":"Internel Server Error"},status = 500)
+ 
 
 def fetch_approve_dealer(request):
     try:
@@ -1082,7 +1089,7 @@ class PasswordResetRequestView(APIView):
                 [user.email],
                 html_message=html_message,  # passing the rendered HTML message here
             )
-
+            
             return Response({"message": "Password reset email sent"}, status=200)
         except UserModel.DoesNotExist:
             return Response({"message": "User with this email does not exist"}, status=404)
@@ -1538,21 +1545,13 @@ s3_client = boto3.client(
     aws_access_key_id='minioadmin',
     aws_secret_access_key='minioadmin',
 )
-import base64
 
 @csrf_exempt
 def Get_DealerDetails(request):
     # Fetch the data from the Dealer_Details model
     try:
         dealer_data = list(Dealer_Details.objects.values())
-        # dealer_id  = Dealer_Details.objects.all()
-        # dealer_profiles = list(DealerProfile.objects.filter(Dealer_ID = dealer_id).values())
-        # return JsonResponse({"images": dealer_data}, safe=False)
-
-        # Fetch all dealer details
-        # dealer_data = list(Dealer_Details.objects.values())
-
-        # Initialize a list to store dealer profiles
+        
         dealer_profiles = []
 
         # Loop through each dealer in dealer_data
