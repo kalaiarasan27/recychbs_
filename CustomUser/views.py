@@ -88,7 +88,6 @@ class IndexView(TemplateView):
 
 # Application Status
 
- 
 @csrf_exempt
 def approve_dealer(request):
     try:
@@ -110,6 +109,7 @@ def approve_dealer(request):
             json_data = [bool(value) for value in field_list]  # Convert all values to True/False
  
             print("Final JSON Data:", json_data)  # Debugging output
+ 
  
             table = Dealer_Details.objects.get(id = dealer_id)
             dealer_name = table.Dealer_Name
