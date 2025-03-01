@@ -1685,10 +1685,17 @@ def Get_UserNotification(request):
     return JsonResponse(data, safe=False, status=200)
 
 def Get_NotificationCount(request):
-    id=request.user.id
-    notification_count = Notification.objects.filter(user_id=id).count()
-    connection.close()
-    return JsonResponse( notification_count, status=200)
+    try:
+        id=request.user.id
+        notification_count = Notification.objects.filter(user_id=id).count()
+        connection.close()
+        return JsonResponse( {'notification_count': notification_count}, status=200)
+
+    except Exception as e:
+        print(e)
+        return JsonResponse( {'error': e}, status=500)
+
+
 
 # User Site
 
