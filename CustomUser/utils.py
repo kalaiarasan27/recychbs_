@@ -1,7 +1,8 @@
 # utils.py
 import requests
 
-DEBOUNCE_API_KEY = '66f195d2ef55b' #'66f02e8eeb216'
+# DEBOUNCE_API_KEY = '66f195d2ef55b' #'66f02e8eeb216'
+DEBOUNCE_API_KEY = '66f02e8eeb216' #'66f02e8eeb216'
 
 def check_email_validity(email):
     debounce_url = 'https://api.debounce.io/v1/'
