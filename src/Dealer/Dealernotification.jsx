@@ -12,7 +12,7 @@ const Dealernotification = () => {
  
   useEffect(() => {
     // fetch('Get_UserNotification/')
-    fetch('Get_Notification/')
+    fetch('Get_UserNotification/')
       .then(response => response.json())
       .then(data => {
         console.log(data);
