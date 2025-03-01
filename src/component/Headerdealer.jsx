@@ -20,6 +20,9 @@ const Headerdealer = () => {
   const navigate = useNavigate();
   const [notification_count, setnotification_count] = useState(0);
 
+  console.log("no",notification_count);
+  
+
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
 
