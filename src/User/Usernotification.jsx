@@ -4,30 +4,30 @@ import Header from '../component/Header';
 
 const Usernotification = () => {
 
-  // const notifications = [
-  //   { head: "dealer 1", title: "comment", message: "your order" },
-  //   { head: "dealer 2", title: "comment", message: "your order" },
-  //   { head: "dealer 3", title: "comment", message: "your order" },
-  // ];
+  const notifications = [
+    { head: "dealer 1", title: "comment", message: "your order" },
+    { head: "dealer 2", title: "comment", message: "your order" },
+    { head: "dealer 3", title: "comment", message: "your order" },
+  ];
 
   const [userDetails, setUserDetails] = useState([]);
   const [loading, setLoading] = useState(true); // Add loading state
   // console.log(userDetails);
   
-  useEffect(() => {
-    // fetch('Get_UserNotification/')
-    fetch('Get_Notification/')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        setUserDetails(data);
-         // Set loading to false after data is fetched
-      })
-      .catch(error => {
-        console.error('Error fetching details:', error);
-        setLoading(false); // Set loading to false in case of an error
-      });
-  }, []);
+  // useEffect(() => {
+  //   // fetch('Get_UserNotification/')
+  //   fetch('Get_Notification/')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log(data);
+  //       setUserDetails(data);
+  //        // Set loading to false after data is fetched
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching details:', error);
+  //       setLoading(false); // Set loading to false in case of an error
+  //     });
+  // }, []);
   // console.log(userDetails);
   
   return (
@@ -35,7 +35,7 @@ const Usernotification = () => {
  <Header/>
     <div className="container-fluid topbottom-user">
       <div className="loginn">
-        {userDetails.map((item, index) => (
+        {notifications.map((item, index) => (
           <div
             key={index}
             style={{
@@ -47,7 +47,7 @@ const Usernotification = () => {
               color: "#fff",
             }}
           >
-            <span>{item.id}</span>
+            <span>{item.head}</span>
             <span>{item.title}</span>
             <span>{item.message}</span>
           </div>
