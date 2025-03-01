@@ -1660,9 +1660,9 @@ def Get_UserProfile(request):
 
 def GetUserDetails(request):
     try:
-        user_id = request.user.id
-        print(user_id)
-        item = UserProfile.objects.filter(id=user_id).values().first()
+        user = request.user
+        print(user)
+        item = UserProfile.objects.filter(user=user).values().first()
         print("User Details",item)
         if item:  
             return JsonResponse(item, safe=False,status=200)
