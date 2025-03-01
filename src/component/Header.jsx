@@ -21,17 +21,17 @@ const Header = () => {
   const [notification_count, setnotification_count] = useState(0);
     const shouldShowSearchBar = location.pathname === "/Homeuser" || location.pathname === "/Scrapselect";
 
-useEffect(() => {
-  fetch('Notification_Count/')
-  .then(response => response.json())
-  .then(notification_count => {
-    console.log(notification_count);
-    setnotification_count(notification_count);
-  })
-  .catch(error => {
-    console.error('Error fetching details:', error);
-  });
-}, []);
+  useEffect(() => {
+    fetch('Notification_Count/')
+    .then(response => response.json())
+    .then((data) => {
+      console.log(data);
+      setnotification_count(data.notification_count);
+    })
+    .catch(error => {
+      console.error('Error fetching details:', error);
+    });
+  }, []);
 
  
   return (
