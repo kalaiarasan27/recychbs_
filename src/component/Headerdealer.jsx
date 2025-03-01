@@ -5,7 +5,7 @@ import logotrans from "../assets/image/logotrans.png";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoIosNotifications } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { BiSolidUserAccount } from "react-icons/bi";
 import {FaPaypal } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
