@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-f247#btkri*v8$@^pbnr7mf@&#llh59-*$x7b5p^-$d4&gwsjp
 DEBUG = False
 
 # ALLOWED_HOSTS = ['django-djreact-app-d5af3d4e3559.herokuapp.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','https://www.recychbs.in/']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','https://www.recychbs.in ']
 
 
 # Application definition
@@ -274,7 +274,7 @@ CORS_ALLOWED_ORIGINS = [
     'https://recychbs-app-c05d5f684be1.herokuapp.com',  # React app's URL
     'https://recychbs-admin-app-527051e76757.herokuapp.com',
     'https://recychbs.in',
-    'https://www.recychbs.in/'
+    'https://www.recychbs.in'
     # 'http://recychbsadmin.in',
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
@@ -296,7 +296,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://recychbs-app-c05d5f684be1.herokuapp.com', 
     'https://recychbs-admin-app-527051e76757.herokuapp.com',
     'https://recychbs.in',
-    'https://www.recychbs.in/'
+    'https://www.recychbs.in'
     # 'http://recychbsadmin.in',
     # 'https://demo-djreact-recyc-app-ee540343796a.herokuapp.com'
 
