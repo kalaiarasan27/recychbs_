@@ -821,6 +821,7 @@ def register_view(request):
             result = check_email_validity(email)
             is_valid = result.get('debounce', {}).get('result') == 'Safe to Send'
             valid_email = ""
+            print("Debounce Result:",result.get('result'))
 
             if result.get('result') == 'Safe to Send':
                 valid_email = "Email is Valid"
