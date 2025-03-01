@@ -29,8 +29,7 @@ SECRET_KEY = 'django-insecure-f247#btkri*v8$@^pbnr7mf@&#llh59-*$x7b5p^-$d4&gwsjp
 DEBUG = False
 
 # ALLOWED_HOSTS = ['django-djreact-app-d5af3d4e3559.herokuapp.com']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','https://www.recychbs.in ']
-
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost','www.recychbs.in']
 
 # Application definition
 
