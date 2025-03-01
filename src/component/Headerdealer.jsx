@@ -30,7 +30,7 @@ const Headerdealer = () => {
     fetch('Notification_Count/')
     .then(response => response.json())
     .then(notification_count => {
-      console.log(notification_count);
+      console.log(data);
       setnotification_count(notification_count);
     })
     .catch(error => {
