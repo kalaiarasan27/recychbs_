@@ -250,7 +250,7 @@ const handleBlur = (e) => {
     else {
       return response.json().then(data => {
         setError(data.error);
-        displayAlert('error', 'Log In Failed');
+        displayAlert('error', data.error);
 
               if (activeLogin === "USER") {
                 setTimeout(() => {
