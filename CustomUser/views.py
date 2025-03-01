@@ -1070,9 +1070,9 @@ class PasswordResetRequestView(APIView):
             token = default_token_generator.make_token(user)
 
             print(user,uid,token)
-            reset_url = f" http://localhost:5173/reset/{uid}/{token}"
+            # reset_url = f" http://localhost:5173/reset/{uid}/{token}"
             # reset_url = f"https://www.recychbs.in/reset/{uid}/{token}"
-            # reset_url = f"{settings.FRONTEND_URL}/reset/{uid}/{token}"
+            reset_url = f"{settings.FRONTEND_URL}/reset/{uid}/{token}"
             print(reset_url)
 
             # Render HTML email template with context
