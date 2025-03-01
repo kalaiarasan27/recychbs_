@@ -1020,7 +1020,7 @@ def login_view(request):
                                     print("form doesn't  sent yet")
                                 return JsonResponse({'message': 'Login successfull',"form_submitted":details_sent}, status=200)
                             else:
-                                return JsonResponse({'error': 'Incorrect Username Or Password'}, status=401)
+                                return JsonResponse({'error': 'Incorrect Email Or Password'}, status=401)
                     else:
                         return JsonResponse({'error': 'Your Account has been blocked by Admin'}, status=403)
                          
@@ -1038,13 +1038,13 @@ def login_view(request):
                                 return JsonResponse({'message': 'Login successfull'}, status=200)
 
                             else:
-                                return JsonResponse({'error': 'Incorrect Username Or Password'}, status=401)
+                                return JsonResponse({'error': 'Incorrect Email Or Password'}, status=401)
                     else:
                         return JsonResponse({'error': 'Your Account has been blocked by Admin'}, status=403)
                          
 
-                else:
-                    return JsonResponse({'error': 'Incorrect  UserName Or Password'}, status=401)
+                # else:
+                #     return JsonResponse({'error': 'Incorrect  UserName Or Password'}, status=401)
     except Exception as e:
         print(e)
 
