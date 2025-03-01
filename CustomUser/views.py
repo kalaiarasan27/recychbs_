@@ -1070,7 +1070,9 @@ class PasswordResetRequestView(APIView):
             token = default_token_generator.make_token(user)
 
             print(user,uid,token)
-            reset_url = f"{settings.FRONTEND_URL}/reset/{uid}/{token}"
+            reset_url = f" http://localhost:5173/reset/{uid}/{token}"
+            # reset_url = f"https://www.recychbs.in/reset/{uid}/{token}"
+            # reset_url = f"{settings.FRONTEND_URL}/reset/{uid}/{token}"
             print(reset_url)
 
             # Render HTML email template with context
@@ -1100,6 +1102,7 @@ class PasswordResetConfirmView(APIView):
     @csrf_exempt
     def post(self, request, uidb64, token):
         new_password = request.data.get('password')
+        print("Reset password confirmation funtion called")
         try:
             uid = force_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(pk=uid)

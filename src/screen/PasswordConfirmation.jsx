@@ -34,7 +34,7 @@ const PasswordResetConfirm = () => {
     }
 
     try {
-      const response = await fetch(`reset/${uid}/${token}/`, {
+      const response = await fetch(`https://www.recychbs.in/reset/${uid}/${token}/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
