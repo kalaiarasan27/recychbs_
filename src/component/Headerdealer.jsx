@@ -29,9 +29,9 @@ const Headerdealer = () => {
   useEffect(() => {
     fetch('Notification_Count/')
     .then(response => response.json())
-    .then(notification_count => {
+    .then((data) => {
       console.log(data);
-      setnotification_count(notification_count);
+      setnotification_count(data.notification_count);
     })
     .catch(error => {
       console.error('Error fetching details:', error);
