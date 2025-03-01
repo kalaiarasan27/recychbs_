@@ -1662,10 +1662,19 @@ def GetUserDetails(request):
     try:
         user = request.user
         print(user)
-        item = UserProfile.objects.filter(user=user).values().first()
-        print("User Details",item)
-        if item:  
-            return JsonResponse(item, safe=False,status=200)
+        details = UserProfile.objects.filter(user=user).values().first()
+        if details:
+            address_parts = details["Address"].split(",")
+            
+            # Assigning parts dynamically
+            details["Door_No"] = address_parts[0] if len(address_parts) > 0 else ""
+            details["City"] = address_parts[1] if len(address_parts) > 1 else ""
+            details["State"] = address_parts[2] if len(address_parts) > 2 else ""
+            details["Pincode"] = address_parts[3] if len(address_parts) > 3 else ""
+
+            print("User Details", details)
+        if details:  
+            return JsonResponse(details, safe=False,status=200)
         connection.close()
     except Exception as e:
         print(e)

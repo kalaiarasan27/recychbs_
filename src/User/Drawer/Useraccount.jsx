@@ -59,7 +59,7 @@ const Useraccount = () => {
                 <p>{userDetails.State}</p>
               </DetailCard>
               <DetailCard title="Country">
-                <p>{userDetails.Country}</p>
+                <p>{userDetails.Nationality}</p>
               </DetailCard>
               <DetailCard title="Pincode">
                 <p>{userDetails.Pincode}</p>
