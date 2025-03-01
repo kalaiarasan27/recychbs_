@@ -501,12 +501,13 @@ def register_confirmation(request):
 
             if role == User.USER:
                 address = register_data.get('address')
+                street = register_data.get('street')
                 city = register_data.get('city')
                 state = register_data.get('state')
                 pincode = register_data.get('pincode')
                 Natioanality = register_data.get('country')
 
-                address = f"{address},{city},{state},{pincode}"
+                address = f"{address},{street},{city},{state},{pincode}"
                     # Compare the entered OTP with the generated OTP
                 data = json.loads(request.body)
                 entered_otp = data.get('enteredOtp')
@@ -1668,9 +1669,10 @@ def GetUserDetails(request):
             
             # Assigning parts dynamically
             details["Door_No"] = address_parts[0] if len(address_parts) > 0 else ""
-            details["City"] = address_parts[1] if len(address_parts) > 1 else ""
-            details["State"] = address_parts[2] if len(address_parts) > 2 else ""
-            details["Pincode"] = address_parts[3] if len(address_parts) > 3 else ""
+            details["Street"] = address_parts[1] if len(address_parts) > 1 else ""
+            details["City"] = address_parts[2] if len(address_parts) > 1 else ""
+            details["State"] = address_parts[3] if len(address_parts) > 2 else ""
+            details["Pincode"] = address_parts[4] if len(address_parts) > 3 else ""
 
             print("User Details", details)
         if details:  
