@@ -29,8 +29,14 @@ urlpatterns = [
     path('ScrapSelection/', ScrapSelection, name='ScrapSelection'),
     path('bookdealer/',Bookdealer,name='bookdealer'),
     path('ongoing_order/',user_OngoingOrder,name='ongoing_order'),
-    path('Get_UserNotification/', Get_UserNotification, name='Get_UserNotification'),
     path('update-bank-account/', save_bank_details, name='update-bank-account'),
+
+
+
+# Notification URLS
+    path('Get_UserNotification/', Get_UserNotification, name='Get_UserNotification'),
+    path('Notification_Count/', Get_NotificationCount, name='Notification_Count'),
+
 
 
 

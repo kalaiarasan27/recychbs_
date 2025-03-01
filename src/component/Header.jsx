@@ -6,7 +6,7 @@ import { IoMenuSharp } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IoIosNotifications } from "react-icons/io";
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import { BiHelpCircle, BiSolidUserAccount } from "react-icons/bi";
 import { FcFaq } from "react-icons/fc";
 import { LuLogOut } from "react-icons/lu";
@@ -18,8 +18,21 @@ const Header = () => {
  
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
   const location = useLocation();
- 
+  const [notification_count, setnotification_count] = useState(0);
     const shouldShowSearchBar = location.pathname === "/Homeuser" || location.pathname === "/Scrapselect";
+
+useEffect(() => {
+  fetch('Notification_Count/')
+  .then(response => response.json())
+  .then(notification_count => {
+    console.log(notification_count);
+    setnotification_count(notification_count);
+  })
+  .catch(error => {
+    console.error('Error fetching details:', error);
+  });
+}, []);
+
  
   return (
     <>
@@ -112,7 +125,7 @@ const Header = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    17
+                    {notification_count}
                   </span>
                 </div>
               </div>

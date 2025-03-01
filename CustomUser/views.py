@@ -1684,6 +1684,12 @@ def Get_UserNotification(request):
     connection.close()
     return JsonResponse(data, safe=False, status=200)
 
+def Get_NotificationCount(request):
+    id=request.user.id
+    notification_count = Notification.objects.filter(user_id=id).count()
+    connection.close()
+    return JsonResponse( notification_count, status=200)
+
 # User Site
 
 # @csrf_exempt

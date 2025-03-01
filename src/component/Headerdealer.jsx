@@ -18,9 +18,23 @@ import { width } from "@fortawesome/free-solid-svg-icons/fa0";
 const Headerdealer = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
+  const [notification_count, setnotification_count] = useState(0);
 
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
+
+  useEffect(() => {
+    fetch('Notification_Count/')
+    .then(response => response.json())
+    .then(notification_count => {
+      console.log(notification_count);
+      setnotification_count(notification_count);
+    })
+    .catch(error => {
+      console.error('Error fetching details:', error);
+    });
+  }, []);
+  
   return (
     <>
       <div className="">
@@ -102,8 +116,8 @@ const Headerdealer = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    17
-                  </span>
+                    {notification_count}
+                    </span>
                 </div>
               </div>
               <div className="col-2 d-flex flex-column align-items-center justify-content-center">
