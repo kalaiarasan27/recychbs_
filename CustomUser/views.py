@@ -1659,14 +1659,20 @@ def Get_UserProfile(request):
 # User Site
 
 def GetUserDetails(request):
-    user_id = request.user.id
-    print(user_id)
-    item = UserProfile.objects.filter(id=user_id).values().first()
-    if item:  
-        return JsonResponse(item, safe=False,status=200)
-    connection.close()
+    try:
+        user_id = request.user.id
+        print(user_id)
+        item = UserProfile.objects.filter(id=user_id).values().first()
+        print("User Details",item)
+        if item:  
+            return JsonResponse(item, safe=False,status=200)
+        connection.close()
+    except Exception as e:
+        print(e)
+        return JsonResponse({'error': e}, status=500)
+
+
     
-    return JsonResponse({'error': 'User Details not found'}, status=404)
 
 
 
