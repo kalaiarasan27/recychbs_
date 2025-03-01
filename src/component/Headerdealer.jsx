@@ -205,8 +205,8 @@ const Headerdealer = () => {
               fontWeight: "bold",
             }}
           >
-            17
-          </span>
+                    {notification_count}
+                    </span>
         </div>
       </div>
     </div>
