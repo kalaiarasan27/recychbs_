@@ -250,6 +250,8 @@ const handleBlur = (e) => {
     else {
       return response.json().then(data => {
         setError(data.error);
+        console.log(data.error);
+        
         displayAlert('error', data.error);
 
               if (activeLogin === "USER") {
