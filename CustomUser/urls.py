@@ -32,14 +32,9 @@ urlpatterns = [
     path('update-bank-account/', save_bank_details, name='update-bank-account'),
 
 
-
 # Notification URLS
     path('Get_UserNotification/', Get_UserNotification, name='Get_UserNotification'),
     path('Notification_Count/', Get_NotificationCount, name='Notification_Count'),
-
-
-
-
 
 
     # Forget Password
@@ -68,14 +63,14 @@ urlpatterns = [
 
     path('fetch-file', fetch_files, name='fetch-file'),
 
-
-
     path('update-location/', update_user_location, name='update_location'),
     path('nearbyUsers/', nearbyUsers, name='nearbyUsers'),
 
 
     path('upload-file/',upload_file , name='upload-file'),
     path('get-file/', get_file, name='get-file'),
+
+    path('users/', get_all_User, name='get_all_users'),
 
 
 ]

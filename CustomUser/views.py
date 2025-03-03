@@ -2032,9 +2032,6 @@ def ScrapSelection(request):
 
     return JsonResponse({'error': 'Invalid request method'}, status=400)
 
-
-
-
 @csrf_exempt
 def Bookdealer(request):
     if request.method == 'POST':
@@ -2162,8 +2159,6 @@ def Bookdealer(request):
                             if nearby_users:
                                 notify_dealers(nearby_users, scrap_details)
                                 time_shedule.sleep(100)  # Wait for another 5 minutes
-
-                                
 
                         # Final response after searching in both radii
                         # return JsonResponse({"status": "Notifications sent to dealers"})
@@ -2412,9 +2407,6 @@ def update_dealer_status(request):
         return JsonResponse({'error': 'Invalid Error'}, status=400)
 
 
-
-
-
 # Location
 from django.contrib.auth import get_user_model
 from geopy.distance import great_circle
@@ -2583,3 +2575,9 @@ def fetch_files(request):
 
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+
+def get_all_User(request):
+    
+    data = list(UserProfile.objects.values())  # Convert QuerySet to a list of dictionaries
+    return JsonResponse(data, safe=False)
