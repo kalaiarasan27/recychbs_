@@ -92,8 +92,8 @@ class IndexView(TemplateView):
 def approve_dealer(request):
     try:
         print("Function Called")
-        stat = request.POST.get('status')
-        print("New Status is "+stat)
+        stat = request.body
+        print(stat)
  
         if request.method == 'POST':
             data = json.loads(request.body)
